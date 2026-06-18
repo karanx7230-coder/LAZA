@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1065925478043",
+    "project_id": "laza-c55ce",
+    "storage_bucket": "laza-c55ce.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065925478043:android:987a85ab29a15c479b283e",
+        "android_client_info": {
+          "package_name": "com.laza"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1065925478043-4japhstn634g7k4tiggk1sp1g6a5u0a6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.laza",
+            "certificate_hash": "f0ea2d60236e965f26a05f04a8cd7ece093aa1bb"
+          }
+        },
+        {
+          "client_id": "1065925478043-cimr44d4veci0egq2grlivtb5bj2r002.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEZqJdJ0zTa1XJmFwBdbu9aFh2iYwKGSA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1065925478043-cimr44d4veci0egq2grlivtb5bj2r002.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
