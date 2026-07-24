@@ -6,21 +6,44 @@ import StackNavigator from './src/navigation/StackNavigator';
 import { WishlistProvider } from './src/context/WishlistContext';
 import { CartProvider } from './src/context/CartContext';
 import { ThemeProvider } from './src/context/ThemeContext';
+import { navigationRef } from './src/navigation/navigationService';
+import useDeepLinking from './src/service/link';
+import {
+  requestNotificationPermission,
+  getFCMToken,
+  handleNotificationNavigation,
+  handleForegroundNotification,
+} from './src/service/notification';
 
 export default function App() {
-  const [initializing, setInitializing] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-   
-    const subscriber = auth().onAuthStateChanged((userState: any) => {
-      setUser(userState);
-      if (initializing) setInitializing(false);
-    });
-    return subscriber;
+    requestNotificationPermission();
+    getFCMToken();
+    const unsubscribeForeground = handleForegroundNotification();
+    return () => {
+      unsubscribeForeground();
+    };
   }, []);
 
-  if (initializing) {
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged((userState: any) => {
+      setUser(userState);
+      if (loading) setLoading(false);
+    });
+    return subscriber;
+  }, [loading]);
+
+  useEffect(() => {
+    if (!loading) {
+      const unsubscribe = handleNotificationNavigation();
+      return () => unsubscribe();
+    }
+  }, [loading]);
+      useDeepLinking();
+  if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="blue" />
@@ -32,7 +55,7 @@ export default function App() {
     <ThemeProvider>
       <CartProvider>
         <WishlistProvider>
-          <NavigationContainer>
+          <NavigationContainer ref={navigationRef}>
             <StackNavigator user={user} />
           </NavigationContainer>
         </WishlistProvider>

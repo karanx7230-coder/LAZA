@@ -120,14 +120,14 @@ export default function Home({ navigation }: any) {
               key={cat}
               style={[
                 styles.brand,
-                selectedCategory === cat && { backgroundColor: '#9B72FF' }, 
+                selectedCategory === cat && { backgroundColor: '#9B72FF' },
               ]}
               onPress={() => setSelectedCategory(cat)}
             >
               <Text
                 style={[
                   styles.brandname,
-                  selectedCategory === cat && { color: '#fff' }, 
+                  selectedCategory === cat && { color: '#fff' },
                 ]}
               >
                 {cat}

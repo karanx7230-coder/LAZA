@@ -6,15 +6,53 @@ import {
   ScrollView,
   Image,
   ImageBackground,
+  ActivityIndicator, // <-- Added ActivityIndicator
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
-export default function Product({ route, navigation }: any) {
+
+export default function Productstack({ route, navigation }: any) {
   const { isDarkMode, toggleTheme, colors } = useTheme();
-  const { productData } = route.params;
   const { Cart, addToCart } = useCart();
+  const [productData, setProductData] = useState(
+    route.params?.productData || null,
+  );
+  const [loading, setLoading] = useState(!route.params?.productData);
+  const [quantity, setQuantity] = useState(1);
+  const productId = route?.params?.id;
+  useEffect(() => {
+    if (!productData && productId) {
+      fetch(`https://dummyjson.com/products/${productId}`)
+        .then(res => res.json())
+        .then(data => {
+          setProductData(data);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error(err);
+          setLoading(false);
+        });
+    }
+  }, [productId, productData]);
+
+  // 3. Show loading screen while fetching
+  if (loading || !productData) {
+    return (
+      <View
+        style={[
+          styles.scrollview,
+          { justifyContent: 'center', alignItems: 'center' },
+        ]}
+      >
+        <ActivityIndicator size="large" color="#9B72FF" />
+      </View>
+    );
+  }
+
+  // Now it is safe to use productData!
   const isItemInCart = Cart?.some((item: any) => item.id === productData.id);
+
   const handlePress = () => {
     if (!isItemInCart) {
       addToCart({ ...productData, quantity: quantity });
@@ -22,13 +60,14 @@ export default function Product({ route, navigation }: any) {
       navigation.navigate('Cart');
     }
   };
-  const [quantity, setQuantity] = useState(1);
 
   const increaseQty = () => setQuantity(prev => prev + 1);
   const decreaseQty = () => {
     if (quantity > 1) setQuantity(prev => prev - 1);
   };
+
   const totalPrice = productData.price * quantity;
+
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView style={styles.scrollview}>
@@ -75,9 +114,9 @@ export default function Product({ route, navigation }: any) {
             <Text style={[styles.name, { color: colors.text }]}>
               Description
             </Text>
-
             <Text style={styles.subname}>{productData.description}</Text>
           </View>
+
           <View style={{ marginTop: 20 }}>
             <View style={styles.view2}>
               <Text style={[styles.name, { color: colors.text }]}>Reviews</Text>

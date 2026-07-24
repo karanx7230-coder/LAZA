@@ -78,7 +78,7 @@ export default function Screen2({ navigation }: any) {
           style={styles.loginPrompt}
         >
           <Text style={styles.acchave}>
-            Already have an account?{' '}
+            Already have an account? 
             <Text style={[styles.signin, { color: colors.text }]}>Signin</Text>
           </Text>
         </TouchableOpacity>
@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
   },
   loginPrompt: {
     marginBottom: 20,
+    padding:30,
   },
   acchave: {
     color: '#9E9E9E',
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    height: 100,
+    height: 80,
   },
   textsignin: {
     color: 'white',

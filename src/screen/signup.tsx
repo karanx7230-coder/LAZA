@@ -63,7 +63,6 @@ export default function Signup({ navigation }: any) {
     }
   };
   const handleFirebaseSignUp = async () => {
-    // 1. Check if fields are empty or have errors
     if (!username || !email || !password) {
       Alert.alert('Missing Fields', 'Please fill out all fields.');
       return;
@@ -76,26 +75,16 @@ export default function Signup({ navigation }: any) {
     setLoading(true);
 
     try {
-      // 2. Create the user in Firebase
       const userCredential = await auth().createUserWithEmailAndPassword(
         email,
         password,
       );
 
-      // 3. Optional but recommended: Save their username to their Firebase profile
       await userCredential.user.updateProfile({
         displayName: username,
       });
-
-      console.log(
-        'User account created & signed in!',
-        userCredential.user.email,
-      );
-
-      // 4. Navigate to the main app on success
       navigation.navigate('MainTabs');
     } catch (error: any) {
-      // 5. Handle Firebase-specific errors
       if (error.code === 'auth/email-already-in-use') {
         setEmailError('That email address is already in use!');
       } else if (error.code === 'auth/invalid-email') {

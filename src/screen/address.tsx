@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   },
   last: {
     backgroundColor: '#8b5cf6',
-    height: 70,
+    height: 80,
     bottom: 0,
     left: 0,
     right: 0,

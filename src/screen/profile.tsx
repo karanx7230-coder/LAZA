@@ -12,7 +12,6 @@ export default function profile({ navigation }: any) {
   const {isDarkMode, toggleTheme,colors } = useTheme();
   const handleLogout = () => {
   auth().signOut()
-    .then(() => console.log('User signed out!'));
 };
   return (
     <View style={[styles.mainview,{backgroundColor:colors.background}]}>
@@ -68,7 +67,6 @@ export default function profile({ navigation }: any) {
       </View>
       <View style={styles.lines}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('')}
           style={styles.row}
         >
           <Image

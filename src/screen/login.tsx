@@ -35,7 +35,6 @@ export default function Signin({ navigation }: any) {
 
     try {
       await auth().signInWithEmailAndPassword(email, password);
-      console.log('Logged in successfully!');
 
       navigation.navigate('MainTabs');
     } catch (error: any) {
@@ -265,6 +264,7 @@ const styles = StyleSheet.create({
     right: 0,
     paddingVertical: 20,
     alignItems: 'center',
+    height:80,
     marginHorizontal: -20,
   },
   signupButtonText: {

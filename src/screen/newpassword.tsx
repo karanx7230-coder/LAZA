@@ -31,7 +31,6 @@ export default function NewPassword({ navigation }: any) {
         setErrorMessage('Passwords do not match!');
       } else {
         setErrorMessage('');
-        console.log('Success! Passwords match.');
         navigation.navigate('home');
       }
     }

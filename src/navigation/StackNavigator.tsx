@@ -21,6 +21,7 @@ import orderdone from '../screen/orderdone';
 import profile from '../screen/profile';
 import wishlist from '../screen/wishlist';
 import Home from '../screen/home';
+import Productstack from '../screen/productstack';
 
 const Stack = createNativeStackNavigator();
 export default function StackNavigator({ user }: { user: any }) {
@@ -40,6 +41,7 @@ export default function StackNavigator({ user }: { user: any }) {
           <Stack.Screen name="payment" component={payment} />
           <Stack.Screen name="profile" component={profile} />
           <Stack.Screen name="product" component={product} />
+          <Stack.Screen name="productstack" component={Productstack} />
           <Stack.Screen name="reviews" component={reviews} />
           <Stack.Screen name="addreview" component={AddReview} />
           <Stack.Screen name="address" component={address} />
