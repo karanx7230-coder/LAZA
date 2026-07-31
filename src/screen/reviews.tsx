@@ -8,8 +8,8 @@ import {
 } from 'react-native';
 import React from 'react';
 import { useTheme } from '../context/ThemeContext';
-export default function reviews({ navigation, route }: any) {
-  const { reviews } = route.params;
+export default function Reviews({ navigation, route }: any) {
+  const { reviews: reviewList } = route.params;
   const { colors } = useTheme();
 
   return (
@@ -25,7 +25,7 @@ export default function reviews({ navigation, route }: any) {
       </View>
       <View style={styles.viewrow}>
         <View>
-          <Text style={[styles.head, { color: colors.text }]}>{reviews?.length || 0} Reviews</Text>
+          <Text style={[styles.head, { color: colors.text }]}>{reviewList?.length || 0} Reviews</Text>
           <Text>
             4.8
             <Image
@@ -44,7 +44,7 @@ export default function reviews({ navigation, route }: any) {
         </View>
       </View>
       <FlatList
-        data={reviews} // Ab ye data route.params se aa raha hai
+        data={reviewList}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => {
           return (

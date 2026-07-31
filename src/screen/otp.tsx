@@ -14,7 +14,7 @@ import { useTheme } from '../context/ThemeContext';
 export default function Otp({ navigation }: any) {
   const [otp, setotp] = useState(['', '', '', '']);
   const inputRefs = useRef<Array<TextInput | null>>([]);
-const {isDarkMode,toggleTheme,colors}=useTheme();
+const {colors}=useTheme();
 
   const [timeLeft, setTimeLeft] = useState(20);
 

@@ -1,6 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
 
-// 1. Define the shape of our context
 type ThemeContextType = {
   isDarkMode: boolean;
   toggleTheme: () => void;

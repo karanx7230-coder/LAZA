@@ -10,7 +10,7 @@ import {
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useTheme } from '../context/ThemeContext';
-export default function payment({ navigation }: any) {
+export default function Payment({ navigation }: any) {
   const [isrememberd, setIsRemembered] = useState(true);
 const {  colors } = useTheme();
   const [name,setname]=useState("")

@@ -8,7 +8,7 @@ import {
   Switch,
 } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
-export default function profile({ navigation }: any) {
+export default function Profile({ navigation }: any) {
   const {isDarkMode, toggleTheme,colors } = useTheme();
   const handleLogout = () => {
   auth().signOut()

@@ -76,18 +76,3 @@ export const handleForegroundNotification = () => {
     unsubscribeNotifee();
   };
 };
-// export const handleForegroundNotification = () => {
-//   return messaging().onMessage(item => {
-//     Alert.alert(
-//       item.notification?.title,
-//       item.notification?.body,
-//       [
-//         { text: 'Dismiss', style: 'cancel' },
-//         {
-//           text: 'View',
-//           onPress: () => navigate('productstack', { id: 10 }),
-//         },
-//       ]
-//     );
-//   });
-// };

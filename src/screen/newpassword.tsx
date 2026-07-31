@@ -17,7 +17,7 @@ export default function NewPassword({ navigation }: any) {
   const [confirmpasswordFocused, setconfirmpasswordFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showconfirmPassword, setShowconfirmPassword] = useState(false);
-  const {isDarkMode,toggleTheme,colors}=useTheme();
+  const {colors}=useTheme();
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');

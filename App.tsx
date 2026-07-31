@@ -4,9 +4,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import StackNavigator from './src/navigation/StackNavigator';
 import { WishlistProvider } from './src/context/WishlistContext';
-import { CartProvider } from './src/context/CartContext';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { navigationRef } from './src/navigation/navigationService';
+import { StoreProvider } from './src/store';
 import useDeepLinking from './src/service/link';
 import {
   requestNotificationPermission,
@@ -31,10 +31,10 @@ export default function App() {
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged((userState: any) => {
       setUser(userState);
-      if (loading) setLoading(false);
+      setLoading(false);
     });
     return subscriber;
-  }, [loading]);
+  }, []);
 
   useEffect(() => {
     if (!loading) {
@@ -52,15 +52,15 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider>
-      <CartProvider>
+    <StoreProvider>
+      <ThemeProvider>
         <WishlistProvider>
           <NavigationContainer ref={navigationRef}>
             <StackNavigator user={user} />
           </NavigationContainer>
         </WishlistProvider>
-      </CartProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </StoreProvider>
   );
 }
 

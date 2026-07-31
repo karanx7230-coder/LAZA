@@ -2,8 +2,8 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import React from 'react';
 import { useTheme } from '../context/ThemeContext';
 
-export default function orderdone({ navigation }: any) {
-const {isDarkMode,toggleTheme,colors}=useTheme();
+export default function OrderDone({ navigation }: any) {
+const {colors}=useTheme();
 
   return (
      <View style={[styles.view,{backgroundColor:colors.background}]}>

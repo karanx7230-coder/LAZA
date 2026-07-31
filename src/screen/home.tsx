@@ -50,17 +50,8 @@ export default function Home({ navigation }: any) {
     getProductsFromAPI();
   }, []);
 
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#9B72FF" />
-        <Text style={{ marginTop: 10 }}>Loading New Arrivals...</Text>
-      </View>
-    );
-  }
-
-  return (
-    <View style={[styles.view, { backgroundColor: colors.background }]}>
+  const ListHeader = () => (
+    <View>
       <View style={styles.viewtop}>
         <TouchableOpacity
           style={styles.back}
@@ -144,7 +135,22 @@ export default function Home({ navigation }: any) {
           <Text style={styles.viewall}>View All</Text>
         </TouchableOpacity>
       </View>
+    </View>
+  );
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#9B72FF" />
+        <Text style={{ marginTop: 10 }}>Loading New Arrivals...</Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={[styles.view, { backgroundColor: colors.background }]}>
       <FlatList
+        ListHeaderComponent={ListHeader}
         numColumns={2}
         columnWrapperStyle={{ justifyContent: 'space-between' }}
         showsVerticalScrollIndicator={false}

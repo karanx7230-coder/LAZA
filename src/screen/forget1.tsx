@@ -12,7 +12,7 @@ import {
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 export default function Forget1({ navigation }: any) {
-const {isDarkMode,toggleTheme,colors}=useTheme();
+const {colors}=useTheme();
 
   const [emailFocused, setemailFocused] = useState(false);
   return (

@@ -14,7 +14,7 @@ import { useTheme } from '../context/ThemeContext';
 
 export default function AddReview({ navigation }: any) {
   const [rating, setRating] = useState(0);
-const {isDarkMode,toggleTheme,colors}=useTheme();
+const {colors}=useTheme();
 
   return (
     <KeyboardAvoidingView style={[styles.mainview,{backgroundColor:colors.background}]}

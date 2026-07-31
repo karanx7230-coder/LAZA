@@ -9,7 +9,7 @@ import {
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 
-export default function addcard({ navigation }: any) {
+export default function AddCard({ navigation }: any) {
   
   const { colors } = useTheme();
    const [name,setname]=useState("")

@@ -8,16 +8,17 @@ import {
   ImageBackground,
 } from 'react-native';
 import React, { useState } from 'react';
-import { useCart } from '../context/CartContext';
+import { observer } from 'mobx-react-lite';
+import { useStore } from '../store';
 import { useTheme } from '../context/ThemeContext';
-export default function Product({ route, navigation }: any) {
-  const { isDarkMode, toggleTheme, colors } = useTheme();
+export default observer(function Product({ route, navigation }: any) {
+  const { colors } = useTheme();
   const { productData } = route.params;
-  const { Cart, addToCart } = useCart();
-  const isItemInCart = Cart?.some((item: any) => item.id === productData.id);
+  const cart = useStore().cart;
+  const isItemInCart = cart.items?.some((item: any) => item.id === productData.id);
   const handlePress = () => {
     if (!isItemInCart) {
-      addToCart({ ...productData, quantity: quantity });
+      cart.addToCart({ ...productData, quantity: quantity });
     } else {
       navigation.navigate('Cart');
     }
@@ -181,7 +182,7 @@ export default function Product({ route, navigation }: any) {
       </View>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   scrollview: {

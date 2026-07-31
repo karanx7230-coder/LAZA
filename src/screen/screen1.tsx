@@ -10,7 +10,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useTheme } from '../context/ThemeContext';
 
 export default function Screen1({ navigation }: any) {
-const {isDarkMode,toggleTheme,colors}=useTheme();
+const {colors}=useTheme();
 
   return (
     <LinearGradient

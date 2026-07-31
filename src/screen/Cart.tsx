@@ -7,21 +7,16 @@ import {
   Image,
 } from 'react-native';
 import React from 'react';
-import { useCart } from '../context/CartContext';
+import { observer } from 'mobx-react-lite';
+import { useStore } from '../store';
 import { useTheme } from '../context/ThemeContext';
-export default function Cart({ route, navigation }: any) {
+export default observer(function Cart({ route, navigation }: any) {
   const { colors } = useTheme();
   const passedAddress = route?.params?.updatedaddress;
-
-  const { Cart, removeFromCart, increaseQuantity, decreaseQuantity } =
-    useCart();
-  const shippingCost = Cart.length > 1 ? 15 : 0;
-  const subtotal = Cart.reduce(
-    (total: number, item: any) =>
-      total + (item.price || 0) * (item.quantity || 1),
-    0,
-  );
-  const totalAmount = subtotal + shippingCost;
+  const cart = useStore().cart;
+  const shippingCost = cart.shippingCost;
+  const subtotal = cart.subtotal;
+  const totalAmount = cart.totalAmount;
 
   return (
     <View style={[styles.view, { backgroundColor: colors.background }]}>
@@ -36,7 +31,7 @@ export default function Cart({ route, navigation }: any) {
         <View style={styles.view1} />
       </View>
 
-      {Cart.length === 0 ? (
+      {cart.items.length === 0 ? (
         <View
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         >
@@ -46,7 +41,7 @@ export default function Cart({ route, navigation }: any) {
         </View>
       ) : (
         <FlatList
-          data={Cart}
+          data={cart.items}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item, index) =>
             item.id ? item.id.toString() : index.toString()
@@ -71,14 +66,14 @@ export default function Cart({ route, navigation }: any) {
                 </TouchableOpacity>
                 <View style={styles.priceviewbox}>
                   <TouchableOpacity
-                    onPress={() => decreaseQuantity(item.id)}
+                    onPress={() => cart.decreaseQuantity(item.id)}
                     style={styles.qtyButton}
                   >
                     <Text style={styles.qtyIcon}>-</Text>
                   </TouchableOpacity>
                   <Text style={styles.qtyText}>{item.quantity || 1}</Text>
                   <TouchableOpacity
-                    onPress={() => increaseQuantity(item.id)}
+                    onPress={() => cart.increaseQuantity(item.id)}
                     style={styles.qtyButton}
                   >
                     <Text style={styles.qtyIcon}>+</Text>
@@ -87,7 +82,7 @@ export default function Cart({ route, navigation }: any) {
                 <View>
                   <TouchableOpacity
                     style={styles.deletetouch}
-                    onPress={() => removeFromCart(item.id)}
+                    onPress={() => cart.removeFromCart(item.id)}
                   >
                     <Image
                       source={require('../assets/Delete.png')}
@@ -113,14 +108,16 @@ export default function Cart({ route, navigation }: any) {
               style={styles.mapimage}
             />
             <View style={styles.adress}>
-              <Text style={styles.adresshead}>{passedAddress 
+              <Text style={styles.adresshead}>
+                {passedAddress
                   ? `${passedAddress.fullAddress}, ${passedAddress.country}`
-                  : 'fufurinagar, cartoonnetwork 555'
-                }</Text>
-              <Text style={styles.adresssubhead}>{passedAddress 
+                  : 'fufurinagar, cartoonnetwork 555'}
+              </Text>
+              <Text style={styles.adresssubhead}>
+                {passedAddress
                   ? `${passedAddress.city}, ${passedAddress.name}`
-                  : 'fufurinagar, cartoonnetwork 555'
-                }</Text>
+                  : 'fufurinagar, cartoonnetwork 555'}
+              </Text>
             </View>
             <Image
               source={require('../assets/Check.png')}
@@ -186,7 +183,7 @@ export default function Cart({ route, navigation }: any) {
       </View>
     </View>
   );
-}
+});
 const styles = StyleSheet.create({
   view: {
     flex: 1,

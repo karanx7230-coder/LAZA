@@ -12,7 +12,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 export default function Wishlist({ navigation }: any) {
   const { wishlist } = useWishlist();
-const { isDarkMode, toggleTheme, colors } = useTheme();
+const { colors } = useTheme();
 const insets = useSafeAreaInsets();
   if (wishlist.length === 0) {
     return (

@@ -9,12 +9,13 @@ import {
   ActivityIndicator, // <-- Added ActivityIndicator
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { useCart } from '../context/CartContext';
+import { observer } from 'mobx-react-lite';
+import { useStore } from '../store';
 import { useTheme } from '../context/ThemeContext';
 
-export default function Productstack({ route, navigation }: any) {
-  const { isDarkMode, toggleTheme, colors } = useTheme();
-  const { Cart, addToCart } = useCart();
+export default observer(function Productstack({ route, navigation }: any) {
+  const { colors } = useTheme();
+  const cart = useStore().cart;
   const [productData, setProductData] = useState(
     route.params?.productData || null,
   );
@@ -51,11 +52,11 @@ export default function Productstack({ route, navigation }: any) {
   }
 
   // Now it is safe to use productData!
-  const isItemInCart = Cart?.some((item: any) => item.id === productData.id);
+  const isItemInCart = cart.items?.some((item: any) => item.id === productData.id);
 
   const handlePress = () => {
     if (!isItemInCart) {
-      addToCart({ ...productData, quantity: quantity });
+      cart.addToCart({ ...productData, quantity: quantity });
     } else {
       navigation.navigate('Cart');
     }
@@ -220,7 +221,7 @@ export default function Productstack({ route, navigation }: any) {
       </View>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   scrollview: {

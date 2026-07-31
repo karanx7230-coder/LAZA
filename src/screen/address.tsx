@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
-export default function address({ navigation }: any) {
+export default function Address({ navigation }: any) {
   const [isprimary, setasprimary] = useState(true);
   const { colors } = useTheme();
   const [name, setname] = useState('');

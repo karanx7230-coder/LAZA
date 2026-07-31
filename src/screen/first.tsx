@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 export default function FirstScreen({ navigation }: any) {
   useEffect(() => {
@@ -11,11 +11,7 @@ export default function FirstScreen({ navigation }: any) {
   return (
     <View style={styles.view}>
       <TouchableOpacity>
-        <Image
-          source={require('../assets/laza.png')}
-          style={styles.image}
-          resizeMode="contain"
-        />
+        <Text style={styles.text}> LAZA</Text>
       </TouchableOpacity>
     </View>
   );
@@ -27,8 +23,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  image: {
-    width: 900,
-    height: 900,
-  },
+  text: { fontSize: 25, color: 'white' },
 });
