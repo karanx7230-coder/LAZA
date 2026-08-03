@@ -203,7 +203,7 @@ export default observer(function Home({ navigation }: any) {
                   >
                     <Image
                       source={
-                        wishlist.isInWishlist(item.id)
+                        isFavorite
                           ? require('../assets/heart1.png')
                           : require('../assets/Heart.png')
                       }

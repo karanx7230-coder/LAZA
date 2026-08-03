@@ -1,10 +1,8 @@
 import React, { createContext, useContext } from 'react';
-import CartStore from './CartStore';
-import wishlistStore from './WishlistStore';
+import createWishlistStore from './WishlistStore';
 
 class RootStore {
-  cart = new CartStore();
-  wishlist = new wishlistStore();
+  wishlist = createWishlistStore();
 }
 
 const rootStore = new RootStore();

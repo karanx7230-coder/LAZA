@@ -9,15 +9,20 @@ import {
   ActivityIndicator, // <-- Added ActivityIndicator
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { observer } from 'mobx-react-lite';
-import { useStore } from '../store';
+import { observer } from '@legendapp/state/react';
 import { useTheme } from '../context/ThemeContext';
 import API from '../api/api';
 import { Colors, Routes } from '../utils';
+import {
+  addToCart,
+  cart$,
+  decreaseQuantity,
+  increaseQuantity,
+  removeFromCart,
+} from '../store/legend/cart';
 
 export default observer(function Productstack({ route, navigation }: any) {
   const { colors } = useTheme();
-  const cart = useStore().cart;
   const [productData, setProductData] = useState(
     route.params?.productData || null,
   );
@@ -53,20 +58,20 @@ export default observer(function Productstack({ route, navigation }: any) {
   }
 
   // Now it is safe to use productData!
-  const isItemInCart = cart.items?.some((item: any) => item.id === productData.id);
+ const isItemInCart = cart$.items.get().some(
+  (item) => item.id === productData.id,
+);
 
   const handlePress = () => {
     if (!isItemInCart) {
-      cart.addToCart({ ...productData, quantity: quantity });
+      addToCart({ ...productData, quantity: quantity });
     } else {
       navigation.navigate(Routes.CART);
     }
   };
 
-  const increaseQty = () => setQuantity(prev => prev + 1);
-  const decreaseQty = () => {
-    if (quantity > 1) setQuantity(prev => prev - 1);
-  };
+  const increaseQty = increaseQuantity;
+  const decreaseQty = decreaseQuantity;
 
   const totalPrice = productData.price * quantity;
 
@@ -193,13 +198,19 @@ export default observer(function Productstack({ route, navigation }: any) {
             </Text>
             <Text style={styles.tax}>with VAT,SD</Text>
           </View>
-          <TouchableOpacity onPress={decreaseQty} style={styles.qtyButton}>
+          <TouchableOpacity
+            onPress={() => decreaseQuantity}
+            style={styles.qtyButton}
+          >
             <Text style={styles.qtyIcon}>-</Text>
           </TouchableOpacity>
           <Text style={[styles.qtyText, { color: colors.text }]}>
             {quantity}
           </Text>
-          <TouchableOpacity onPress={increaseQty} style={styles.qtyButton}>
+          <TouchableOpacity
+            onPress={() => increaseQuantity}
+            style={styles.qtyButton}
+          >
             <Text style={styles.qtyIcon}>+</Text>
           </TouchableOpacity>
           <Text style={[styles.price, { color: colors.text }]}>

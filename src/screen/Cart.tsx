@@ -8,18 +8,27 @@ import {
   StatusBar,
 } from 'react-native';
 import React from 'react';
-import { observer } from 'mobx-react-lite';
-import { useStore } from '../store';
+import { observer } from '@legendapp/state/react';
 import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
 import { formatPrice } from '../utils/format';
+import {
+  cart$,
+  decreaseQuantity,
+  increaseQuantity,
+  removeFromCart,
+} from '../store/legend/cart';
 export default observer(function Cart({ route, navigation }: any) {
   const { isDarkMode, colors } = useTheme();
   const passedAddress = route?.params?.updatedaddress;
-  const cart = useStore().cart;
-  const shippingCost = cart.shippingCost;
-  const subtotal = cart.subtotal;
-  const totalAmount = cart.totalAmount;
+  const shippingCost = 5;
+  const items = cart$.items.get();
+
+  const subtotal = items.reduce(
+    (accumulator, item) => accumulator + item.price * item.quantity,
+    0,
+  );
+  const totalAmount = subtotal + shippingCost;
 
   return (
     <View style={[styles.view, { backgroundColor: colors.background }]}>
@@ -39,7 +48,7 @@ export default observer(function Cart({ route, navigation }: any) {
         <View style={styles.view1} />
       </View>
 
-      {cart.items.length === 0 ? (
+      {items.length === 0 ? (
         <View
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         >
@@ -49,7 +58,7 @@ export default observer(function Cart({ route, navigation }: any) {
         </View>
       ) : (
         <FlatList
-          data={cart.items}
+          data={items}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item, index) =>
             item.id ? item.id.toString() : index.toString()
@@ -74,14 +83,14 @@ export default observer(function Cart({ route, navigation }: any) {
                 </TouchableOpacity>
                 <View style={styles.priceviewbox}>
                   <TouchableOpacity
-                    onPress={() => cart.decreaseQuantity(item.id)}
+                    onPress={() => decreaseQuantity(item.id)}
                     style={styles.qtyButton}
                   >
                     <Text style={styles.qtyIcon}>-</Text>
                   </TouchableOpacity>
                   <Text style={styles.qtyText}>{item.quantity || 1}</Text>
                   <TouchableOpacity
-                    onPress={() => cart.increaseQuantity(item.id)}
+                    onPress={() => increaseQuantity(item.id)}
                     style={styles.qtyButton}
                   >
                     <Text style={styles.qtyIcon}>+</Text>
@@ -90,7 +99,7 @@ export default observer(function Cart({ route, navigation }: any) {
                 <View>
                   <TouchableOpacity
                     style={styles.deletetouch}
-                    onPress={() => cart.removeFromCart(item.id)}
+                    onPress={() => removeFromCart(item.id)}
                   >
                     <Image
                       source={require('../assets/Delete.png')}

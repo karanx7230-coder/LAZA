@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@legendapp/state": "^2.1.15",
     "@notifee/react-native": "^9.1.8",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-community/slider": "^5.2.0",

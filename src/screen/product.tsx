@@ -9,20 +9,20 @@ import {
   StatusBar,
 } from 'react-native';
 import React, { useState } from 'react';
-import { observer } from 'mobx-react-lite';
-import { useStore } from '../store';
+import { observer } from '@legendapp/state/react';
 import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
+import { addToCart, cart$ } from '../store/legend/cart';
 export default observer(function Product({ route, navigation }: any) {
   const { isDarkMode, colors } = useTheme();
   const { productData } = route.params;
-  const cart = useStore().cart;
-  const isItemInCart = cart.items?.some(
-    (item: any) => item.id === productData.id,
-  );
+  const isItemInCart = cart$.items
+    .get()
+    .some(item => item.id === productData.id);
   const handlePress = () => {
     if (!isItemInCart) {
-      cart.addToCart({ ...productData, quantity: quantity });
+      addToCart({ ...productData, quantity });
+      console.log('Item added to cart:', productData);
     } else {
       navigation.navigate(Routes.CART);
     }

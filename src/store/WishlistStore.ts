@@ -1,33 +1,32 @@
-import { makeAutoObservable } from 'mobx';
+import { observable } from 'mobx';
 
-export interface wishlistItem {
-  id: number | string;
+export interface WishlistItem {
+  id: string;
   title: string;
   price: number;
   [key: string]: any;
 }
 
-class wishlistStore {
-  items: wishlistItem[] = [];
+function createWishlistStore() {
+  //state
+  const store = observable({
+    items: [] as WishlistItem[],
+    //funcction to check
+    isInWishlist(id: string) {
+      return !!store.items.find(item => item.id === id);
+    },
+    // function to add and remove
+    toggleWishlist(product: WishlistItem) {
+      //if the product is already in the wishlist
+      if (store.items.find(item => item.id === product.id)) {
+        store.items = store.items.filter(item => item.id !== product.id);
+      } else {
+        store.items.push({ ...product });
+      }
+    },
+  });
 
-  constructor() {
-    makeAutoObservable(this);
-  }
-  isInWishlist(id: number | string) {
-    return this.items.some(item => item.id === id);
-  }
-  toggleWishlist(product: wishlistItem) {
-    const exists = this.items.find(item => item.id === product.id);
-
-    if (exists) {
-      this.items = this.items.filter(item => item.id !== product.id);
-    } else {
-      this.items.push({ ...product });
-    }
-  }
-  clearwishlist() {
-    this.items = [];
-  }
+  return store;
 }
 
-export default wishlistStore;
+export default createWishlistStore;
