@@ -2,6 +2,8 @@ import React from 'react';
 import { Image, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import { Routes, Colors } from '../utils';
+
 import Home from '../screen/home';
 import Cart from '../screen/Cart';
 import wishlist from '../screen/wishlist';
@@ -15,18 +17,18 @@ export default function TabNavigator() {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: '#ffffff',
+          backgroundColor: Colors.white,
           height: 60,
         },
       }}
     >
       <Tab.Screen
-        name="HomeTab"
+        name={Routes.HOME_TAB}
         component={Home}
         options={{
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <Text style={{ fontSize: 12, color: '#9B72FF' }}>home</Text>
+              <Text style={{ fontSize: 12, color: Colors.primary }}>home</Text>
             ) : (
               <Image
                 source={require('../assets/home1.png')}
@@ -37,12 +39,12 @@ export default function TabNavigator() {
         }}
       />
       <Tab.Screen
-        name="wishlist"
+        name={Routes.WISHLIST}
         component={wishlist}
         listeners={({ navigation }) => ({
           tabPress: e => {
             e.preventDefault();
-            navigation.navigate('wishlist', { brandName: undefined });
+            navigation.navigate(Routes.WISHLIST, { brandName: undefined });
           },
         })}
         options={{
@@ -60,7 +62,7 @@ export default function TabNavigator() {
       />
 
       <Tab.Screen
-        name="CartTab"
+        name={Routes.CART_TAB}
         component={Cart}
         options={{
           tabBarIcon: ({ focused }) =>
@@ -76,7 +78,7 @@ export default function TabNavigator() {
         }}
       />
       <Tab.Screen
-        name="payment"
+        name={Routes.PAYMENT}
         component={payment}
         options={{
           tabBarIcon: ({ focused }) =>

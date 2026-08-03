@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import auth from '@react-native-firebase/auth';
 import StackNavigator from './src/navigation/StackNavigator';
-import { WishlistProvider } from './src/context/WishlistContext';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { navigationRef } from './src/navigation/navigationService';
 import { StoreProvider } from './src/store';
@@ -17,14 +18,14 @@ import {
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     requestNotificationPermission();
     getFCMToken();
     const unsubscribeForeground = handleForegroundNotification();
     return () => {
-      unsubscribeForeground();
+      if (unsubscribeForeground) unsubscribeForeground();
     };
   }, []);
 
@@ -39,35 +40,46 @@ export default function App() {
   useEffect(() => {
     if (!loading) {
       const unsubscribe = handleNotificationNavigation();
-      return () => unsubscribe();
+      return () => {
+        if (unsubscribe) unsubscribe();
+      };
     }
   }, [loading]);
-      useDeepLinking();
+
+  useDeepLinking();
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="blue" />
+        <ActivityIndicator size="large" color="#9B72FF" />
       </View>
     );
   }
 
   return (
-    <StoreProvider>
-      <ThemeProvider>
-        <WishlistProvider>
-          <NavigationContainer ref={navigationRef}>
-            <StackNavigator user={user} />
-          </NavigationContainer>
-        </WishlistProvider>
-      </ThemeProvider>
-    </StoreProvider>
+    <GestureHandlerRootView style={styles.rootContainer}>
+      <SafeAreaProvider>
+        <StoreProvider>
+          <ThemeProvider>
+              <NavigationContainer ref={navigationRef}>
+                <StackNavigator user={user} />
+              </NavigationContainer>
+          </ThemeProvider>
+        </StoreProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
+  rootContainer: {
+    flex: 1,
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#ffffff',
   },
 });
+

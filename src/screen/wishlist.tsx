@@ -5,18 +5,27 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
 import React from 'react';
-import { useWishlist } from '../context/WishlistContext';
 import { useTheme } from '../context/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-export default function Wishlist({ navigation }: any) {
-  const { wishlist } = useWishlist();
-const { colors } = useTheme();
-const insets = useSafeAreaInsets();
-  if (wishlist.length === 0) {
+import { Routes } from '../utils';
+import { useStore } from '../store';
+import { observer } from 'mobx-react-lite';
+export default observer(function Wishlist({ navigation }: any) {
+  const wishlist = useStore().wishlist;
+
+  const { isDarkMode, colors } = useTheme();
+  const insets = useSafeAreaInsets();
+  if (wishlist.items.length === 0) {
     return (
       <View style={styles.center}>
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor="transparent"
+          translucent
+        />
         <Text style={{ fontSize: 18, color: 'gray' }}>
           Your Wishlist is Empty!
         </Text>
@@ -25,7 +34,16 @@ const insets = useSafeAreaInsets();
   }
 
   return (
-    <View style={[styles.view, { paddingTop: insets.top, paddingBottom: insets.bottom, backgroundColor: colors.background }]}>
+    <View
+      style={[
+        styles.view,
+        {
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          backgroundColor: colors.background,
+        },
+      ]}
+    >
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity
@@ -34,19 +52,19 @@ const insets = useSafeAreaInsets();
           >
             <Text style={{ fontSize: 20 }}>←</Text>
           </TouchableOpacity>
-          <Text style={[styles.title,{color:colors.text}]}>Wishlist</Text>
+          <Text style={[styles.title, { color: colors.text }]}>Wishlist</Text>
           <View style={{ width: 40 }} />
         </View>
 
         <FlatList
-          data={wishlist}
+          data={wishlist.items}
           contentContainerStyle={{ paddingBottom: 20 }}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.item}
               onPress={() =>
-                navigation.navigate('product', { productData: item })
+                navigation.navigate(Routes.PRODUCT, { productData: item })
               }
             >
               <Image source={{ uri: item.thumbnail }} style={styles.img} />
@@ -62,13 +80,12 @@ const insets = useSafeAreaInsets();
       </View>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   view: {
     flex: 1,
     backgroundColor: '#fff',
-   
   },
   container: {
     flex: 1,

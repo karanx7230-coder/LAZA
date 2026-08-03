@@ -6,15 +6,25 @@ import {
   Image,
   StyleSheet,
   Switch,
+  StatusBar,
 } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
+import { Routes } from '../utils';
+
 export default function Profile({ navigation }: any) {
-  const {isDarkMode, toggleTheme,colors } = useTheme();
+  const { isDarkMode, toggleTheme, colors } = useTheme();
+  
   const handleLogout = () => {
-  auth().signOut()
-};
+    auth().signOut();
+  };
+
   return (
-    <View style={[styles.mainview,{backgroundColor:colors.background}]}>
+    <View style={[styles.mainview, { backgroundColor: colors.background }]}>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor="transparent"
+        translucent
+      />
       <View style={styles.viewrow}>
         <TouchableOpacity
           style={styles.back}
@@ -31,8 +41,7 @@ export default function Profile({ navigation }: any) {
             source={require('../assets/profile.png')}
             resizeMode="cover"
           />
-
-          <Text style={[styles.text,{ color: colors.text }]}>Mr Mou</Text>
+          <Text style={[styles.text, { color: colors.text }]}>Mr Mou</Text>
           <Text style={styles.text1}>
             verified Profile
             <Image
@@ -47,6 +56,7 @@ export default function Profile({ navigation }: any) {
           </TouchableOpacity>
         </View>
       </View>
+
       <View style={styles.lines}>
         <View style={styles.row}>
           <Image
@@ -65,21 +75,21 @@ export default function Profile({ navigation }: any) {
           />
         </View>
       </View>
+
       <View style={styles.lines}>
-        <TouchableOpacity
-          style={styles.row}
-        >
+        <TouchableOpacity style={styles.row}>
           <Image
             style={styles.image1}
             source={require('../assets/Info.png')}
             resizeMode="contain"
           />
-          <Text    style={[styles.text2, { color: colors.text }]}>Account Information</Text>
+          <Text style={[styles.text2, { color: colors.text }]}>Account Information</Text>
         </TouchableOpacity>
       </View>
+
       <View style={styles.lines}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('newpassword')}
+          onPress={() => navigation.navigate(Routes.NEW_PASSWORD)}
           style={styles.row}
         >
           <Image
@@ -87,12 +97,13 @@ export default function Profile({ navigation }: any) {
             source={require('../assets/lock.png')}
             resizeMode="contain"
           />
-          <Text    style={[styles.text2, { color: colors.text }]}>Password</Text>
+          <Text style={[styles.text2, { color: colors.text }]}>Password</Text>
         </TouchableOpacity>
       </View>
+
       <View style={styles.lines}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Cart')}
+          onPress={() => navigation.navigate(Routes.CART)}
           style={styles.row}
         >
           <Image
@@ -100,12 +111,13 @@ export default function Profile({ navigation }: any) {
             source={require('../assets/Bag.png')}
             resizeMode="contain"
           />
-          <Text    style={[styles.text2, { color: colors.text }]}>Order</Text>
+          <Text style={[styles.text2, { color: colors.text }]}>Order</Text>
         </TouchableOpacity>
       </View>
+
       <View style={styles.lines}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('payment')}
+          onPress={() => navigation.navigate(Routes.PAYMENT)}
           style={styles.row}
         >
           <Image
@@ -113,12 +125,13 @@ export default function Profile({ navigation }: any) {
             source={require('../assets/Wallet.png')}
             resizeMode="contain"
           />
-          <Text    style={[styles.text2, { color: colors.text }]}>My Cards</Text>
+          <Text style={[styles.text2, { color: colors.text }]}>My Cards</Text>
         </TouchableOpacity>
       </View>
+
       <View style={styles.lines}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('wishlist')}
+          onPress={() => navigation.navigate(Routes.WISHLIST)}
           style={styles.row}
         >
           <Image
@@ -126,14 +139,12 @@ export default function Profile({ navigation }: any) {
             source={require('../assets/Heart.png')}
             resizeMode="contain"
           />
-          <Text    style={[styles.text2, { color: colors.text }]}>Wishlist</Text>
+          <Text style={[styles.text2, { color: colors.text }]}>Wishlist</Text>
         </TouchableOpacity>
       </View>
+
       <View style={styles.lines1}>
-        <TouchableOpacity
-          onPress={handleLogout}
-          style={styles.row}
-        >
+        <TouchableOpacity onPress={handleLogout} style={styles.row}>
           <Image
             style={styles.image1}
             source={require('../assets/Logout.png')}
@@ -145,6 +156,7 @@ export default function Profile({ navigation }: any) {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   mainview: {
     flex: 1,
@@ -170,7 +182,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: 260,
   },
-
   text: {
     fontSize: 25,
     fontWeight: '600',
@@ -195,7 +206,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginRight:10,
+    marginRight: 10,
   },
   lines1: {
     marginTop: 40,

@@ -1,6 +1,7 @@
 import { Linking } from 'react-native';
 import { useEffect } from 'react';
 import { navigate } from '../navigation/navigationService';
+import { Routes } from '../utils';
 
 function useDeepLinking() {
     useEffect(() => {
@@ -19,7 +20,7 @@ function useDeepLinking() {
         console.log('Deep link received:', url);
         const parsed = new URL(url);
         const productId = parsed.pathname.replace(/^\//,'');
-        navigate('productstack', { id: productId });
+        navigate(Routes.PRODUCT_STACK, { id: productId });
     }
 }
 export default useDeepLinking;

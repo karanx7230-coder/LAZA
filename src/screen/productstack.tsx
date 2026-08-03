@@ -12,6 +12,8 @@ import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../store';
 import { useTheme } from '../context/ThemeContext';
+import API from '../api/api';
+import { Colors, Routes } from '../utils';
 
 export default observer(function Productstack({ route, navigation }: any) {
   const { colors } = useTheme();
@@ -24,9 +26,8 @@ export default observer(function Productstack({ route, navigation }: any) {
   const productId = route?.params?.id;
   useEffect(() => {
     if (!productData && productId) {
-      fetch(`https://dummyjson.com/products/${productId}`)
-        .then(res => res.json())
-        .then(data => {
+      API.get(`/products/${productId}`)
+        .then(({ data }) => {
           setProductData(data);
           setLoading(false);
         })
@@ -58,7 +59,7 @@ export default observer(function Productstack({ route, navigation }: any) {
     if (!isItemInCart) {
       cart.addToCart({ ...productData, quantity: quantity });
     } else {
-      navigation.navigate('Cart');
+      navigation.navigate(Routes.CART);
     }
   };
 
@@ -211,7 +212,7 @@ export default observer(function Productstack({ route, navigation }: any) {
           onPress={handlePress}
           style={[
             styles.addtocart,
-            { backgroundColor: isItemInCart ? '#3281ffa7' : '#9B72FF' },
+            { backgroundColor: isItemInCart ? '#3281ffa7' : Colors.primary },
           ]}
         >
           <Text style={styles.cart}>

@@ -9,15 +9,19 @@ import {
   ScrollView,
   FlatList,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { DrawerActions } from '@react-navigation/native';
 import API from '../api/api';
-import { useWishlist } from '../context/WishlistContext';
 import { useTheme } from '../context/ThemeContext';
-export default function Home({ navigation }: any) {
-  const { colors } = useTheme();
-  const { wishlist, toggleWishlist } = useWishlist();
+import { Colors, Routes } from '../utils';
+import { useStore } from '../store';
+import { observer } from 'mobx-react-lite';
+
+export default observer(function Home({ navigation }: any) {
+  const { isDarkMode, colors } = useTheme();
+  const wishlist = useStore().wishlist;
   const [cloths, setCloths] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -65,7 +69,7 @@ export default function Home({ navigation }: any) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.back}
-          onPress={() => navigation.navigate('Cart')}
+          onPress={() => navigation.navigate(Routes.CART)}
         >
           <Image
             style={styles.imagetop}
@@ -111,7 +115,7 @@ export default function Home({ navigation }: any) {
               key={cat}
               style={[
                 styles.brand,
-                selectedCategory === cat && { backgroundColor: '#9B72FF' },
+                selectedCategory === cat && { backgroundColor: Colors.primary },
               ]}
               onPress={() => setSelectedCategory(cat)}
             >
@@ -140,34 +144,51 @@ export default function Home({ navigation }: any) {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: colors.background,
+        }}
+      >
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor="transparent"
+          translucent
+        />
         <ActivityIndicator size="large" color="#9B72FF" />
-        <Text style={{ marginTop: 10 }}>Loading New Arrivals...</Text>
+        <Text style={{ marginTop: 10, color: colors.text }}>
+          Loading New Arrivals...
+        </Text>
       </View>
     );
   }
 
   return (
     <View style={[styles.view, { backgroundColor: colors.background }]}>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor="transparent"
+        translucent
+      />
       <FlatList
         ListHeaderComponent={ListHeader}
         numColumns={2}
         columnWrapperStyle={{ justifyContent: 'space-between' }}
         showsVerticalScrollIndicator={false}
         data={filteredProducts}
+        extraData={wishlist.items.length}
         keyExtractor={(item, index) =>
           item.id ? item.id.toString() : index.toString()
         }
         renderItem={({ item }) => {
-          const isFavorite = wishlist.some(
-            (favItem: any) => favItem.id === item.id,
-          );
-
+          const isFavorite = wishlist.isInWishlist(item.id);
           return (
             <View style={styles.clothboxes}>
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('product', { productData: item })
+                  navigation.navigate(Routes.PRODUCT, { productData: item })
                 }
                 style={styles.touchbox}
               >
@@ -178,11 +199,11 @@ export default function Home({ navigation }: any) {
                 >
                   <TouchableOpacity
                     style={styles.diltouch}
-                    onPress={() => toggleWishlist(item)}
+                    onPress={() => wishlist.toggleWishlist(item)}
                   >
                     <Image
                       source={
-                        isFavorite
+                        wishlist.isInWishlist(item.id)
                           ? require('../assets/heart1.png')
                           : require('../assets/Heart.png')
                       }
@@ -205,7 +226,7 @@ export default function Home({ navigation }: any) {
       />
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   view: {

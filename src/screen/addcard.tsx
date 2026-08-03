@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { Colors } from '../utils';
 
 export default function AddCard({ navigation }: any) {
   
@@ -150,8 +151,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   addnew: {
-    backgroundColor: '#f4e8ff',
-    borderColor: '#c77af3',
+	backgroundColor: Colors.primarySoft,
+	borderColor: '#c77af3',
     borderWidth: 1,
     height: 50,
     borderRadius: 10,
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   last: {
-    backgroundColor: '#8b5cf6',
+	backgroundColor: Colors.primaryDark,
     height: 70,
     justifyContent: 'center',
     alignItems: 'center',

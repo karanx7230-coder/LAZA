@@ -7,10 +7,13 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  StatusBar,
 } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
+import { Colors, Routes } from '../utils';
 GoogleSignin.configure({
-  webClientId: '1065925478043-cimr44d4veci0egq2grlivtb5bj2r002.apps.googleusercontent.com',
+  webClientId:
+    '1065925478043-cimr44d4veci0egq2grlivtb5bj2r002.apps.googleusercontent.com',
 });
 export default function Screen2({ navigation }: any) {
   const ongooglebuttonpress = async () => {
@@ -29,16 +32,19 @@ export default function Screen2({ navigation }: any) {
       console.error('google login error:', error);
     }
   };
-  const { colors } = useTheme();
+  const { isDarkMode, colors } = useTheme();
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor="transparent"
+        translucent
+      />
       <Text style={[styles.title1, { color: colors.text }]}>
         Let's Get Started
       </Text>
 
-      <TouchableOpacity
-        style={styles.facebookBtn}
-      >
+      <TouchableOpacity style={styles.facebookBtn}>
         <Image
           style={styles.imgf}
           source={require('../assets/facebook.png')}
@@ -47,9 +53,7 @@ export default function Screen2({ navigation }: any) {
         <Text style={styles.btnText}>Facebook</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.TwitterBtn}
-      >
+      <TouchableOpacity style={styles.TwitterBtn}>
         <Image
           style={styles.imgf}
           source={require('../assets/twitter.png')}
@@ -59,8 +63,10 @@ export default function Screen2({ navigation }: any) {
       </TouchableOpacity>
 
       <TouchableOpacity
-       onPress={() => {
-          ongooglebuttonpress().catch(error => console.log('Login failed:', error));
+        onPress={() => {
+          ongooglebuttonpress().catch(error =>
+            console.log('Login failed:', error),
+          );
         }}
         style={styles.GoogleBtn}
       >
@@ -74,17 +80,17 @@ export default function Screen2({ navigation }: any) {
 
       <View style={styles.bottomContainer}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('login')}
+          onPress={() => navigation.navigate(Routes.LOGIN)}
           style={styles.loginPrompt}
         >
           <Text style={styles.acchave}>
-            Already have an account? 
+            Already have an account?
             <Text style={[styles.signin, { color: colors.text }]}>Signin</Text>
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate('signup')}
+          onPress={() => navigation.navigate(Routes.SIGNUP)}
           style={styles.createacc}
         >
           <Text style={styles.textsignin}>Create an Account</Text>
@@ -112,7 +118,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#4D6AB4',
+	backgroundColor: Colors.navy,
     padding: 15,
     borderRadius: 8,
     width: '85%',
@@ -122,7 +128,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#2CA4F4',
+	backgroundColor: Colors.infoBlue,
     padding: 15,
     width: '85%',
     borderRadius: 8,
@@ -132,7 +138,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#E94335',
+	backgroundColor: Colors.error,
     padding: 15,
     width: '85%',
     borderRadius: 8,
@@ -154,7 +160,7 @@ const styles = StyleSheet.create({
   },
   loginPrompt: {
     marginBottom: 20,
-    padding:30,
+    padding: 30,
   },
   acchave: {
     color: '#9E9E9E',
@@ -166,7 +172,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   createacc: {
-    backgroundColor: '#9A75FA',
+	backgroundColor: Colors.primaryLight,
     width: '100%',
     paddingVertical: 20,
     justifyContent: 'center',

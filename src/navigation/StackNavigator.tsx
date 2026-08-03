@@ -1,6 +1,8 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { Routes } from '../utils';
+
 import DrawerNavigator from './DrawerNavigator';
 import FirstScreen from '../screen/first';
 import Screen1 from '../screen/screen1';
@@ -32,33 +34,37 @@ export default function StackNavigator({ user }: { user: any }) {
       }}
     >
       {user ? (
-        // Agar user login hai (user object exist karta hai), toh yeh screens dikhao
         <Stack.Group>
-          <Stack.Screen name="MainTabs" component={DrawerNavigator} />
-          <Stack.Screen name="home" component={Home} />
-          <Stack.Screen name="Cart" component={Cart} />
-          <Stack.Screen name="wishlist" component={wishlist} />
-          <Stack.Screen name="payment" component={payment} />
-          <Stack.Screen name="profile" component={profile} />
-          <Stack.Screen name="product" component={product} />
-          <Stack.Screen name="productstack" component={Productstack} />
-          <Stack.Screen name="reviews" component={reviews} />
-          <Stack.Screen name="addreview" component={AddReview} />
-          <Stack.Screen name="address" component={address} />
-          <Stack.Screen name="addcard" component={addcard} />
-          <Stack.Screen name="orderdone" component={orderdone} />
+          <Stack.Screen name={Routes.MAIN_TABS} component={DrawerNavigator} />
+          <Stack.Screen name={Routes.HOME} component={Home} />
+          <Stack.Screen name={Routes.CART} component={Cart} />
+          <Stack.Screen name={Routes.WISHLIST} component={wishlist} />
+          <Stack.Screen name={Routes.PAYMENT} component={payment} />
+          <Stack.Screen name={Routes.PROFILE} component={profile} />
+          <Stack.Screen name={Routes.PRODUCT} component={product} />
+          <Stack.Screen
+            name={Routes.PRODUCT_STACK}
+            component={Productstack}
+          />
+          <Stack.Screen name={Routes.REVIEWS} component={reviews} />
+          <Stack.Screen name={Routes.ADD_REVIEW} component={AddReview} />
+          <Stack.Screen name={Routes.ADDRESS} component={address} />
+          <Stack.Screen name={Routes.ADD_CARD} component={addcard} />
+          <Stack.Screen name={Routes.ORDER_DONE} component={orderdone} />
         </Stack.Group>
       ) : (
-        // Agar user null hai (login nahi kiya), toh sirf yeh Auth screens dikhao
         <Stack.Group>
-          <Stack.Screen name="first" component={FirstScreen} />
-          <Stack.Screen name="screen1" component={Screen1} />
-          <Stack.Screen name="screen2" component={Screen2} />
-          <Stack.Screen name="forget1" component={Forget1} />
-          <Stack.Screen name="otp" component={Otp} />
-          <Stack.Screen name="newpassword" component={newpassword} />
-          <Stack.Screen name="signup" component={Signup} />
-          <Stack.Screen name="login" component={Signin} />
+          <Stack.Screen name={Routes.FIRST} component={FirstScreen} />
+          <Stack.Screen name={Routes.SCREEN1} component={Screen1} />
+          <Stack.Screen name={Routes.SCREEN2} component={Screen2} />
+          <Stack.Screen name={Routes.FORGET} component={Forget1} />
+          <Stack.Screen name={Routes.OTP} component={Otp} />
+          <Stack.Screen
+            name={Routes.NEW_PASSWORD}
+            component={newpassword}
+          />
+          <Stack.Screen name={Routes.SIGNUP} component={Signup} />
+          <Stack.Screen name={Routes.LOGIN} component={Signin} />
         </Stack.Group>
       )}
     </Stack.Navigator>

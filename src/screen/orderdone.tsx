@@ -1,6 +1,7 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import React from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { Colors, Routes } from '../utils';
 
 export default function OrderDone({ navigation }: any) {
 const {colors}=useTheme();
@@ -27,13 +28,13 @@ const {colors}=useTheme();
       </Text>
       <TouchableOpacity
         style={styles.addnew}
-        onPress={() => navigation.navigate('Cart')}
+        onPress={() => navigation.navigate(Routes.CART)}
       >
         <Text style={styles.addtext}>Go to Orders</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.confirmbtn}
-        onPress={() => navigation.navigate('MainTabs')}
+        onPress={() => navigation.navigate(Routes.MAIN_TABS)}
       >
         <Text style={styles.confirmtext}>coontinue shopping</Text>
       </TouchableOpacity>
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   confirmbtn: {
-    backgroundColor: '#8b5cf6',
+	backgroundColor: Colors.primaryDark,
     position: 'absolute',
     bottom: 0,
     left: 0,

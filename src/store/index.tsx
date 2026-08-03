@@ -1,8 +1,10 @@
 import React, { createContext, useContext } from 'react';
 import CartStore from './CartStore';
+import wishlistStore from './WishlistStore';
 
 class RootStore {
   cart = new CartStore();
+  wishlist = new wishlistStore();
 }
 
 const rootStore = new RootStore();

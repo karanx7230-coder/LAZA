@@ -1,6 +1,8 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
+import { Routes } from '../utils';
+
 import Profile from '../screen/profile'; 
 import TabNavigator from './TabNavigator'; 
 
@@ -17,7 +19,7 @@ export default function DrawerNavigator() {
         },
       }}
     >
-      <Drawer.Screen name="HomeDrawer" component={TabNavigator} />
+      <Drawer.Screen name={Routes.HOME_DRAWER} component={TabNavigator} />
       
     
     </Drawer.Navigator>

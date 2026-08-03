@@ -8,16 +8,18 @@ import {
   Text,
   TextInput,
   Image,
+  StatusBar,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { Colors, Routes } from '../utils';
 
 export default function NewPassword({ navigation }: any) {
   const [passwordFocused, setpasswordFocused] = useState(false);
   const [confirmpasswordFocused, setconfirmpasswordFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showconfirmPassword, setShowconfirmPassword] = useState(false);
-  const {colors}=useTheme();
+  const { isDarkMode, colors } = useTheme();
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -31,30 +33,37 @@ export default function NewPassword({ navigation }: any) {
         setErrorMessage('Passwords do not match!');
       } else {
         setErrorMessage('');
-        navigation.navigate('home');
+        navigation.navigate(Routes.HOME);
       }
     }
   };
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1,backgroundColor:colors.background }}
+      style={{ flex: 1, backgroundColor: colors.background }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor="transparent"
+        translucent
+      />
       <ScrollView
         style={styles.container}
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={[styles.view,{backgroundColor:colors.background}]}>
+        <View style={[styles.view, { backgroundColor: colors.background }]}>
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
             <Text style={styles.backArrow}>←</Text>
           </TouchableOpacity>
-          <Text style={[styles.head,{color:colors.text}]}>New Password</Text>
-          <Text style={[styles.heade,{color:colors.text}]}>Password</Text>
+          <Text style={[styles.head, { color: colors.text }]}>
+            New Password
+          </Text>
+          <Text style={[styles.heade, { color: colors.text }]}>Password</Text>
           <View style={styles.input}>
             <TextInput
               onFocus={() => setpasswordFocused(true)}
@@ -88,7 +97,9 @@ export default function NewPassword({ navigation }: any) {
               />
             </TouchableOpacity>
           </View>
-          <Text style={[styles.heade,{color:colors.text}]}>Confirm password</Text>
+          <Text style={[styles.heade, { color: colors.text }]}>
+            Confirm password
+          </Text>
           <View style={styles.input}>
             <TextInput
               onFocus={() => setconfirmpasswordFocused(true)}
@@ -194,7 +205,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   otpButton: {
-    backgroundColor: '#8b5cf6',
+	backgroundColor: Colors.primaryDark,
     position: 'absolute',
     bottom: 0,
     left: 0,

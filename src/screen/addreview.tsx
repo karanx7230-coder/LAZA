@@ -11,6 +11,7 @@ import {
 import React, { useState } from 'react';
 import Slider from '@react-native-community/slider';
 import { useTheme } from '../context/ThemeContext';
+import { Colors } from '../utils';
 
 export default function AddReview({ navigation }: any) {
   const [rating, setRating] = useState(0);
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   submitBtn: {
-    backgroundColor: '#9b6cff',
+	backgroundColor: Colors.primaryLight,
     height: 65,
     justifyContent: 'center',
     alignItems: 'center',

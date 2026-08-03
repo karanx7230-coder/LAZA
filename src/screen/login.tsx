@@ -15,7 +15,10 @@ import {
   Platform,
   Alert,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Colors, Routes } from '../utils';
 export default function Signin({ navigation }: any) {
   const [isRemembered, setIsRemembered] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -24,7 +27,7 @@ export default function Signin({ navigation }: any) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { colors } = useTheme();
+  const { isDarkMode, colors } = useTheme();
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Missing Fields', 'Please enter your email and password.');
@@ -36,7 +39,7 @@ export default function Signin({ navigation }: any) {
     try {
       await auth().signInWithEmailAndPassword(email, password);
 
-      navigation.navigate('MainTabs');
+      navigation.navigate(Routes.MAIN_TABS);
     } catch (error: any) {
       if (
         error.code === 'auth/user-not-found' ||
@@ -53,112 +56,127 @@ export default function Signin({ navigation }: any) {
     }
   };
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: colors.background }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps="handled"
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <KeyboardAvoidingView
+        style={{ flex: 1, backgroundColor: colors.background }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <View style={[styles.login, { backgroundColor: colors.background }]}>
-          <TouchableOpacity
-            style={styles.back}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={styles.backtext}> ← </Text>
-          </TouchableOpacity>
-          <Text style={[styles.signup, { color: colors.text }]}>Welcome</Text>
-          <Text style={styles.line1}>Please enter your data to continue</Text>
-          <View style={styles.textinput}>
-            <Text style={[styles.type, { color: colors.text }]}>E mail</Text>
-            <View style={styles.line}>
-              <TextInput
-                onFocus={() => setusernameFocused(true)}
-                onBlur={() => setusernameFocused(false)}
-                style={[
-                  styles.input,
-                  { borderBottomColor: usernameFocused ? 'blue' : 'grey' },
-                ]}
-                value={email}
-                onChangeText={setEmail} 
-                autoCapitalize="none" 
-                keyboardType="email-address"
-              />
-            </View>
-          </View>
-          <View style={styles.textinput}>
-            <Text style={[styles.type, { color: colors.text }]}>Password</Text>
-            <View style={styles.line}>
-              <TextInput
-                onFocus={() => setpasswordFocused(true)}
-                onBlur={() => setpasswordFocused(false)}
-                style={[
-                  styles.input,
-                  { borderBottomColor: passwordFocused ? 'blue' : 'grey' },
-                ]}
-                secureTextEntry={!showPassword}
-                value={password}
-                onChangeText={setPassword}
-                autoCapitalize='none'
-              />
-              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                <Image
-                  source={{
-                    uri: showPassword
-                      ? 'https://cdn-icons-png.flaticon.com/512/709/709612.png'
-                      : 'https://cdn-icons-png.flaticon.com/512/565/565655.png',
-                  }}
-                  style={{
-                    marginRight: 10,
-                    width: 24,
-                    height: 24,
-                    marginLeft: -25,
-                    marginBottom: 10,
-                  }}
-                />
-              </TouchableOpacity>
-            </View>
-            <View>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('forget1')}
-                style={styles.forgotbtn}
-              >
-                <Text style={styles.forget}>Forget Password?</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.rememberRow}>
-            <Text style={[styles.rememberText, { color: colors.text }]}>
-              Remember me
-            </Text>
-            <Switch
-              value={isRemembered}
-              onValueChange={setIsRemembered}
-              trackColor={{ false: 'grey', true: 'green' }}
-              thumbColor="white"
-            />
-          </View>
-          <View style={styles.endview}>
-            <Text style={[styles.endline, { color: colors.text }]}>
-              By connecting your account confirm that you agree with our
-              <Text style={styles.term}> Term and Condition</Text>
-            </Text>
-          </View>
-          <TouchableOpacity
-            onPress={handleLogin}
-            style={styles.signupButton}
-            disabled={loading}
-          >{loading ?(<ActivityIndicator color={"#ffffff"} size={"large"}/>
-
-          ):(
-            <Text style={styles.signupButtonText}>Login</Text>
-           ) }
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor="transparent"
+          translucent
+        />
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={[styles.login, { backgroundColor: colors.background }]}>
+            <TouchableOpacity
+              style={styles.back}
+              onPress={() => navigation.goBack()}
+            >
+              <Text style={styles.backtext}> ← </Text>
             </TouchableOpacity>
+            <Text style={[styles.signup, { color: colors.text }]}>Welcome</Text>
+            <Text style={styles.line1}>Please enter your data to continue</Text>
+            <View style={{ flex: 0.4 }} />
+            <View style={styles.textinput}>
+              <Text style={[styles.type, { color: colors.text }]}>E mail</Text>
+              <View style={styles.line}>
+                <TextInput
+                  onFocus={() => setusernameFocused(true)}
+                  onBlur={() => setusernameFocused(false)}
+                  style={[
+                    styles.input,
+                    { borderBottomColor: usernameFocused ? 'blue' : 'grey' },
+                  ]}
+                  value={email}
+                  onChangeText={setEmail}
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                />
+              </View>
+            </View>
+            <View style={styles.textinput}>
+              <Text style={[styles.type, { color: colors.text }]}>
+                Password
+              </Text>
+              <View style={styles.line}>
+                <TextInput
+                  onFocus={() => setpasswordFocused(true)}
+                  onBlur={() => setpasswordFocused(false)}
+                  style={[
+                    styles.input,
+                    { borderBottomColor: passwordFocused ? 'blue' : 'grey' },
+                  ]}
+                  secureTextEntry={!showPassword}
+                  value={password}
+                  onChangeText={setPassword}
+                  autoCapitalize="none"
+                />
+                <TouchableOpacity
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Image
+                    source={{
+                      uri: showPassword
+                        ? 'https://cdn-icons-png.flaticon.com/512/709/709612.png'
+                        : 'https://cdn-icons-png.flaticon.com/512/565/565655.png',
+                    }}
+                    style={{
+                      marginRight: 10,
+                      width: 24,
+                      height: 24,
+                      marginLeft: -25,
+                      marginBottom: 10,
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate(Routes.FORGET)}
+                  style={styles.forgotbtn}
+                >
+                  <Text style={styles.forget}>Forget Password?</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={styles.rememberRow}>
+              <Text style={[styles.rememberText, { color: colors.text }]}>
+                Remember me
+              </Text>
+              <Switch
+                value={isRemembered}
+                onValueChange={setIsRemembered}
+                trackColor={{ false: 'grey', true: 'green' }}
+                thumbColor="white"
+              />
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+      <View style={[styles.footer, { backgroundColor: colors.background }]}>
+        <View style={styles.endview}>
+          <Text style={[styles.endline, { color: colors.text }]}>
+            By connecting your account confirm that you agree with our
+            <Text style={styles.term}> Term and Condition</Text>
+          </Text>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        <TouchableOpacity
+          onPress={handleLogin}
+          style={styles.signupButton}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color={'#ffffff'} size={'large'} />
+          ) : (
+            <Text style={styles.signupButtonText}>Login</Text>
+          )}
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -176,19 +194,15 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     backgroundColor: '#ffffff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20,
-    borderRadius: 30,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // marginTop: 20,
     fontWeight: 'bold',
   },
   backtext: {
-    fontSize: 30,
+    fontSize: 40,
     color: 'black',
     textAlign: 'center',
-    textAlignVertical: 'center',
-    includeFontPadding: false,
-    lineHeight: 30,
   },
   signup: {
     fontSize: 32,
@@ -203,7 +217,6 @@ const styles = StyleSheet.create({
     color: '#989898',
     textAlign: 'center',
     marginTop: 0,
-    marginBottom: 200,
   },
   textinput: {
     marginBottom: 25,
@@ -248,28 +261,25 @@ const styles = StyleSheet.create({
     color: '#0000',
   },
   endview: {
-    bottom: 100,
-    position: 'absolute',
-    marginHorizontal: 20,
+    margin: 20,
   },
   endline: {
     fontSize: 14,
     color: '#464646',
   },
   signupButton: {
-    backgroundColor: '#8b5cf6',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
+	backgroundColor: Colors.primaryDark,
     paddingVertical: 20,
     alignItems: 'center',
-    height:80,
-    marginHorizontal: -20,
+    height: 80,
+    width: '100%',
   },
   signupButtonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: '600',
+  },
+  footer: {
+    paddingHorizontal: -20,
   },
 });

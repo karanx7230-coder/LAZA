@@ -11,9 +11,12 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import React, { useState } from 'react';
+import { Colors, Routes } from '../utils';
+
 export default function Signup({ navigation }: any) {
   const [username, setUsername] = useState('');
   const [isRemembered, setIsRemembered] = useState(false);
@@ -23,7 +26,10 @@ export default function Signup({ navigation }: any) {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { colors } = useTheme();
+  const [usernameFocused, setUsernameFocused] = useState(false);
+  const [emailFocused, setEmailFocused] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
+  const { isDarkMode, colors } = useTheme();
 
   const handleUsernameChange = (text: string) => {
     setUsername(text);
@@ -62,6 +68,7 @@ export default function Signup({ navigation }: any) {
       setPasswordError('');
     }
   };
+
   const handleFirebaseSignUp = async () => {
     if (!username || !email || !password) {
       Alert.alert('Missing Fields', 'Please fill out all fields.');
@@ -83,7 +90,7 @@ export default function Signup({ navigation }: any) {
       await userCredential.user.updateProfile({
         displayName: username,
       });
-      navigation.navigate('MainTabs');
+      navigation.navigate(Routes.MAIN_TABS);
     } catch (error: any) {
       if (error.code === 'auth/email-already-in-use') {
         setEmailError('That email address is already in use!');
@@ -98,11 +105,17 @@ export default function Signup({ navigation }: any) {
       setLoading(false);
     }
   };
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: colors.background }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor="transparent"
+        translucent
+      />
       <ScrollView
         style={styles.container}
         contentContainerStyle={{ flexGrow: 1 }}
@@ -121,12 +134,19 @@ export default function Signup({ navigation }: any) {
             <Text style={styles.title}>Sign Up</Text>
 
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Username</Text>
+              <Text style={[styles.label, { color: colors.text }]}>
+                Username
+              </Text>
               <View style={styles.inputRow}>
                 <TextInput
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    { borderBottomColor: usernameFocused ? 'blue' : '#E7E8EA' },
+                  ]}
                   value={username}
                   onChangeText={handleUsernameChange}
+                  onFocus={() => setUsernameFocused(true)}
+                  onBlur={() => setUsernameFocused(false)}
                   autoCapitalize="none"
                 />
                 {username.length >= 5 ? (
@@ -139,12 +159,19 @@ export default function Signup({ navigation }: any) {
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Email Address</Text>
+              <Text style={[styles.label, { color: colors.text }]}>
+                Email Address
+              </Text>
               <View style={styles.inputRow}>
                 <TextInput
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    { borderBottomColor: emailFocused ? 'blue' : '#E7E8EA' },
+                  ]}
                   value={email}
                   onChangeText={handleEmailChange}
+                  onFocus={() => setEmailFocused(true)}
+                  onBlur={() => setEmailFocused(false)}
                   autoCapitalize="none"
                   keyboardType="email-address"
                 />
@@ -156,13 +183,21 @@ export default function Signup({ navigation }: any) {
                 <Text style={styles.error}>{emailError}</Text>
               ) : null}
             </View>
+
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Password</Text>
+              <Text style={[styles.label, { color: colors.text }]}>
+                Password
+              </Text>
               <View style={styles.inputRow}>
                 <TextInput
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    { borderBottomColor: passwordFocused ? 'blue' : '#E7E8EA' },
+                  ]}
                   value={password}
                   onChangeText={handlepasswordChange}
+                  onFocus={() => setPasswordFocused(true)}
+                  onBlur={() => setPasswordFocused(false)}
                   secureTextEntry={true}
                 />
                 {password.length > 0 && passwordError === '' ? (
@@ -244,8 +279,6 @@ const styles = StyleSheet.create({
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E7E8EA',
     paddingBottom: 8,
   },
   input: {
@@ -254,14 +287,15 @@ const styles = StyleSheet.create({
     color: '#1D1E20',
     fontWeight: '500',
     padding: 0,
+    borderBottomWidth: 1,
   },
   checkMark: {
-    color: '#4ade80',
+	color: Colors.success,
     fontSize: 18,
     fontWeight: 'bold',
   },
   strongText: {
-    color: '#4ade80',
+	color: Colors.success,
     fontSize: 14,
     fontWeight: '500',
   },
@@ -278,7 +312,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   signupButton: {
-    backgroundColor: '#9b6cff',
+	backgroundColor: Colors.primaryLight,
     height: 100,
     justifyContent: 'center',
     alignItems: 'center',
@@ -290,7 +324,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   error: {
-    color: '#EA4335',
+	color: Colors.googleRed,
     fontSize: 12,
     marginTop: 5,
   },

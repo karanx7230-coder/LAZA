@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { Colors, Routes } from '../utils';
 export default function Reviews({ navigation, route }: any) {
   const { reviews: reviewList } = route.params;
   const { colors } = useTheme();
@@ -35,7 +36,7 @@ export default function Reviews({ navigation, route }: any) {
           </Text>
         </View>
         <View>
-          <TouchableOpacity onPress={() => navigation.navigate('addreview')}>
+            <TouchableOpacity onPress={() => navigation.navigate(Routes.ADD_REVIEW)}>
             <Image
               source={require('../assets/addreview.png')}
               resizeMode="contain"
@@ -51,7 +52,7 @@ export default function Reviews({ navigation, route }: any) {
             <View style={styles.view}>
               <View style={styles.reviewrow}>
                 <View style={styles.rname}>
-                  <Text style={{ fontWeight: 'bold', color: '#9B72FF' }}>
+                  <Text style={{ fontWeight: 'bold', color: Colors.primary }}>
                     {item.reviewerName?.charAt(0).toUpperCase()}
                   </Text>
                 </View>

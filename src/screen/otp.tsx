@@ -8,13 +8,15 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
+  StatusBar,
 } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { Colors, Routes } from '../utils';
 export default function Otp({ navigation }: any) {
   const [otp, setotp] = useState(['', '', '', '']);
   const inputRefs = useRef<Array<TextInput | null>>([]);
-const {colors}=useTheme();
+  const { isDarkMode, colors } = useTheme();
 
   const [timeLeft, setTimeLeft] = useState(20);
 
@@ -52,22 +54,31 @@ const {colors}=useTheme();
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor="transparent"
+        translucent
+      />
       <ScrollView
         style={styles.container}
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={[styles.view,{backgroundColor:colors.background}]}>
+        <View style={[styles.view, { backgroundColor: colors.background }]}>
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
             <Text style={styles.backArrow}>←</Text>
           </TouchableOpacity>
-          <Text style={[styles.head,{color:colors.text}]}>Verification code</Text>
+          <Text style={[styles.head, { color: colors.text }]}>
+            Verification code
+          </Text>
           <Image source={require('../assets/lock.png')} />
           <View style={styles.input}>
-            <Text style={[styles.headotp,{color:colors.text}]}>OTP Code</Text>
+            <Text style={[styles.headotp, { color: colors.text }]}>
+              OTP Code
+            </Text>
             <View style={styles.otpContainer}>
               {otp.map((digit, index) => (
                 <TextInput
@@ -97,7 +108,7 @@ const {colors}=useTheme();
           ) : (
             <TouchableOpacity onPress={handleResend}>
               <Text
-                style={[styles.line, { color: '#8b5cf6', fontWeight: 'bold' }]}
+	style={[styles.line, { color: Colors.primaryDark, fontWeight: 'bold' }]}
               >
                 Resend confirmation code
               </Text>
@@ -105,7 +116,7 @@ const {colors}=useTheme();
           )}
 
           <TouchableOpacity
-            onPress={() => navigation.navigate('newpassword')}
+            onPress={() => navigation.navigate(Routes.NEW_PASSWORD)}
             style={styles.otpButton}
           >
             <Text style={styles.otpText}>Confirm otp</Text>
@@ -174,7 +185,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   otpButton: {
-    backgroundColor: '#8b5cf6',
+	backgroundColor: Colors.primaryDark,
     position: 'absolute',
     bottom: 0,
     left: 0,

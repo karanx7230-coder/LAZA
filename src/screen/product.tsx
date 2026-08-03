@@ -6,21 +6,25 @@ import {
   ScrollView,
   Image,
   ImageBackground,
+  StatusBar,
 } from 'react-native';
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../store';
 import { useTheme } from '../context/ThemeContext';
+import { Colors, Routes } from '../utils';
 export default observer(function Product({ route, navigation }: any) {
-  const { colors } = useTheme();
+  const { isDarkMode, colors } = useTheme();
   const { productData } = route.params;
   const cart = useStore().cart;
-  const isItemInCart = cart.items?.some((item: any) => item.id === productData.id);
+  const isItemInCart = cart.items?.some(
+    (item: any) => item.id === productData.id,
+  );
   const handlePress = () => {
     if (!isItemInCart) {
       cart.addToCart({ ...productData, quantity: quantity });
     } else {
-      navigation.navigate('Cart');
+      navigation.navigate(Routes.CART);
     }
   };
   const [quantity, setQuantity] = useState(1);
@@ -32,6 +36,11 @@ export default observer(function Product({ route, navigation }: any) {
   const totalPrice = productData.price * quantity;
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor="transparent"
+        translucent
+      />
       <ScrollView style={styles.scrollview}>
         <ImageBackground
           source={{ uri: productData.thumbnail }}
@@ -172,7 +181,7 @@ export default observer(function Product({ route, navigation }: any) {
           onPress={handlePress}
           style={[
             styles.addtocart,
-            { backgroundColor: isItemInCart ? '#3281ffa7' : '#9B72FF' },
+            { backgroundColor: isItemInCart ? '#3281ffa7' : Colors.primary },
           ]}
         >
           <Text style={styles.cart}>

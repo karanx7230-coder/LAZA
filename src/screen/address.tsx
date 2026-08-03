@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { Colors } from '../utils';
 export default function Address({ navigation }: any) {
   const [isprimary, setasprimary] = useState(true);
   const { colors } = useTheme();
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
     marginBottom: 170,
   },
   last: {
-    backgroundColor: '#8b5cf6',
+	backgroundColor: Colors.primaryDark,
     height: 80,
     bottom: 0,
     left: 0,

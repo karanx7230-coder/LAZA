@@ -8,11 +8,13 @@ import {
   Image,
   Text,
   TextInput,
+  StatusBar,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { Colors, Routes } from '../utils';
 export default function Forget1({ navigation }: any) {
-const {colors}=useTheme();
+  const { isDarkMode, colors } = useTheme();
 
   const [emailFocused, setemailFocused] = useState(false);
   return (
@@ -20,22 +22,34 @@ const {colors}=useTheme();
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor="transparent"
+        translucent
+      />
       <ScrollView
         style={styles.container}
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
       >
-        <View  style={[styles.view,{backgroundColor:colors.background}]}>
+        <View style={[styles.view, { backgroundColor: colors.background }]}>
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
             <Text style={styles.backArrow}>←</Text>
           </TouchableOpacity>
-          <Text  style={[styles.head,{color:colors.text}]}>Forget Password</Text>
-          <Image source={require('../assets/biglock.png')} resizeMode='contain'></Image>
+          <Text style={[styles.head, { color: colors.text }]}>
+            Forget Password
+          </Text>
+          <Image
+            source={require('../assets/biglock.png')}
+            resizeMode="contain"
+          ></Image>
           <View style={styles.input}>
-            <Text  style={[styles.heade,{color:colors.text}]}>Email address</Text>
+            <Text style={[styles.heade, { color: colors.text }]}>
+              Email address
+            </Text>
             <TextInput
               onFocus={() => setemailFocused(true)}
               onBlur={() => setemailFocused(false)}
@@ -51,7 +65,7 @@ const {colors}=useTheme();
             password.
           </Text>
           <TouchableOpacity
-            onPress={() => navigation.navigate('otp')}
+            onPress={() => navigation.navigate(Routes.OTP)}
             style={styles.otpButton}
           >
             <Text style={styles.otpText}>Confirm Email</Text>
@@ -109,7 +123,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   otpButton: {
-    backgroundColor: '#8b5cf6',
+	backgroundColor: Colors.primaryDark,
     position: 'absolute',
     bottom: 0,
     left: 0,

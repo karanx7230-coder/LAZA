@@ -4,48 +4,56 @@ import {
   StyleSheet,
   TouchableOpacity,
   Text,
+  StatusBar,
 } from 'react-native';
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { useTheme } from '../context/ThemeContext';
+import { Colors, Routes } from '../utils';
 
 export default function Screen1({ navigation }: any) {
-const {colors}=useTheme();
+  const { colors } = useTheme();
 
   return (
     <LinearGradient
       colors={['#7231eb', '#a594b2']}
       style={styles.mainContainer}
     >
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="transparent"
+        translucent
+      />
       <ImageBackground
-        source={require('../assets/manonly.png')}
+        source={require('../assets/man.png')}
         style={styles.image}
         resizeMode="cover"
       >
-        <View style={[styles.box,{backgroundColor:colors.card}]}>
-          
-          <Text  style={[styles.boxheading,{color:colors.text}]}>Look Good, Feel Good</Text>
+        <View style={[styles.box, { backgroundColor: colors.card }]}>
+          <Text style={[styles.boxheading, { color: colors.text }]}>
+            Look Good, Feel Good
+          </Text>
           <Text style={styles.line}>
             Create your individual & unique style and look amazing everyday.
           </Text>
 
           <View style={styles.btns}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('screen2')}
+              onPress={() => navigation.navigate(Routes.SCREEN2)}
               style={styles.men}
             >
               <Text style={styles.menText}>Men</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => navigation.navigate('screen2')}
+              onPress={() => navigation.navigate(Routes.SCREEN2)}
               style={styles.women}
             >
               <Text style={styles.womenText}>Women</Text>
             </TouchableOpacity>
           </View>
           <TouchableOpacity
-            onPress={() => navigation.navigate('screen2')}
+            onPress={() => navigation.navigate(Routes.SCREEN2)}
             style={styles.skip}
           >
             <Text style={styles.skiptext}>Skip</Text>
@@ -104,7 +112,7 @@ const styles = StyleSheet.create({
     padding: 15,
     width: 140,
     alignItems: 'center',
-    backgroundColor: '#9B72FF',
+	backgroundColor: Colors.primary,
   },
   menText: {
     color: '#5b5858',

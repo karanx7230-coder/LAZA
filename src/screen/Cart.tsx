@@ -5,13 +5,16 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
+  StatusBar,
 } from 'react-native';
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../store';
 import { useTheme } from '../context/ThemeContext';
+import { Colors, Routes } from '../utils';
+import { formatPrice } from '../utils/format';
 export default observer(function Cart({ route, navigation }: any) {
-  const { colors } = useTheme();
+  const { isDarkMode, colors } = useTheme();
   const passedAddress = route?.params?.updatedaddress;
   const cart = useStore().cart;
   const shippingCost = cart.shippingCost;
@@ -20,10 +23,15 @@ export default observer(function Cart({ route, navigation }: any) {
 
   return (
     <View style={[styles.view, { backgroundColor: colors.background }]}>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor="transparent"
+        translucent
+      />
       <View style={styles.headerRow}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.navigate('MainTabs')}
+          onPress={() => navigation.navigate(Routes.MAIN_TABS)}
         >
           <Text style={styles.backArrow}>←</Text>
         </TouchableOpacity>
@@ -57,7 +65,7 @@ export default observer(function Cart({ route, navigation }: any) {
               </View>
               <View style={styles.detailsContainer}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('wishlist')}
+                  onPress={() => navigation.navigate(Routes.WISHLIST)}
                 >
                   <Text style={styles.itemName} numberOfLines={2}>
                     {item.title}
@@ -100,7 +108,7 @@ export default observer(function Cart({ route, navigation }: any) {
         <Text style={[styles.title, { color: colors.text }]}>
           Delivery Address
         </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('address')}>
+        <TouchableOpacity onPress={() => navigation.navigate(Routes.ADDRESS)}>
           <View style={styles.row}>
             <Image
               source={require('../assets/map.png')}
@@ -132,7 +140,7 @@ export default observer(function Cart({ route, navigation }: any) {
         </Text>
         <TouchableOpacity
           style={styles.row1}
-          onPress={() => navigation.navigate('payment')}
+          onPress={() => navigation.navigate(Routes.PAYMENT)}
         >
           <Image
             source={require('../assets/visa.png')}
@@ -154,12 +162,12 @@ export default observer(function Cart({ route, navigation }: any) {
           <Text style={[styles.title, { color: colors.text }]}>Order Info</Text>
           <View style={styles.inforow}>
             <Text style={{ color: colors.text }}>Subtotal</Text>
-            <Text style={{ color: colors.text }}>${subtotal.toFixed(2)}</Text>
+            <Text style={{ color: colors.text }}>{formatPrice(subtotal)}</Text>
           </View>
           <View style={styles.inforow}>
             <Text style={{ color: colors.text }}>Shipping Cost</Text>
             <Text style={{ color: colors.text }}>
-              ${shippingCost.toFixed(2)}
+              {formatPrice(shippingCost)}
             </Text>
           </View>
           <View style={styles.inforow}>
@@ -167,7 +175,7 @@ export default observer(function Cart({ route, navigation }: any) {
               Total
             </Text>
             <Text style={{ fontWeight: 'bold', color: colors.text }}>
-              ${totalAmount.toFixed(2)}
+              {formatPrice(totalAmount)}
             </Text>
           </View>
         </View>
@@ -175,7 +183,7 @@ export default observer(function Cart({ route, navigation }: any) {
         <View>
           <TouchableOpacity
             style={styles.last}
-            onPress={() => navigation.navigate('orderdone')}
+            onPress={() => navigation.navigate(Routes.ORDER_DONE)}
           >
             <Text style={styles.lasttext}>Checkout</Text>
           </TouchableOpacity>
@@ -349,7 +357,7 @@ const styles = StyleSheet.create({
   },
 
   last: {
-    backgroundColor: '#8b5cf6',
+    backgroundColor: Colors.primaryDark,
     height: 50,
     marginVertical: 20,
     marginBottom: 1,

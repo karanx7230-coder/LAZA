@@ -10,6 +10,7 @@ import {
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useTheme } from '../context/ThemeContext';
+import { Colors, Routes } from '../utils';
 export default function Payment({ navigation }: any) {
   const [isrememberd, setIsRemembered] = useState(true);
 const {  colors } = useTheme();
@@ -42,7 +43,7 @@ const {  colors } = useTheme();
         <View>
           <TouchableOpacity
             style={styles.addnew}
-            onPress={() => navigation.navigate('addcard')}
+            onPress={() => navigation.navigate(Routes.ADD_CARD)}
           >
             <Image
               source={require('../assets/Plus.png')}
@@ -164,8 +165,8 @@ const styles = StyleSheet.create({
     height: 200,
   },
   addnew: {
-    backgroundColor: '#f4e8ff',
-    borderColor: '#c77af3',
+	backgroundColor: Colors.primarySoft,
+	borderColor: '#c77af3',
     borderWidth: 1,
     height: 50,
     borderRadius: 10,
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   last: {
-    backgroundColor: '#8b5cf6',
+	backgroundColor: Colors.primaryDark,
     height: 70,
     justifyContent: 'center',
     alignItems: 'center',

@@ -2,6 +2,7 @@ import { PermissionsAndroid, Platform } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import notifee, { EventType, AndroidImportance } from '@notifee/react-native';
 import { navigate } from '../navigation/navigationService';
+import { Routes } from '../utils';
 export const requestNotificationPermission = async () => {
   try {
     if (Platform.OS === 'android' && Platform.Version >= 33) {
@@ -28,14 +29,14 @@ export const getFCMToken = async () => {
 export const handleNotificationNavigation = () => {
   const idno = 15;
   const unsubscribe = messaging().onNotificationOpenedApp(() => {
-    navigate('productstack', { id: idno });
+    navigate(Routes.PRODUCT_STACK, { id: idno });
   });
 
   messaging()
     .getInitialNotification()
     .then(remoteMessage => {
       if (remoteMessage) {
-        navigate('productstack', { id: idno });
+        navigate(Routes.PRODUCT_STACK, { id: idno });
       }
     });
 
@@ -67,7 +68,7 @@ export const handleForegroundNotification = () => {
 
   const unsubscribeNotifee = notifee.onForegroundEvent(({ type }) => {
     if (type === EventType.PRESS) {
-      navigate('productstack', { id: 18 });
+      navigate(Routes.PRODUCT_STACK, { id: 18 });
     }
   });
 
