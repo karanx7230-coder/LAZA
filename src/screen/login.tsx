@@ -19,8 +19,6 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, Routes } from '../utils';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
 export default function Signin({ navigation }: any) {
   const [isRemembered, setIsRemembered] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -30,7 +28,6 @@ export default function Signin({ navigation }: any) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { isDarkMode, colors } = useTheme();
-  const dispatch = useDispatch();
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Missing Fields', 'Please enter your email and password.');

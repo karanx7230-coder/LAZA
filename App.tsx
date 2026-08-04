@@ -9,6 +9,8 @@ import { ThemeProvider } from './src/context/ThemeContext';
 import { navigationRef } from './src/navigation/navigationService';
 import { StoreProvider } from './src/store';
 import useDeepLinking from './src/service/link';
+import { Provider } from 'react-redux';
+import { store } from './src/store/redux/store/store';
 import {
   requestNotificationPermission,
   getFCMToken,
@@ -60,11 +62,13 @@ export default function App() {
     <GestureHandlerRootView style={styles.rootContainer}>
       <SafeAreaProvider>
         <StoreProvider>
-          <ThemeProvider>
+          <Provider store={store}>
+            <ThemeProvider>
               <NavigationContainer ref={navigationRef}>
                 <StackNavigator user={user} />
               </NavigationContainer>
-          </ThemeProvider>
+            </ThemeProvider>
+          </Provider>
         </StoreProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
@@ -82,4 +86,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
 });
-
