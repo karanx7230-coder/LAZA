@@ -10,14 +10,15 @@ import {
 } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { Routes } from '../utils';
+import { RootState } from '../store/redux/store/store';
+import { useSelector as reduxselect } from 'react-redux';
 
 export default function Profile({ navigation }: any) {
   const { isDarkMode, toggleTheme, colors } = useTheme();
-  
   const handleLogout = () => {
     auth().signOut();
   };
-
+  const user = reduxselect((state: RootState) => state.userreducer);
   return (
     <View style={[styles.mainview, { backgroundColor: colors.background }]}>
       <StatusBar
@@ -41,7 +42,7 @@ export default function Profile({ navigation }: any) {
             source={require('../assets/profile.png')}
             resizeMode="cover"
           />
-          <Text style={[styles.text, { color: colors.text }]}>Mr Mou</Text>
+          <Text style={[styles.text, { color: colors.text }]}>{user.name}</Text>
           <Text style={styles.text1}>
             verified Profile
             <Image
@@ -52,7 +53,7 @@ export default function Profile({ navigation }: any) {
         </TouchableOpacity>
         <View>
           <TouchableOpacity style={styles.order}>
-            <Text>3 order</Text>
+            <Text>3 order </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -83,7 +84,9 @@ export default function Profile({ navigation }: any) {
             source={require('../assets/Info.png')}
             resizeMode="contain"
           />
-          <Text style={[styles.text2, { color: colors.text }]}>Account Information</Text>
+          <Text style={[styles.text2, { color: colors.text }]}>
+            Account Information
+          </Text>
         </TouchableOpacity>
       </View>
 

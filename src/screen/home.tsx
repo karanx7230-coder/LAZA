@@ -69,7 +69,7 @@ export default observer(function Home({ navigation }: any) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.back}
-          onPress={() => navigation.navigate(Routes.CART)}
+          onPress={() => navigation.navigate(Routes.TEST_INPUT)}
         >
           <Image
             style={styles.imagetop}

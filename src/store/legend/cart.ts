@@ -14,17 +14,17 @@ export const cart$ = observable({ items: [] as CartItem[] });
 export const addToCart = (item: CartItem) => cart$.items.push(item);
 
 export const removeFromCart = (id: string) =>
-  cart$.items.set(items => items.filter(i => i.id !== id));
+  cart$.items.set(items => items.filter(item => item.id !== id));
 export const increaseQuantity = (id: string) => {
-  const idx = cart$.items.get().findIndex(i => i.id === id);
-  if (idx !== -1) {
-    cart$.items[idx].quantity.set((q: number) => q + 1);
+  const index = cart$.items.get().findIndex(item => item.id === id);
+  if (index !== -1) {
+    cart$.items[index].quantity.set((quantity: number) => quantity + 1);
   }
 };
 
 export const decreaseQuantity = (id: string) => {
-  const idx = cart$.items.get().findIndex(i => i.id === id);
-  if (idx !== -1 && cart$.items[idx].quantity.get() > 1) {
-    cart$.items[idx].quantity.set((q: number) => q - 1);
+  const index = cart$.items.get().findIndex(item => item.id === id);
+  if (index !== -1 && cart$.items[index].quantity.get() > 1) {
+    cart$.items[index].quantity.set((quantity: number) => quantity - 1);
   }
 };
