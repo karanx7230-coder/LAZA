@@ -6,9 +6,9 @@ import {
   ScrollView,
   Image,
   ImageBackground,
-  ActivityIndicator, // <-- Added ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import API from '../api/api';
 import { Colors, Routes } from '../utils';
@@ -28,6 +28,27 @@ export default function Productstack({ route, navigation }: any) {
   const isItemInCart = useAppSelector(state =>
     state.cart.items.some(item => item.id === productData?.id),
   );
+
+  const themeStyles = useMemo(
+    () =>
+      StyleSheet.create({
+        screenBackground: {
+          flex: 1,
+          backgroundColor: colors.background,
+        },
+        textColor: {
+          color: colors.text,
+        },
+        buttonBackground: {
+          backgroundColor: isItemInCart ? '#3281ffa7' : Colors.primary,
+        },
+        quantityValue: {
+          color: colors.text,
+        },
+      }),
+    [colors.background, colors.text, isItemInCart],
+  );
+
   useEffect(() => {
     if (!productData && productId) {
       API.get(`/products/${productId}`)
@@ -42,21 +63,14 @@ export default function Productstack({ route, navigation }: any) {
     }
   }, [productId, productData]);
 
-  // 3. Show loading screen while fetching
   if (loading || !productData) {
     return (
-      <View
-        style={[
-          styles.scrollview,
-          { justifyContent: 'center', alignItems: 'center' },
-        ]}
-      >
-        <ActivityIndicator size="large" color="#9B72FF" />
+      <View style={[styles.screen, styles.loading]}>
+        <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
   }
 
-  // Now it is safe to use productData!
   const decreaseQty = () => {
     if (quantity > 1) setQuantity(prev => prev - 1);
   };
@@ -73,7 +87,7 @@ export default function Productstack({ route, navigation }: any) {
   const totalPrice = productData.price * quantity;
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
+    <View style={[styles.screen, themeStyles.screenBackground]}>
       <ScrollView style={styles.scrollview}>
         <ImageBackground
           source={{ uri: productData.thumbnail }}
@@ -102,28 +116,29 @@ export default function Productstack({ route, navigation }: any) {
 
         <View style={styles.mainview}>
           <View style={styles.view2}>
-            <View style={styles.subname}></View>
+            <View style={styles.subname} />
             <Text style={styles.subname}>price</Text>
           </View>
+
           <View style={styles.view3}>
-            <Text style={[styles.name, { color: colors.text }]}>
+            <Text style={[styles.name, themeStyles.textColor]}>
               {productData.title}
             </Text>
-            <Text style={[styles.price, { color: colors.text }]}>
+            <Text style={[styles.price, themeStyles.textColor]}>
               ${productData.price}
             </Text>
           </View>
 
           <View style={styles.viewdescription}>
-            <Text style={[styles.name, { color: colors.text }]}>
+            <Text style={[styles.name, themeStyles.textColor]}>
               Description
             </Text>
             <Text style={styles.subname}>{productData.description}</Text>
           </View>
 
-          <View style={{ marginTop: 20 }}>
+          <View style={styles.section}>
             <View style={styles.view2}>
-              <Text style={[styles.name, { color: colors.text }]}>Reviews</Text>
+              <Text style={[styles.name, themeStyles.textColor]}>Reviews</Text>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate(Routes.REVIEWS, {
@@ -137,30 +152,15 @@ export default function Productstack({ route, navigation }: any) {
 
             {productData.reviews && productData.reviews.length > 0 ? (
               <View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginTop: 10,
-                  }}
-                >
-                  <View
-                    style={[
-                      styles.profileimg,
-                      {
-                        backgroundColor: '#f0f0f0',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      },
-                    ]}
-                  >
-                    <Text style={{ fontWeight: 'bold' }}>
+                <View style={styles.reviewSummaryRow}>
+                  <View style={[styles.profileimg, styles.profileAvatar]}>
+                    <Text style={styles.boldText}>
                       {productData.reviews[0].reviewerName.charAt(0)}
                     </Text>
                   </View>
 
-                  <View style={{ flex: 1 }}>
-                    <Text style={{ fontWeight: 'bold', color: colors.text }}>
+                  <View style={styles.flexOne}>
+                    <Text style={[styles.boldText, themeStyles.textColor]}>
                       {productData.reviews[0].reviewerName}
                     </Text>
                     <Text style={styles.date}>
@@ -187,10 +187,11 @@ export default function Productstack({ route, navigation }: any) {
           </View>
         </View>
       </ScrollView>
-      <View>
+
+      <View style={styles.priceSection}>
         <View style={styles.priceviewbox}>
           <View>
-            <Text style={[styles.name, { color: colors.text }]}>
+            <Text style={[styles.name, themeStyles.textColor]}>
               Total Price
             </Text>
             <Text style={styles.tax}>with VAT,SD</Text>
@@ -199,35 +200,60 @@ export default function Productstack({ route, navigation }: any) {
             value={quantity}
             onDecrease={decreaseQty}
             onIncrease={increaseQty}
-            valueStyle={{ color: colors.text }}
+            valueStyle={themeStyles.quantityValue}
           />
-          <Text style={[styles.price, { color: colors.text }]}>
+          <Text style={[styles.price, themeStyles.textColor]}>
             ${totalPrice.toFixed(2)}
           </Text>
         </View>
       </View>
-      <View>
-        <TouchableOpacity
-          onPress={handlePress}
-          style={[
-            styles.addtocart,
-            { backgroundColor: isItemInCart ? '#3281ffa7' : Colors.primary },
-          ]}
-        >
-          <Text style={styles.cart}>
-            {isItemInCart ? 'Go to Cart' : 'Add to Cart'}
-          </Text>
-        </TouchableOpacity>
-      </View>
+
+      <TouchableOpacity
+        onPress={handlePress}
+        style={[styles.addtocart, themeStyles.buttonBackground]}
+      >
+        <Text style={styles.cart}>
+          {isItemInCart ? 'Go to Cart' : 'Add to Cart'}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
   scrollview: {
     flex: 1,
   },
-
+  loading: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  section: {
+    marginTop: 20,
+  },
+  priceSection: {
+    marginTop: 10,
+  },
+  reviewSummaryRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  profileAvatar: {
+    backgroundColor: Colors.bgSoft,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  flexOne: {
+    flex: 1,
+    marginLeft: 10,
+  },
+  boldText: {
+    fontWeight: 'bold',
+  },
   viewtop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -235,17 +261,16 @@ const styles = StyleSheet.create({
   back: {
     width: 45,
     height: 45,
-    backgroundColor: '#ffffff',
+    backgroundColor: Colors.white,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 40,
     marginHorizontal: 20,
     borderRadius: 25,
-    fontWeight: 'bold',
   },
   backtext: {
     fontSize: 30,
-    color: 'black',
+    color: Colors.black,
     textAlign: 'center',
     textAlignVertical: 'center',
     includeFontPadding: false,
@@ -271,7 +296,7 @@ const styles = StyleSheet.create({
   },
   subname: {
     fontSize: 12,
-    color: '#b2b2b2',
+    color: Colors.textMuted,
     marginTop: 10,
   },
   view3: {
@@ -281,12 +306,12 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: Colors.textPrimary,
   },
   price: {
     fontSize: 22,
     fontWeight: '400',
-    color: '#000',
+    color: Colors.black,
     marginTop: 5,
   },
   viewdescription: {
@@ -303,16 +328,13 @@ const styles = StyleSheet.create({
     color: 'grey',
   },
   date: {
-    color: '#b4b4b4',
+    color: Colors.textMuted,
   },
-
   reviewpassage: {
     fontSize: 13,
     padding: 10,
-    color: '#878787',
-  },
-  row: {
-    flexDirection: 'row',
+    color: Colors.textMedium,
+    marginTop: 10,
   },
   priceviewbox: {
     flexDirection: 'row',
@@ -328,7 +350,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   cart: {
-    color: '#ffffff',
+    color: Colors.white,
     fontSize: 20,
   },
   addtocart: {

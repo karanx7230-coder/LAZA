@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 
 import auth from '@react-native-firebase/auth';
@@ -19,6 +19,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, Routes } from '../utils';
+
 export default function Signin({ navigation }: any) {
   const [isRemembered, setIsRemembered] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -28,6 +29,30 @@ export default function Signin({ navigation }: any) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { isDarkMode, colors } = useTheme();
+
+  const themeStyles = useMemo(
+    () =>
+      StyleSheet.create({
+        background: {
+          backgroundColor: colors.background,
+        },
+        textColor: {
+          color: colors.text,
+        },
+      }),
+    [colors.background, colors.text],
+  );
+
+  const emailInputStyle = [
+    styles.input,
+    usernameFocused ? styles.inputFocused : styles.inputBlurred,
+  ];
+
+  const passwordInputStyle = [
+    styles.input,
+    passwordFocused ? styles.inputFocused : styles.inputBlurred,
+  ];
+
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Missing Fields', 'Please enter your email and password.');
@@ -53,10 +78,11 @@ export default function Signin({ navigation }: any) {
       setLoading(false);
     }
   };
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+    <SafeAreaView style={[styles.safeArea, themeStyles.background]}>
       <KeyboardAvoidingView
-        style={{ flex: 1, backgroundColor: colors.background }}
+        style={[styles.keyboard, themeStyles.background]}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <StatusBar
@@ -66,29 +92,26 @@ export default function Signin({ navigation }: any) {
         />
         <ScrollView
           style={styles.container}
-          contentContainerStyle={{ flexGrow: 1 }}
+          contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
         >
-          <View style={[styles.login, { backgroundColor: colors.background }]}>
+          <View style={[styles.login, themeStyles.background]}>
             <TouchableOpacity
               style={styles.back}
               onPress={() => navigation.goBack()}
             >
               <Text style={styles.backtext}> ← </Text>
             </TouchableOpacity>
-            <Text style={[styles.signup, { color: colors.text }]}>Welcome</Text>
+            <Text style={[styles.signup, themeStyles.textColor]}>Welcome</Text>
             <Text style={styles.line1}>Please enter your data to continue</Text>
-            <View style={{ flex: 0.4 }} />
+            <View style={styles.spacer} />
             <View style={styles.textinput}>
-              <Text style={[styles.type, { color: colors.text }]}>E mail</Text>
+              <Text style={[styles.type, themeStyles.textColor]}>E mail</Text>
               <View style={styles.line}>
                 <TextInput
                   onFocus={() => setusernameFocused(true)}
                   onBlur={() => setusernameFocused(false)}
-                  style={[
-                    styles.input,
-                    { borderBottomColor: usernameFocused ? 'blue' : 'grey' },
-                  ]}
+                  style={emailInputStyle}
                   value={email}
                   onChangeText={setEmail}
                   autoCapitalize="none"
@@ -97,17 +120,12 @@ export default function Signin({ navigation }: any) {
               </View>
             </View>
             <View style={styles.textinput}>
-              <Text style={[styles.type, { color: colors.text }]}>
-                Password
-              </Text>
+              <Text style={[styles.type, themeStyles.textColor]}>Password</Text>
               <View style={styles.line}>
                 <TextInput
                   onFocus={() => setpasswordFocused(true)}
                   onBlur={() => setpasswordFocused(false)}
-                  style={[
-                    styles.input,
-                    { borderBottomColor: passwordFocused ? 'blue' : 'grey' },
-                  ]}
+                  style={passwordInputStyle}
                   secureTextEntry={!showPassword}
                   value={password}
                   onChangeText={setPassword}
@@ -122,13 +140,7 @@ export default function Signin({ navigation }: any) {
                         ? 'https://cdn-icons-png.flaticon.com/512/709/709612.png'
                         : 'https://cdn-icons-png.flaticon.com/512/565/565655.png',
                     }}
-                    style={{
-                      marginRight: 10,
-                      width: 24,
-                      height: 24,
-                      marginLeft: -25,
-                      marginBottom: 10,
-                    }}
+                    style={styles.passwordIcon}
                   />
                 </TouchableOpacity>
               </View>
@@ -142,7 +154,7 @@ export default function Signin({ navigation }: any) {
               </View>
             </View>
             <View style={styles.rememberRow}>
-              <Text style={[styles.rememberText, { color: colors.text }]}>
+              <Text style={[styles.rememberText, themeStyles.textColor]}>
                 Remember me
               </Text>
               <Switch
@@ -155,9 +167,9 @@ export default function Signin({ navigation }: any) {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-      <View style={[styles.footer, { backgroundColor: colors.background }]}>
+      <View style={[styles.footer, themeStyles.background]}>
         <View style={styles.endview}>
-          <Text style={[styles.endline, { color: colors.text }]}>
+          <Text style={[styles.endline, themeStyles.textColor]}>
             By connecting your account confirm that you agree with our
             <Text style={styles.term}> Term and Condition</Text>
           </Text>
@@ -168,7 +180,7 @@ export default function Signin({ navigation }: any) {
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color={'#ffffff'} size={'large'} />
+            <ActivityIndicator color={Colors.white} size="large" />
           ) : (
             <Text style={styles.signupButtonText}>Login</Text>
           )}
@@ -179,27 +191,37 @@ export default function Signin({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
+  keyboard: {
+    flex: 1,
+  },
   login: {
     flex: 1,
-    backgroundColor: 'white',
     paddingHorizontal: 20,
   },
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: Colors.white,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  spacer: {
+    flex: 0.4,
   },
   back: {
     width: 50,
     height: 50,
-    backgroundColor: '#ffffff',
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // marginTop: 20,
-    fontWeight: 'bold',
+    backgroundColor: Colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 25,
   },
   backtext: {
     fontSize: 40,
-    color: 'black',
+    color: Colors.black,
     textAlign: 'center',
   },
   signup: {
@@ -208,11 +230,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
     marginBottom: 0,
-    color: '#111',
   },
   line1: {
     fontSize: 15,
-    color: '#989898',
+    color: Colors.textMuted,
     textAlign: 'center',
     marginTop: 0,
   },
@@ -232,11 +253,23 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#1f2937',
+    color: Colors.textPrimary,
     fontWeight: '500',
     padding: 0,
-
     borderBottomWidth: 1,
+  },
+  inputFocused: {
+    borderBottomColor: 'blue',
+  },
+  inputBlurred: {
+    borderBottomColor: 'grey',
+  },
+  passwordIcon: {
+    marginRight: 10,
+    width: 24,
+    height: 24,
+    marginLeft: -25,
+    marginBottom: 10,
   },
   rememberRow: {
     flexDirection: 'row',
@@ -248,22 +281,19 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
   },
   forget: {
-    color: 'red',
+    color: Colors.error,
   },
   rememberText: {
     fontSize: 16,
-    color: '#4b4c4d',
   },
   term: {
     fontWeight: 'bold',
-    color: '#0000',
   },
   endview: {
     margin: 20,
   },
   endline: {
     fontSize: 14,
-    color: '#464646',
   },
   signupButton: {
     backgroundColor: Colors.primaryDark,
@@ -273,7 +303,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   signupButtonText: {
-    color: 'white',
+    color: Colors.white,
     fontSize: 18,
     fontWeight: '600',
   },

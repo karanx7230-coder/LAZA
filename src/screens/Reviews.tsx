@@ -6,15 +6,29 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
+
 export default function Reviews({ navigation, route }: any) {
   const { reviews: reviewList } = route.params;
   const { colors } = useTheme();
 
+  const themeStyles = useMemo(
+    () =>
+      StyleSheet.create({
+        background: {
+          backgroundColor: colors.background,
+        },
+        textColor: {
+          color: colors.text,
+        },
+      }),
+    [colors.background, colors.text],
+  );
+
   return (
-    <View style={[styles.mainview, { backgroundColor: colors.background }]}>
+    <View style={[styles.mainview, themeStyles.background]}>
       <View style={styles.viewrow}>
         <TouchableOpacity
           style={styles.back}
@@ -22,28 +36,41 @@ export default function Reviews({ navigation, route }: any) {
         >
           <Text style={styles.backtext}> ← </Text>
         </TouchableOpacity>
-        <Text style={[styles.head, { color: colors.text }]}>Reviews</Text>
+        <Text style={[styles.head, themeStyles.textColor]}>Reviews</Text>
       </View>
+
       <View style={styles.viewrow}>
         <View>
-          <Text style={[styles.head, { color: colors.text }]}>{reviewList?.length || 0} Reviews</Text>
-          <Text>
-            4.8
-            <Image
-              source={require('../assets/Star.png')}
-              resizeMode="contain"
-            />
-          </Text>
+          <View style={styles.ratingSummary}>
+            <Text
+              style={[styles.head, styles.ratingHead, themeStyles.textColor]}
+            >
+              {reviewList?.length || 0} Reviews
+            </Text>
+            <View style={styles.ratingValueRow}>
+              <Text style={[styles.ratingValue, themeStyles.textColor]}>
+                4.8
+              </Text>
+              <Image
+                source={require('../assets/Star.png')}
+                resizeMode="contain"
+                style={styles.starIcon}
+              />
+            </View>
+          </View>
         </View>
-        <View>
-            <TouchableOpacity onPress={() => navigation.navigate(Routes.ADD_REVIEW)}>
-            <Image
-              source={require('../assets/addreview.png')}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          onPress={() => navigation.navigate(Routes.ADD_REVIEW)}
+          style={styles.addReviewBtn}
+        >
+          <Image
+            source={require('../assets/addreview.png')}
+            resizeMode="contain"
+            style={styles.addReviewIcon}
+          />
+        </TouchableOpacity>
       </View>
+
       <FlatList
         data={reviewList}
         keyExtractor={(item, index) => index.toString()}
@@ -52,13 +79,13 @@ export default function Reviews({ navigation, route }: any) {
             <View style={styles.view}>
               <View style={styles.reviewrow}>
                 <View style={styles.rname}>
-                  <Text style={{ fontWeight: 'bold', color: Colors.primary }}>
+                  <Text style={styles.reviewInitialText}>
                     {item.reviewerName?.charAt(0).toUpperCase()}
                   </Text>
                 </View>
 
-                <View style={{ marginLeft: 10, flex: 1 }}>
-                  <Text style={{ fontWeight: 'bold' }}>
+                <View style={styles.reviewDetails}>
+                  <Text style={[styles.reviewName, themeStyles.textColor]}>
                     {item.reviewerName}
                   </Text>
                   <Text style={styles.date}>
@@ -79,14 +106,15 @@ export default function Reviews({ navigation, route }: any) {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   view: {
     marginBottom: 20,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: Colors.bgCard,
     borderRadius: 20,
   },
   mainview: {
-    backgroundColor: '#ffffff',
+    backgroundColor: Colors.white,
     flex: 1,
     paddingHorizontal: 20,
   },
@@ -101,23 +129,46 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 20,
   },
-  name: {
-    color: '#3e3e3e',
-    fontSize: 18,
+  ratingHead: {
+    marginHorizontal: 0,
+    marginTop: 20,
+  },
+  ratingSummary: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  ratingValueRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 10,
+  },
+  ratingValue: {
+    fontSize: 16,
+    marginRight: 8,
+  },
+  starIcon: {
+    width: 16,
+    height: 16,
+  },
+  addReviewBtn: {
+    marginTop: 20,
+  },
+  addReviewIcon: {
+    width: 30,
+    height: 30,
   },
   back: {
     width: 45,
     height: 45,
-    backgroundColor: '#f7f7f7',
+    backgroundColor: Colors.bgLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
     borderRadius: 25,
-    fontWeight: 'bold',
   },
   backtext: {
     fontSize: 30,
-    color: 'black',
+    color: Colors.black,
     textAlign: 'center',
     textAlignVertical: 'center',
     includeFontPadding: false,
@@ -128,35 +179,38 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 20,
   },
-  viewreview: {
+  rname: {
     width: 45,
     height: 45,
     borderRadius: 25,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: Colors.bgSoft,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  reviewInitialText: {
+    fontWeight: 'bold',
+    color: Colors.primary,
+  },
+  reviewDetails: {
+    flex: 1,
+    marginLeft: 10,
+  },
+  reviewName: {
+    fontWeight: 'bold',
   },
   rating: {
     marginLeft: 120,
   },
   ratingtext: {
-    color: '#494949',
+    color: Colors.textPrimary,
     marginLeft: 10,
   },
   date: {
     color: '#a7a7a7',
   },
   passage: {
-    color: '#8f8f8f',
+    color: Colors.textMedium,
     fontSize: 15,
     padding: 10,
-  },
-  rname: {
-    width: 45,
-    height: 45,
-    borderRadius: 25,
-    backgroundColor: '#f0f0f0',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });

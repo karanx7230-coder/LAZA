@@ -35,7 +35,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-// 4. Create a custom hook for easy access (just like useCart)
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (context === undefined) {

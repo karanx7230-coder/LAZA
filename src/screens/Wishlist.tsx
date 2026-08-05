@@ -1,3 +1,4 @@
+import React, { useMemo } from 'react';
 import {
   View,
   Text,
@@ -7,16 +8,34 @@ import {
   TouchableOpacity,
   StatusBar,
 } from 'react-native';
-import React from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Routes } from '../utils';
+import { Colors, Routes } from '../utils';
 import { useAppSelector } from '../hooks/redux';
+
 export default function Wishlist({ navigation }: any) {
   const items = useAppSelector(state => state.wishlist.items);
 
   const { isDarkMode, colors } = useTheme();
   const insets = useSafeAreaInsets();
+
+  const pageStyle = useMemo(
+    () => [
+      styles.view,
+      {
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        backgroundColor: colors.background,
+      },
+    ],
+    [insets.top, insets.bottom, colors.background],
+  );
+
+  const titleTextStyle = useMemo(
+    () => [styles.title, { color: colors.text }],
+    [colors.text],
+  );
+
   if (items.length === 0) {
     return (
       <View style={styles.center}>
@@ -25,39 +44,28 @@ export default function Wishlist({ navigation }: any) {
           backgroundColor="transparent"
           translucent
         />
-        <Text style={{ fontSize: 18, color: 'gray' }}>
-          Your Wishlist is Empty!
-        </Text>
+        <Text style={styles.emptyText}>Your Wishlist is Empty!</Text>
       </View>
     );
   }
 
   return (
-    <View
-      style={[
-        styles.view,
-        {
-          paddingTop: insets.top,
-          paddingBottom: insets.bottom,
-          backgroundColor: colors.background,
-        },
-      ]}
-    >
+    <View style={pageStyle}>
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={styles.backButton}
           >
-            <Text style={{ fontSize: 20 }}>←</Text>
+            <Text style={styles.backArrow}>←</Text>
           </TouchableOpacity>
-          <Text style={[styles.title, { color: colors.text }]}>Wishlist</Text>
-          <View style={{ width: 40 }} />
+          <Text style={titleTextStyle}>Wishlist</Text>
+          <View style={styles.headerSpacer} />
         </View>
 
         <FlatList
           data={items}
-          contentContainerStyle={{ paddingBottom: 20 }}
+          contentContainerStyle={styles.flatListContent}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity
@@ -67,7 +75,7 @@ export default function Wishlist({ navigation }: any) {
               }
             >
               <Image source={{ uri: item.thumbnail }} style={styles.img} />
-              <View style={{ flex: 1 }}>
+              <View style={styles.itemTextWrapper}>
                 <Text style={styles.name} numberOfLines={1}>
                   {item.title}
                 </Text>
@@ -84,7 +92,7 @@ export default function Wishlist({ navigation }: any) {
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
   },
   container: {
     flex: 1,
@@ -98,25 +106,39 @@ const styles = StyleSheet.create({
   },
   backButton: {
     padding: 10,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: Colors.bgLight,
     borderRadius: 50,
+  },
+  backArrow: {
+    fontSize: 20,
   },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#000',
+    color: Colors.black,
     textAlign: 'center',
+  },
+  headerSpacer: {
+    width: 40,
   },
   center: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: Colors.white,
+  },
+  emptyText: {
+    fontSize: 18,
+    color: Colors.textMedium,
+  },
+  flatListContent: {
+    paddingBottom: 20,
   },
   item: {
     flexDirection: 'row',
     marginBottom: 15,
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     padding: 15,
     borderRadius: 15,
   },
@@ -127,14 +149,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#f4f4f4',
   },
+  itemTextWrapper: {
+    flex: 1,
+  },
   name: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: Colors.textPrimary,
   },
   price: {
     fontSize: 15,
-    color: '#000',
+    color: Colors.black,
     fontWeight: 'bold',
     marginTop: 5,
   },

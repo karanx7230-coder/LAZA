@@ -14,7 +14,7 @@ import {
   StatusBar,
 } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Colors } from '../utils';
 
 export default function Signup({ navigation }: any) {
@@ -30,6 +30,34 @@ export default function Signup({ navigation }: any) {
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const { isDarkMode, colors } = useTheme();
+
+  const themeStyles = useMemo(
+    () =>
+      StyleSheet.create({
+        background: {
+          backgroundColor: colors.background,
+        },
+        textColor: {
+          color: colors.text,
+        },
+      }),
+    [colors.background, colors.text],
+  );
+
+  const usernameInputStyle = [
+    styles.input,
+    usernameFocused ? styles.inputFocused : styles.inputBlurred,
+  ];
+
+  const emailInputStyle = [
+    styles.input,
+    emailFocused ? styles.inputFocused : styles.inputBlurred,
+  ];
+
+  const passwordInputStyle = [
+    styles.input,
+    passwordFocused ? styles.inputFocused : styles.inputBlurred,
+  ];
 
   const handleUsernameChange = (text: string) => {
     setUsername(text);
@@ -107,7 +135,7 @@ export default function Signup({ navigation }: any) {
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: colors.background }}
+      style={[styles.keyboard, themeStyles.background]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <StatusBar
@@ -117,11 +145,11 @@ export default function Signup({ navigation }: any) {
       />
       <ScrollView
         style={styles.container}
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.innerContainer}>
+        <View style={[styles.innerContainer, themeStyles.background]}>
           <View>
             <TouchableOpacity
               style={styles.backButton}
@@ -130,18 +158,15 @@ export default function Signup({ navigation }: any) {
               <Text style={styles.backArrow}>←</Text>
             </TouchableOpacity>
 
-            <Text style={styles.title}>Sign Up</Text>
+            <Text style={[styles.title, themeStyles.textColor]}>Sign Up</Text>
 
             <View style={styles.inputGroup}>
-              <Text style={[styles.label, { color: colors.text }]}>
+              <Text style={[styles.label, themeStyles.textColor]}>
                 Username
               </Text>
               <View style={styles.inputRow}>
                 <TextInput
-                  style={[
-                    styles.input,
-                    { borderBottomColor: usernameFocused ? 'blue' : '#E7E8EA' },
-                  ]}
+                  style={usernameInputStyle}
                   value={username}
                   onChangeText={handleUsernameChange}
                   onFocus={() => setUsernameFocused(true)}
@@ -158,15 +183,12 @@ export default function Signup({ navigation }: any) {
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={[styles.label, { color: colors.text }]}>
+              <Text style={[styles.label, themeStyles.textColor]}>
                 Email Address
               </Text>
               <View style={styles.inputRow}>
                 <TextInput
-                  style={[
-                    styles.input,
-                    { borderBottomColor: emailFocused ? 'blue' : '#E7E8EA' },
-                  ]}
+                  style={emailInputStyle}
                   value={email}
                   onChangeText={handleEmailChange}
                   onFocus={() => setEmailFocused(true)}
@@ -184,15 +206,12 @@ export default function Signup({ navigation }: any) {
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={[styles.label, { color: colors.text }]}>
+              <Text style={[styles.label, themeStyles.textColor]}>
                 Password
               </Text>
               <View style={styles.inputRow}>
                 <TextInput
-                  style={[
-                    styles.input,
-                    { borderBottomColor: passwordFocused ? 'blue' : '#E7E8EA' },
-                  ]}
+                  style={passwordInputStyle}
                   value={password}
                   onChangeText={handlepasswordChange}
                   onFocus={() => setPasswordFocused(true)}
@@ -209,7 +228,9 @@ export default function Signup({ navigation }: any) {
             </View>
 
             <View style={styles.rememberRow}>
-              <Text style={styles.rememberText}>Remember me</Text>
+              <Text style={[styles.rememberText, themeStyles.textColor]}>
+                Remember me
+              </Text>
               <Switch
                 value={isRemembered}
                 onValueChange={setIsRemembered}
@@ -226,7 +247,7 @@ export default function Signup({ navigation }: any) {
             disabled={loading}
           >
             {loading ? (
-              <ActivityIndicator color="#ffffff" size="large" />
+              <ActivityIndicator color={Colors.white} size="large" />
             ) : (
               <Text style={styles.signupButtonText}>Sign Up</Text>
             )}
@@ -238,9 +259,15 @@ export default function Signup({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
+  keyboard: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     paddingHorizontal: 20,
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   innerContainer: {
     flex: 1,
@@ -249,7 +276,7 @@ const styles = StyleSheet.create({
   backButton: {
     width: 45,
     height: 45,
-    backgroundColor: '#F5F6FA',
+    backgroundColor: Colors.bgLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 50,
@@ -257,7 +284,7 @@ const styles = StyleSheet.create({
   },
   backArrow: {
     fontSize: 22,
-    color: '#282828',
+    color: Colors.textDark,
   },
   title: {
     fontSize: 28,
@@ -265,14 +292,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
     marginBottom: 40,
-    color: '#1D1E20',
   },
   inputGroup: {
     marginBottom: 25,
   },
   label: {
     fontSize: 14,
-    color: '#8F959E',
+    color: Colors.textMedium,
     marginBottom: 8,
   },
   inputRow: {
@@ -283,18 +309,24 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#1D1E20',
+    color: Colors.textPrimary,
     fontWeight: '500',
     padding: 0,
     borderBottomWidth: 1,
   },
+  inputFocused: {
+    borderBottomColor: 'blue',
+  },
+  inputBlurred: {
+    borderBottomColor: Colors.border,
+  },
   checkMark: {
-	color: Colors.success,
+    color: Colors.success,
     fontSize: 18,
     fontWeight: 'bold',
   },
   strongText: {
-	color: Colors.success,
+    color: Colors.success,
     fontSize: 14,
     fontWeight: '500',
   },
@@ -307,23 +339,22 @@ const styles = StyleSheet.create({
   },
   rememberText: {
     fontSize: 15,
-    color: '#1D1E20',
     fontWeight: '500',
   },
   signupButton: {
-	backgroundColor: Colors.primaryLight,
+    backgroundColor: Colors.primaryLight,
     height: 100,
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: -20,
   },
   signupButtonText: {
-    color: '#ffffff',
+    color: Colors.white,
     fontSize: 18,
     fontWeight: '600',
   },
   error: {
-	color: Colors.googleRed,
+    color: Colors.googleRed,
     fontSize: 12,
     marginTop: 5,
   },
