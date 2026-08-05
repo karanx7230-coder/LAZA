@@ -10,8 +10,9 @@ import { navigationRef } from './src/navigation/navigationService';
 import { StoreProvider } from './src/store';
 import useDeepLinking from './src/service/link';
 import { Provider } from 'react-redux';
-import { store } from './src/store/redux/store/store';
-import {
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from './src/store/redux/store/store';
+import { 
   requestNotificationPermission,
   getFCMToken,
   handleNotificationNavigation,
@@ -63,11 +64,13 @@ export default function App() {
       <SafeAreaProvider>
         <StoreProvider>
           <Provider store={store}>
-            <ThemeProvider>
-              <NavigationContainer ref={navigationRef}>
-                <StackNavigator user={user} />
-              </NavigationContainer>
-            </ThemeProvider>
+            <PersistGate loading={null} persistor={persistor}>
+              <ThemeProvider>
+                <NavigationContainer ref={navigationRef}>
+                  <StackNavigator user={user} />
+                </NavigationContainer>
+              </ThemeProvider>
+            </PersistGate>
           </Provider>
         </StoreProvider>
       </SafeAreaProvider>

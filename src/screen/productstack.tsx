@@ -18,7 +18,6 @@ import {
   cart$,
   decreaseQuantity,
   increaseQuantity,
-  removeFromCart,
 } from '../store/legend/cart';
 
 export default observer(function Productstack({ route, navigation }: any) {
@@ -58,9 +57,9 @@ export default observer(function Productstack({ route, navigation }: any) {
   }
 
   // Now it is safe to use productData!
- const isItemInCart = cart$.items.get().some(
-  (item) => item.id === productData.id,
-);
+  const isItemInCart = cart$.items
+    .get()
+    .some(item => item.id === productData.id);
 
   const handlePress = () => {
     if (!isItemInCart) {
@@ -69,9 +68,6 @@ export default observer(function Productstack({ route, navigation }: any) {
       navigation.navigate(Routes.CART);
     }
   };
-
-  const increaseQty = increaseQuantity;
-  const decreaseQty = decreaseQuantity;
 
   const totalPrice = productData.price * quantity;
 
