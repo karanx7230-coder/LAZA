@@ -6,73 +6,42 @@ import {
   ScrollView,
   Image,
   ImageBackground,
-  ActivityIndicator, // <-- Added ActivityIndicator
+  StatusBar,
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import { observer } from '@legendapp/state/react';
+import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
-import API from '../api/api';
 import { Colors, Routes } from '../utils';
-import {
-  addToCart,
-  cart$,
-  decreaseQuantity,
-  increaseQuantity,
-} from '../store/legend/cart';
-
-export default observer(function Productstack({ route, navigation }: any) {
-  const { colors } = useTheme();
-  const [productData, setProductData] = useState(
-    route.params?.productData || null,
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
+import { addToCart } from '../store/redux/slice/cartSlice';
+import QuantityStepper from '../components/QuantityStepper';
+export default function Product({ route, navigation }: any) {
+  const { isDarkMode, colors } = useTheme();
+  const dispatch = useAppDispatch();
+  const { productData } = route.params;
+  const isItemInCart = useAppSelector(state =>
+    state.cart.items.some(item => item.id === productData.id),
   );
-  const [loading, setLoading] = useState(!route.params?.productData);
-  const [quantity, setQuantity] = useState(1);
-  const productId = route?.params?.id;
-  useEffect(() => {
-    if (!productData && productId) {
-      API.get(`/products/${productId}`)
-        .then(({ data }) => {
-          setProductData(data);
-          setLoading(false);
-        })
-        .catch(err => {
-          console.error(err);
-          setLoading(false);
-        });
-    }
-  }, [productId, productData]);
-
-  // 3. Show loading screen while fetching
-  if (loading || !productData) {
-    return (
-      <View
-        style={[
-          styles.scrollview,
-          { justifyContent: 'center', alignItems: 'center' },
-        ]}
-      >
-        <ActivityIndicator size="large" color="#9B72FF" />
-      </View>
-    );
-  }
-
-  // Now it is safe to use productData!
-  const isItemInCart = cart$.items
-    .get()
-    .some(item => item.id === productData.id);
-
   const handlePress = () => {
     if (!isItemInCart) {
-      addToCart({ ...productData, quantity: quantity });
+      dispatch(addToCart({ ...productData, quantity }));
     } else {
       navigation.navigate(Routes.CART);
     }
   };
+  const [quantity, setQuantity] = useState(1);
 
+  const increaseQty = () => setQuantity(prev => prev + 1);
+  const decreaseQty = () => {
+    if (quantity > 1) setQuantity(prev => prev - 1);
+  };
   const totalPrice = productData.price * quantity;
-
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor="transparent"
+        translucent
+      />
       <ScrollView style={styles.scrollview}>
         <ImageBackground
           source={{ uri: productData.thumbnail }}
@@ -88,7 +57,7 @@ export default observer(function Productstack({ route, navigation }: any) {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.back}
-              onPress={() => navigation.navigate('Cart')}
+              onPress={() => navigation.navigate(Routes.CART)}
             >
               <Image
                 style={styles.imagetop}
@@ -117,15 +86,15 @@ export default observer(function Productstack({ route, navigation }: any) {
             <Text style={[styles.name, { color: colors.text }]}>
               Description
             </Text>
+
             <Text style={styles.subname}>{productData.description}</Text>
           </View>
-
           <View style={{ marginTop: 20 }}>
             <View style={styles.view2}>
               <Text style={[styles.name, { color: colors.text }]}>Reviews</Text>
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('reviews', {
+                  navigation.navigate(Routes.REVIEWS, {
                     reviews: productData.reviews,
                   })
                 }
@@ -194,21 +163,12 @@ export default observer(function Productstack({ route, navigation }: any) {
             </Text>
             <Text style={styles.tax}>with VAT,SD</Text>
           </View>
-          <TouchableOpacity
-            onPress={() => decreaseQuantity}
-            style={styles.qtyButton}
-          >
-            <Text style={styles.qtyIcon}>-</Text>
-          </TouchableOpacity>
-          <Text style={[styles.qtyText, { color: colors.text }]}>
-            {quantity}
-          </Text>
-          <TouchableOpacity
-            onPress={() => increaseQuantity}
-            style={styles.qtyButton}
-          >
-            <Text style={styles.qtyIcon}>+</Text>
-          </TouchableOpacity>
+          <QuantityStepper
+            value={quantity}
+            onDecrease={decreaseQty}
+            onIncrease={increaseQty}
+            valueStyle={{ color: colors.text }}
+          />
           <Text style={[styles.price, { color: colors.text }]}>
             ${totalPrice.toFixed(2)}
           </Text>
@@ -229,7 +189,7 @@ export default observer(function Productstack({ route, navigation }: any) {
       </View>
     </View>
   );
-});
+}
 
 const styles = StyleSheet.create({
   scrollview: {
@@ -286,11 +246,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  imageextra: {
-    height: 77,
-    width: 77,
-    borderRadius: 10,
-  },
   name: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -301,16 +256,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#000',
     marginTop: 5,
-  },
-  buttonText: {
-    color: '#737373',
-    fontWeight: 'bold',
-    fontSize: 12,
-  },
-  more: {
-    fontSize: 12,
-    color: '#b2b2b2',
-    marginTop: -4,
   },
   viewdescription: {
     marginTop: 5,
@@ -337,30 +282,6 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
   },
-  quantityRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-    justifyContent: 'center',
-  },
-  qtyButton: {
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#949494',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f0f0f0',
-  },
-  qtyIcon: {
-    fontSize: 16,
-    color: '#242424',
-  },
-  qtyText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
   priceviewbox: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -368,11 +289,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingHorizontal: 40,
     paddingVertical: 10,
-  },
-  pricetext: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#2d2d2d',
   },
   tax: {
     fontSize: 11,

@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  ImageBackground,
   ScrollView,
   FlatList,
   ActivityIndicator,
@@ -16,12 +15,14 @@ import { DrawerActions } from '@react-navigation/native';
 import API from '../api/api';
 import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
-import { useStore } from '../store';
-import { observer } from 'mobx-react-lite';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
+import { toggleWishlist } from '../store/redux/slice/wishlistSlice';
+import ProductCard from '../components/ProductCard';
 
-export default observer(function Home({ navigation }: any) {
+export default function Home({ navigation }: any) {
   const { isDarkMode, colors } = useTheme();
-  const wishlist = useStore().wishlist;
+  const dispatch = useAppDispatch();
+  const wishlistItems = useAppSelector(state => state.wishlist.items);
   const [cloths, setCloths] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -44,8 +45,7 @@ export default observer(function Home({ navigation }: any) {
         const response = await API.get('/products');
 
         setCloths(response.data.products);
-      } catch (error) {
-        console.log('API call fail ho gayi:', error);
+      } catch {
       } finally {
         setLoading(false);
       }
@@ -69,7 +69,7 @@ export default observer(function Home({ navigation }: any) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.back}
-          onPress={() => navigation.navigate(Routes.TEST_INPUT)}
+          onPress={() => navigation.navigate(Routes.CART)}
         >
           <Image
             style={styles.imagetop}
@@ -178,55 +178,24 @@ export default observer(function Home({ navigation }: any) {
         columnWrapperStyle={{ justifyContent: 'space-between' }}
         showsVerticalScrollIndicator={false}
         data={filteredProducts}
-        extraData={wishlist.items.length}
+        extraData={wishlistItems.length}
         keyExtractor={(item, index) =>
           item.id ? item.id.toString() : index.toString()
         }
-        renderItem={({ item }) => {
-          const isFavorite = wishlist.isInWishlist(item.id);
-          return (
-            <View style={styles.clothboxes}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate(Routes.PRODUCT, { productData: item })
-                }
-                style={styles.touchbox}
-              >
-                <ImageBackground
-                  source={{ uri: item.thumbnail }}
-                  style={styles.clothimage}
-                  resizeMode="contain"
-                >
-                  <TouchableOpacity
-                    style={styles.diltouch}
-                    onPress={() => wishlist.toggleWishlist(item)}
-                  >
-                    <Image
-                      source={
-                        isFavorite
-                          ? require('../assets/heart1.png')
-                          : require('../assets/Heart.png')
-                      }
-                      style={styles.dilimage}
-                      resizeMode="contain"
-                    />
-                  </TouchableOpacity>
-                </ImageBackground>
-
-                <Text style={styles.name} numberOfLines={1}>
-                  {item.title}
-                </Text>
-                <Text style={styles.price} numberOfLines={1}>
-                  ${item.price}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          );
-        }}
+        renderItem={({ item }) => (
+          <ProductCard
+            product={item}
+            isFavorite={wishlistItems.some(i => i.id === item.id)}
+            onPress={() =>
+              navigation.navigate(Routes.PRODUCT, { productData: item })
+            }
+            onToggleFavorite={() => dispatch(toggleWishlist(item))}
+          />
+        )}
       />
     </View>
   );
-});
+}
 
 const styles = StyleSheet.create({
   view: {
@@ -315,49 +284,5 @@ const styles = StyleSheet.create({
   },
   brandname: {
     fontSize: 15,
-  },
-  touchbox: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    padding: 10,
-    marginVertical: 8,
-    marginHorizontal: 5,
-    alignItems: 'center',
-    width: 170,
-    borderRadius: 10,
-  },
-  clothboxes: {
-    height: 'auto',
-    width: 'auto',
-  },
-  clothimage: {
-    width: 160,
-    height: 200,
-    marginBottom: 10,
-    backgroundColor: '#ffffff',
-  },
-  diltouch: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    padding: 8,
-    borderRadius: 20,
-  },
-  dilimage: {
-    width: 20,
-    height: 20,
-  },
-  name: {
-    fontSize: 14,
-    fontWeight: '500',
-    textAlign: 'center',
-    marginBottom: 5,
-    color: '#333',
-    width: 150,
-  },
-  price: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#000',
   },
 });

@@ -1,3 +1,3 @@
-export * from './routes';
-export * from './colors';
+export * from '../constants/routes';
+export * from '../constants/colors';
 export * from './format';

@@ -11,14 +11,13 @@ import React from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Routes } from '../utils';
-import { useStore } from '../store';
-import { observer } from 'mobx-react-lite';
-export default observer(function Wishlist({ navigation }: any) {
-  const wishlist = useStore().wishlist;
+import { useAppSelector } from '../hooks/redux';
+export default function Wishlist({ navigation }: any) {
+  const items = useAppSelector(state => state.wishlist.items);
 
   const { isDarkMode, colors } = useTheme();
   const insets = useSafeAreaInsets();
-  if (wishlist.items.length === 0) {
+  if (items.length === 0) {
     return (
       <View style={styles.center}>
         <StatusBar
@@ -57,7 +56,7 @@ export default observer(function Wishlist({ navigation }: any) {
         </View>
 
         <FlatList
-          data={wishlist.items}
+          data={items}
           contentContainerStyle={{ paddingBottom: 20 }}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
@@ -80,7 +79,7 @@ export default observer(function Wishlist({ navigation }: any) {
       </View>
     </View>
   );
-});
+}
 
 const styles = StyleSheet.create({
   view: {

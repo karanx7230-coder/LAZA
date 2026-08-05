@@ -3,6 +3,28 @@ jest.mock('@react-native-firebase/app', () => ({
   default: jest.fn(),
 }));
 
+jest.mock('@react-native-async-storage/async-storage', () => {
+  let store = {};
+  return {
+    __esModule: true,
+    default: {
+      setItem: jest.fn((key, value) => {
+        store[key] = value;
+        return Promise.resolve();
+      }),
+      getItem: jest.fn(key => Promise.resolve(store[key] ?? null)),
+      removeItem: jest.fn(key => {
+        delete store[key];
+        return Promise.resolve();
+      }),
+      clear: jest.fn(() => {
+        store = {};
+        return Promise.resolve();
+      }),
+    },
+  };
+});
+
 jest.mock('@react-native-firebase/auth', () => ({
   __esModule: true,
   default: jest.fn(() => ({

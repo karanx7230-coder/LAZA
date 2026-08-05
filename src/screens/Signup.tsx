@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import React, { useState } from 'react';
-import { Colors, Routes } from '../utils';
+import { Colors } from '../utils';
 
 export default function Signup({ navigation }: any) {
   const [username, setUsername] = useState('');
@@ -90,7 +90,6 @@ export default function Signup({ navigation }: any) {
       await userCredential.user.updateProfile({
         displayName: username,
       });
-      navigation.navigate(Routes.MAIN_TABS);
     } catch (error: any) {
       if (error.code === 'auth/email-already-in-use') {
         setEmailError('That email address is already in use!');

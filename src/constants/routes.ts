@@ -3,7 +3,6 @@ export const Routes = {
   HOME_DRAWER: 'HomeDrawer',
   HOME_TAB: 'HomeTab',
   CART_TAB: 'CartTab',
-  TEST_INPUT: 'testinput',
 
   HOME: 'home',
   CART: 'Cart',

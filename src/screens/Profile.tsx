@@ -10,15 +10,14 @@ import {
 } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { Routes } from '../utils';
-import { RootState } from '../store/redux/store/store';
-import { useSelector as reduxselect } from 'react-redux';
+import { useAppSelector } from '../hooks/redux';
 
 export default function Profile({ navigation }: any) {
   const { isDarkMode, toggleTheme, colors } = useTheme();
   const handleLogout = () => {
     auth().signOut();
   };
-  const user = reduxselect((state: RootState) => state.userreducer);
+  const user = useAppSelector(state => state.userreducer);
   return (
     <View style={[styles.mainview, { backgroundColor: colors.background }]}>
       <StatusBar

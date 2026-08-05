@@ -7,12 +7,16 @@ import auth from '@react-native-firebase/auth';
 import StackNavigator from './src/navigation/StackNavigator';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { navigationRef } from './src/navigation/navigationService';
-import { StoreProvider } from './src/store';
 import useDeepLinking from './src/service/link';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './src/store/redux/store/store';
-import { 
+import { useAppDispatch } from './src/hooks/redux';
+import {
+  setUser as setUserState,
+  clearUser,
+} from './src/store/redux/slice/userslice';
+import {
   requestNotificationPermission,
   getFCMToken,
   handleNotificationNavigation,
@@ -20,6 +24,23 @@ import {
 } from './src/service/notification';
 
 export default function App() {
+  return (
+    <GestureHandlerRootView style={styles.rootContainer}>
+      <SafeAreaProvider>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <ThemeProvider>
+              <AppRoot />
+            </ThemeProvider>
+          </PersistGate>
+        </Provider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
+  );
+}
+
+function AppRoot() {
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
 
@@ -36,9 +57,20 @@ export default function App() {
     const subscriber = auth().onAuthStateChanged((userState: any) => {
       setUser(userState);
       setLoading(false);
+      if (userState) {
+        dispatch(
+          setUserState({
+            uid: userState.uid,
+            name: userState.displayName || '',
+            email: userState.email || '',
+          }),
+        );
+      } else {
+        dispatch(clearUser());
+      }
     });
     return subscriber;
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (!loading) {
@@ -60,21 +92,9 @@ export default function App() {
   }
 
   return (
-    <GestureHandlerRootView style={styles.rootContainer}>
-      <SafeAreaProvider>
-        <StoreProvider>
-          <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-              <ThemeProvider>
-                <NavigationContainer ref={navigationRef}>
-                  <StackNavigator user={user} />
-                </NavigationContainer>
-              </ThemeProvider>
-            </PersistGate>
-          </Provider>
-        </StoreProvider>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <NavigationContainer ref={navigationRef}>
+      <StackNavigator user={user} />
+    </NavigationContainer>
   );
 }
 

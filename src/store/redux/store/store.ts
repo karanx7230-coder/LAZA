@@ -1,18 +1,28 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { persistReducer, persistStore } from 'redux-persist';
-import userSlice from '../slice/userslice';
+import {
+  persistReducer,
+  persistStore,
+  type PersistedState,
+} from 'redux-persist';
+import userReducer from '../slice/userslice';
+import cartReducer from '../slice/cartSlice';
+import wishlistReducer from '../slice/wishlistSlice';
+import ordersReducer from '../slice/ordersSlice';
 
 const persistConfig = {
   key: 'root',
   version: 1,
   storage: AsyncStorage,
-  whitelist: ['userreducer'],
-  migrate: (state: any) => Promise.resolve(state),
+  whitelist: ['userreducer', 'cart', 'wishlist'],
+  migrate: (state: PersistedState) => Promise.resolve(state),
 };
 
 const rootReducer = combineReducers({
-  userreducer: userSlice,
+  userreducer: userReducer,
+  cart: cartReducer,
+  wishlist: wishlistReducer,
+  orders: ordersReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

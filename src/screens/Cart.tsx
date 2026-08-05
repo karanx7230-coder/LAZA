@@ -8,21 +8,23 @@ import {
   StatusBar,
 } from 'react-native';
 import React from 'react';
-import { observer } from '@legendapp/state/react';
 import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
 import { formatPrice } from '../utils/format';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import {
-  cart$,
   decreaseQuantity,
   increaseQuantity,
   removeFromCart,
-} from '../store/legend/cart';
-export default observer(function Cart({ route, navigation }: any) {
+} from '../store/redux/slice/cartSlice';
+import { addOrder } from '../store/redux/slice/ordersSlice';
+import QuantityStepper from '../components/QuantityStepper';
+export default function Cart({ route, navigation }: any) {
   const { isDarkMode, colors } = useTheme();
+  const dispatch = useAppDispatch();
   const passedAddress = route?.params?.updatedaddress;
   const shippingCost = 5;
-  const items = cart$.items.get();
+  const items = useAppSelector(state => state.cart.items);
 
   const subtotal = items.reduce(
     (accumulator, item) => accumulator + item.price * item.quantity,
@@ -82,24 +84,16 @@ export default observer(function Cart({ route, navigation }: any) {
                   <Text style={styles.price}>${item.price}</Text>
                 </TouchableOpacity>
                 <View style={styles.priceviewbox}>
-                  <TouchableOpacity
-                    onPress={() => decreaseQuantity(item.id)}
-                    style={styles.qtyButton}
-                  >
-                    <Text style={styles.qtyIcon}>-</Text>
-                  </TouchableOpacity>
-                  <Text style={styles.qtyText}>{item.quantity || 1}</Text>
-                  <TouchableOpacity
-                    onPress={() => increaseQuantity(item.id)}
-                    style={styles.qtyButton}
-                  >
-                    <Text style={styles.qtyIcon}>+</Text>
-                  </TouchableOpacity>
+                  <QuantityStepper
+                    value={item.quantity || 1}
+                    onDecrease={() => dispatch(decreaseQuantity(item.id))}
+                    onIncrease={() => dispatch(increaseQuantity(item.id))}
+                  />
                 </View>
                 <View>
                   <TouchableOpacity
                     style={styles.deletetouch}
-                    onPress={() => removeFromCart(item.id)}
+                    onPress={() => dispatch(removeFromCart(item.id))}
                   >
                     <Image
                       source={require('../assets/Delete.png')}
@@ -192,7 +186,17 @@ export default observer(function Cart({ route, navigation }: any) {
         <View>
           <TouchableOpacity
             style={styles.last}
-            onPress={() => navigation.navigate(Routes.ORDER_DONE)}
+            onPress={() => {
+              dispatch(
+                addOrder({
+                  id: Date.now().toString(),
+                  items,
+                  total: totalAmount,
+                  date: new Date().toISOString(),
+                }),
+              );
+              navigation.navigate(Routes.ORDER_DONE);
+            }}
           >
             <Text style={styles.lasttext}>Checkout</Text>
           </TouchableOpacity>
@@ -200,7 +204,7 @@ export default observer(function Cart({ route, navigation }: any) {
       </View>
     </View>
   );
-});
+}
 const styles = StyleSheet.create({
   view: {
     flex: 1,
@@ -275,30 +279,6 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 14,
     color: '#9ba0a5',
-  },
-  quantityRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-    justifyContent: 'center',
-  },
-  qtyButton: {
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#949494',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f0f0f0',
-  },
-  qtyIcon: {
-    fontSize: 16,
-    color: '#242424',
-  },
-  qtyText: {
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   footerContainer: {
     marginTop: 10,

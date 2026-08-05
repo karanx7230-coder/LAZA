@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
-import { Colors } from '../utils';
+import { Colors, Routes } from '../utils';
 export default function Address({ navigation }: any) {
   const [isprimary, setasprimary] = useState(true);
   const { colors } = useTheme();
@@ -18,7 +18,7 @@ export default function Address({ navigation }: any) {
   const [phone, setphone] = useState('');
   const [fulladdress, setfulladdress] = useState('');
   const handlecheckkout = () => {
-    navigation.navigate('Cart', {
+    navigation.navigate(Routes.CART, {
       updatedaddress: {
         name,
         city,

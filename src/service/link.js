@@ -17,7 +17,6 @@ function useDeepLinking() {
     }, []);
 
     function handleDeepLink(url) {
-        console.log('Deep link received:', url);
         const parsed = new URL(url);
         const productId = parsed.pathname.replace(/^\//,'');
         navigate(Routes.PRODUCT_STACK, { id: productId });

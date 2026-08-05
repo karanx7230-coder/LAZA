@@ -38,7 +38,6 @@ export default function Signin({ navigation }: any) {
 
     try {
       await auth().signInWithEmailAndPassword(email, password);
-      navigation.navigate(Routes.MAIN_TABS);
     } catch (error: any) {
       if (
         error.code === 'auth/user-not-found' ||

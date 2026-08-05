@@ -4,10 +4,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Routes, Colors } from '../utils';
 
-import Home from '../screen/home';
-import Cart from '../screen/Cart';
-import wishlist from '../screen/wishlist';
-import payment from '../screen/payment';
+import Home from '../screens/Home';
+import Cart from '../screens/Cart';
+import Wishlist from '../screens/Wishlist';
+import Payment from '../screens/Payment';
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
@@ -40,7 +40,7 @@ export default function TabNavigator() {
       />
       <Tab.Screen
         name={Routes.WISHLIST}
-        component={wishlist}
+        component={Wishlist}
         listeners={({ navigation }) => ({
           tabPress: e => {
             e.preventDefault();
@@ -79,7 +79,7 @@ export default function TabNavigator() {
       />
       <Tab.Screen
         name={Routes.PAYMENT}
-        component={payment}
+        component={Payment}
         options={{
           tabBarIcon: ({ focused }) =>
             focused ? (

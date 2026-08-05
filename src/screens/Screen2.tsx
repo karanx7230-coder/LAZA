@@ -64,9 +64,7 @@ export default function Screen2({ navigation }: any) {
 
       <TouchableOpacity
         onPress={() => {
-          ongooglebuttonpress().catch(error =>
-            console.log('Login failed:', error),
-          );
+          ongooglebuttonpress();
         }}
         style={styles.GoogleBtn}
       >
