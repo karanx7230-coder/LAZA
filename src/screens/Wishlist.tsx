@@ -7,11 +7,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   StatusBar,
+  ImageBackground,
 } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, Routes } from '../utils';
 import { useAppSelector } from '../hooks/redux';
+import Product from './Product';
 
 export default function Wishlist({ navigation }: any) {
   const items = useAppSelector(state => state.wishlist.items);
@@ -51,7 +53,7 @@ export default function Wishlist({ navigation }: any) {
 
   return (
     <View style={pageStyle}>
-      <View style={styles.container}>
+      <View style={styles.container1}>
         <View style={styles.header}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
@@ -65,23 +67,31 @@ export default function Wishlist({ navigation }: any) {
 
         <FlatList
           data={items}
+          numColumns={2}
           contentContainerStyle={styles.flatListContent}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() =>
-                navigation.navigate(Routes.PRODUCT, { productData: item })
-              }
-            >
-              <Image source={{ uri: item.thumbnail }} style={styles.img} />
-              <View style={styles.itemTextWrapper}>
+            <View style={styles.container}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate(Routes.PRODUCT, { productData: item })
+                }
+                style={styles.touchbox}
+              >
+                <Image
+                  source={{ uri: item.thumbnail }}
+                  style={styles.image}
+                  resizeMode="contain"
+                />
+
                 <Text style={styles.name} numberOfLines={1}>
                   {item.title}
                 </Text>
-                <Text style={styles.price}>${item.price}</Text>
-              </View>
-            </TouchableOpacity>
+                <Text style={styles.price} numberOfLines={1}>
+                  ${item.price}
+                </Text>
+              </TouchableOpacity>
+            </View>
           )}
         />
       </View>
@@ -94,9 +104,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.white,
   },
-  container: {
+  container1: {
     flex: 1,
-    paddingHorizontal: 20,
   },
   header: {
     flexDirection: 'row',
@@ -152,15 +161,64 @@ const styles = StyleSheet.create({
   itemTextWrapper: {
     flex: 1,
   },
+
+  //card styles
+  container: {
+    height: 'auto',
+    width: 'auto',
+  },
+  touchbox: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+    marginVertical: 8,
+    marginHorizontal: 5,
+    alignItems: 'center',
+    width: 170,
+    borderRadius: 10,
+  },
+  image: {
+    width: 160,
+    height: 200,
+    marginBottom: 10,
+    backgroundColor: '#ffffff',
+  },
+  favoriteTouch: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    padding: 8,
+    borderRadius: 20,
+  },
+  favoriteImage: {
+    width: 20,
+    height: 20,
+  },
   name: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: Colors.textPrimary,
+    fontSize: 14,
+    fontWeight: '500',
+    textAlign: 'center',
+    marginBottom: 5,
+    color: '#333',
+    width: 150,
   },
   price: {
-    fontSize: 15,
-    color: Colors.black,
+    fontSize: 16,
     fontWeight: 'bold',
-    marginTop: 5,
+    color: '#000',
   },
 });
+// <TouchableOpacity
+//   style={styles.item}
+//   onPress={() =>
+//     navigation.navigate(Routes.PRODUCT, { productData: item })
+//   }
+// >
+//   <Image source={{ uri: item.thumbnail }} style={styles.img} />
+//   <View style={styles.itemTextWrapper}>
+//     <Text style={styles.name} numberOfLines={1}>
+//       {item.title}
+//     </Text>
+//     <Text style={styles.price}>${item.price}</Text>
+//   </View>
+// </TouchableOpacity>

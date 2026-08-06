@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
+  Image,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
@@ -116,7 +117,13 @@ export default function Address({ navigation }: any) {
             trackColor={{ false: '#e0e0e0', true: '#3ac053' }}
           />
         </View>
-        <View style={styles.card} />
+        <TouchableOpacity>
+          <Image
+            source={require('../assets/images/location.png')}
+            resizeMode="contain"
+            style={styles.card}
+          />
+        </TouchableOpacity>
       </ScrollView>
       <View>
         <TouchableOpacity style={styles.last} onPress={handlecheckkout}>
@@ -191,7 +198,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   card: {
-    marginBottom: 170,
+    height: 170,
   },
   last: {
     backgroundColor: Colors.primaryDark,
