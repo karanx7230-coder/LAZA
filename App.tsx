@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, ActivityIndicator, StyleSheet, PermissionsAndroid, Platform, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -43,7 +43,6 @@ function AppRoot() {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
-
   useEffect(() => {
     requestNotificationPermission();
     getFCMToken();

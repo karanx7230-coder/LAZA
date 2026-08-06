@@ -9,8 +9,10 @@ import {
   ScrollView,
   Platform,
   Image,
+  PermissionsAndroid,
+  Alert,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
 import { setAddress } from '../store/redux/slice/adressSlice';
@@ -35,6 +37,55 @@ export default function Address({ navigation }: any) {
       screen: Routes.HOME_DRAWER,
       params: { screen: Routes.CART },
     });
+  };
+
+  const requestLocationPermission = async () => {
+    if (Platform.OS !== 'android') return true;
+
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Location Permission',
+          message:
+            'App ko map par aapki location dikhane ke liye permission chahiye',
+          buttonNeutral: 'Baad me poocho',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('Location permission mil gayi');
+        return true;
+      } else {
+        console.log('Location permission deny ho gayi');
+        Alert.alert(
+          'Permission for location',
+          'used to display your location on map',
+        );
+        return false;
+      }
+    } catch (err) {
+      console.warn(err);
+      return false;
+    }
+  };
+  // useEffect(() => {
+  //   const setupLocation = async () => {
+  //     const already = await checkLocationPermission();
+  //     if (!already) {
+  //       await requestLocationPermission();
+  //     }
+  //   };
+  //   setupLocation();
+  // }, []);
+  const checkLocationPermission = async () => {
+    const hasPermission = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    );
+    console.log('Permission already hai kya:', hasPermission);
+    return hasPermission;
   };
   return (
     <KeyboardAvoidingView
@@ -117,7 +168,10 @@ export default function Address({ navigation }: any) {
             trackColor={{ false: '#e0e0e0', true: '#3ac053' }}
           />
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity
+          //  onPress={checkLocationPermission}
+          onPress={() => navigation.navigate(Routes.Track)}
+        >
           <Image
             source={require('../assets/images/location.png')}
             resizeMode="contain"
@@ -198,7 +252,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   card: {
-    height: 170,
+    height: 200,
+    width: 350,
   },
   last: {
     backgroundColor: Colors.primaryDark,
@@ -222,6 +277,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
-    marginBottom: 100,
   },
 });

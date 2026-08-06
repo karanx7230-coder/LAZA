@@ -16,6 +16,7 @@ export const Routes = {
   ADD_REVIEW: 'addreview',
   ADDRESS: 'address',
   ADD_CARD: 'addcard',
+  Track: 'tracklist',
 
   ORDER_DONE: 'orderdone',
   ORDER: 'order',

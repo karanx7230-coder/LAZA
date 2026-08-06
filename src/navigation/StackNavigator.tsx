@@ -13,6 +13,7 @@ import Signin from '../screens/Signin';
 import Otp from '../screens/Otp';
 import NewPassword from '../screens/NewPassword';
 import Cart from '../screens/Cart';
+import TrackingScreen from '../screens/tracklist';
 import Product from '../screens/Product';
 import Reviews from '../screens/Reviews';
 import AddReview from '../screens/AddReview';
@@ -43,6 +44,7 @@ export default function StackNavigator({ user }: { user: any }) {
           <Stack.Screen name={Routes.PAYMENT} component={Payment} />
           <Stack.Screen name={Routes.PROFILE} component={Profile} /> */}
           <Stack.Screen name={Routes.PRODUCT} component={Product} />
+          <Stack.Screen name={Routes.Track} component={TrackingScreen} />
           <Stack.Screen name={Routes.PRODUCT_STACK} component={ProductStack} />
           <Stack.Screen name={Routes.REVIEWS} component={Reviews} />
           <Stack.Screen name={Routes.ADD_REVIEW} component={AddReview} />

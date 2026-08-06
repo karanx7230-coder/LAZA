@@ -2,6 +2,16 @@
      xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+<!-- Sirf tab agar app background me bhi location track karega (e.g. delivery tracking) -->
+<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+<!-- Android 14 / API 34+ ke liye zaroori, agar foreground service location ke liye use ho -->
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
     <queries>
         <intent>
             <action android:name="android.speech.RecognitionService" />
@@ -18,10 +28,13 @@
       android:supportsRtl="true"
       tools:replace="android:appComponentFactory"
       android:appComponentFactory="androidx.core.app.CoreComponentFactory">
-  <meta-data
-   android:name="com.google.firebase.messaging.default_notification_channel_id"
-   android:value="default"
-   tools:replace="android:value" />
+    <meta-data
+      android:name="com.google.firebase.messaging.default_notification_channel_id"
+      android:value="default"
+      tools:replace="android:value" />
+    <meta-data
+       android:name="com.google.android.geo.API_KEY"
+       android:value="AIzaSyBWH0MfwaB8TzFHtYSpcnS-Y-JZ-aERwz4" />
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
