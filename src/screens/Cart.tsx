@@ -51,159 +51,170 @@ export default function Cart({ route, navigation }: any) {
         <View style={styles.view1} />
       </View>
 
-      {items.length === 0 ? (
-        <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-        >
-          <Text style={{ fontSize: 18, color: 'gray' }}>
-            Your cart is empty!
-          </Text>
-        </View>
-      ) : (
-        <FlatList
-          data={items}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) =>
-            item.id ? item.id.toString() : index.toString()
-          }
-          renderItem={({ item }: any) => (
-            <View style={styles.itemCard}>
-              <View style={styles.imageContainer}>
-                <Image
-                  source={{ uri: item.thumbnail }}
-                  resizeMode="cover"
-                  style={styles.productimage}
+      <FlatList
+        data={items}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item, index) =>
+          item.id ? item.id.toString() : index.toString()
+        }
+        contentContainerStyle={
+          items.length === 0
+            ? { flexGrow: 1, justifyContent: 'center' }
+            : undefined
+        }
+        renderItem={({ item }: any) => (
+          <View style={styles.itemCard}>
+            <View style={styles.imageContainer}>
+              <Image
+                source={{ uri: item.thumbnail }}
+                resizeMode="cover"
+                style={styles.productimage}
+              />
+            </View>
+            <View style={styles.detailsContainer}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate(Routes.WISHLIST)}
+              >
+                <Text style={styles.itemName} numberOfLines={2}>
+                  {item.title}
+                </Text>
+                <Text style={styles.price}>${item.price}</Text>
+              </TouchableOpacity>
+              <View style={styles.priceviewbox}>
+                <QuantityStepper
+                  value={item.quantity || 1}
+                  onDecrease={() => dispatch(decreaseQuantity(item.id))}
+                  onIncrease={() => dispatch(increaseQuantity(item.id))}
                 />
               </View>
-              <View style={styles.detailsContainer}>
+              <View>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate(Routes.WISHLIST)}
+                  style={styles.deletetouch}
+                  onPress={() => dispatch(removeFromCart(item.id))}
                 >
-                  <Text style={styles.itemName} numberOfLines={2}>
-                    {item.title}
-                  </Text>
-                  <Text style={styles.price}>${item.price}</Text>
-                </TouchableOpacity>
-                <View style={styles.priceviewbox}>
-                  <QuantityStepper
-                    value={item.quantity || 1}
-                    onDecrease={() => dispatch(decreaseQuantity(item.id))}
-                    onIncrease={() => dispatch(increaseQuantity(item.id))}
+                  <Image
+                    source={require('../assets/images/Delete.png')}
+                    resizeMode="contain"
                   />
-                </View>
-                <View>
-                  <TouchableOpacity
-                    style={styles.deletetouch}
-                    onPress={() => dispatch(removeFromCart(item.id))}
-                  >
-                    <Image
-                      source={require('../assets/images/Delete.png')}
-                      resizeMode="contain"
-                    />
-                  </TouchableOpacity>
-                </View>
+                </TouchableOpacity>
               </View>
             </View>
-          )}
-        />
-      )}
-
-      <View style={styles.footerContainer}>
-        <Text style={[styles.title, { color: colors.text }]}>
-          Delivery Address
-        </Text>
-        <TouchableOpacity onPress={() => navigation.navigate(Routes.ADDRESS)}>
-          <View style={styles.row}>
-            <Image
-              source={require('../assets/images/map.png')}
-              resizeMode="contain"
-              style={styles.mapimage}
-            />
-            <View style={styles.adress}>
-              <Text style={styles.adresshead}>
-                {passedAddress
-                  ? `${passedAddress.fullAddress}, ${passedAddress.country}`
-                  : 'fufurinagar, cartoonnetwork 555'}
-              </Text>
-              <Text style={styles.adresssubhead}>
-                {passedAddress
-                  ? `${passedAddress.city}, ${passedAddress.name}`
-                  : 'fufurinagar, cartoonnetwork 555'}
-              </Text>
-            </View>
-            <Image
-              source={require('../assets/images/Check.png')}
-              resizeMode="contain"
-              style={styles.tick}
-            />
           </View>
-        </TouchableOpacity>
-
-        <Text style={[styles.title, { color: colors.text }]}>
-          Payment Method
-        </Text>
-        <TouchableOpacity
-          style={styles.row1}
-          onPress={() => navigation.navigate(Routes.PAYMENT)}
-        >
-          <Image
-            source={require('../assets/images/visa.png')}
-            resizeMode="cover"
-            style={styles.visa}
-          />
-          <View>
-            <Text>Visa Classic</Text>
-            <Text>**** 7640</Text>
-          </View>
-          <Image
-            source={require('../assets/images/Check.png')}
-            resizeMode="contain"
-            style={styles.visatick}
-          />
-        </TouchableOpacity>
-
-        <View>
-          <Text style={[styles.title, { color: colors.text }]}>Order Info</Text>
-          <View style={styles.inforow}>
-            <Text style={{ color: colors.text }}>Subtotal</Text>
-            <Text style={{ color: colors.text }}>{formatPrice(subtotal)}</Text>
-          </View>
-          <View style={styles.inforow}>
-            <Text style={{ color: colors.text }}>Shipping Cost</Text>
-            <Text style={{ color: colors.text }}>
-              {formatPrice(shippingCost)}
-            </Text>
-          </View>
-          <View style={styles.inforow}>
-            <Text style={{ fontWeight: 'bold', color: colors.text }}>
-              Total
-            </Text>
-            <Text style={{ fontWeight: 'bold', color: colors.text }}>
-              {formatPrice(totalAmount)}
-            </Text>
-          </View>
-        </View>
-
-        <View>
-          <TouchableOpacity
-            style={styles.last}
-            onPress={() => {
-              dispatch(clearCart());
-              dispatch(
-                addOrder({
-                  id: Date.now().toString(),
-                  items,
-                  total: totalAmount,
-                  date: new Date().toISOString(),
-                }),
-              );
-              navigation.navigate(Routes.ORDER_DONE);
-            }}
+        )}
+        ListEmptyComponent={
+          <View
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
           >
-            <Text style={styles.lasttext}>Checkout</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+            <Text style={{ fontSize: 18, color: 'gray' }}>
+              Your cart is empty!
+            </Text>
+          </View>
+        }
+        ListFooterComponent={
+          <View style={styles.footerContainer}>
+            <Text style={[styles.title, { color: colors.text }]}>
+              Delivery Address
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(Routes.ADDRESS)}
+            >
+              <View style={styles.row}>
+                <Image
+                  source={require('../assets/images/map.png')}
+                  resizeMode="contain"
+                  style={styles.mapimage}
+                />
+                <View style={styles.adress}>
+                  <Text style={styles.adresshead}>
+                    {passedAddress
+                      ? `${passedAddress.fullAddress}, ${passedAddress.country}`
+                      : 'fufurinagar, cartoonnetwork 555'}
+                  </Text>
+                  <Text style={styles.adresssubhead}>
+                    {passedAddress
+                      ? `${passedAddress.city}, ${passedAddress.name}`
+                      : 'fufurinagar, cartoonnetwork 555'}
+                  </Text>
+                </View>
+                <Image
+                  source={require('../assets/images/Check.png')}
+                  resizeMode="contain"
+                  style={styles.tick}
+                />
+              </View>
+            </TouchableOpacity>
+
+            <Text style={[styles.title, { color: colors.text }]}>
+              Payment Method
+            </Text>
+            <TouchableOpacity
+              style={styles.row1}
+              onPress={() => navigation.navigate(Routes.PAYMENT)}
+            >
+              <Image
+                source={require('../assets/images/visa.png')}
+                resizeMode="cover"
+                style={styles.visa}
+              />
+              <View>
+                <Text>Visa Classic</Text>
+                <Text>**** 7640</Text>
+              </View>
+              <Image
+                source={require('../assets/images/Check.png')}
+                resizeMode="contain"
+                style={styles.visatick}
+              />
+            </TouchableOpacity>
+
+            <View>
+              <Text style={[styles.title, { color: colors.text }]}>
+                Order Info
+              </Text>
+              <View style={styles.inforow}>
+                <Text style={{ color: colors.text }}>Subtotal</Text>
+                <Text style={{ color: colors.text }}>
+                  {formatPrice(subtotal)}
+                </Text>
+              </View>
+              <View style={styles.inforow}>
+                <Text style={{ color: colors.text }}>Shipping Cost</Text>
+                <Text style={{ color: colors.text }}>
+                  {formatPrice(shippingCost)}
+                </Text>
+              </View>
+              <View style={styles.inforow}>
+                <Text style={{ fontWeight: 'bold', color: colors.text }}>
+                  Total
+                </Text>
+                <Text style={{ fontWeight: 'bold', color: colors.text }}>
+                  {formatPrice(totalAmount)}
+                </Text>
+              </View>
+            </View>
+
+            <View>
+              <TouchableOpacity
+                style={styles.last}
+                onPress={() => {
+                  dispatch(
+                    addOrder({
+                      id: Date.now().toString(),
+                      items,
+                      total: totalAmount,
+                      date: new Date().toISOString(),
+                    }),
+                  );
+                  dispatch(clearCart());
+                  navigation.navigate(Routes.ORDER_DONE);
+                }}
+              >
+                <Text style={styles.lasttext}>Checkout</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        }
+      />
     </View>
   );
 }

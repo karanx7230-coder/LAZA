@@ -24,6 +24,7 @@ import Profile from '../screens/Profile';
 import Wishlist from '../screens/Wishlist';
 import Home from '../screens/Home';
 import ProductStack from '../screens/ProductStack';
+import Orders from '../screens/orders';
 
 const Stack = createNativeStackNavigator();
 export default function StackNavigator({ user }: { user: any }) {
@@ -36,21 +37,19 @@ export default function StackNavigator({ user }: { user: any }) {
       {user ? (
         <Stack.Group>
           <Stack.Screen name={Routes.MAIN_TABS} component={DrawerNavigator} />
-          <Stack.Screen name={Routes.HOME} component={Home} />
+          {/* <Stack.Screen name={Routes.HOME} component={Home} />
           <Stack.Screen name={Routes.CART} component={Cart} />
           <Stack.Screen name={Routes.WISHLIST} component={Wishlist} />
           <Stack.Screen name={Routes.PAYMENT} component={Payment} />
-          <Stack.Screen name={Routes.PROFILE} component={Profile} />
+          <Stack.Screen name={Routes.PROFILE} component={Profile} /> */}
           <Stack.Screen name={Routes.PRODUCT} component={Product} />
-          <Stack.Screen
-            name={Routes.PRODUCT_STACK}
-            component={ProductStack}
-          />
+          <Stack.Screen name={Routes.PRODUCT_STACK} component={ProductStack} />
           <Stack.Screen name={Routes.REVIEWS} component={Reviews} />
           <Stack.Screen name={Routes.ADD_REVIEW} component={AddReview} />
           <Stack.Screen name={Routes.ADDRESS} component={Address} />
           <Stack.Screen name={Routes.ADD_CARD} component={AddCard} />
           <Stack.Screen name={Routes.ORDER_DONE} component={OrderDone} />
+          <Stack.Screen name={Routes.ORDER} component={Orders} />
         </Stack.Group>
       ) : (
         <Stack.Group>
@@ -59,10 +58,7 @@ export default function StackNavigator({ user }: { user: any }) {
           <Stack.Screen name={Routes.SCREEN2} component={Screen2} />
           <Stack.Screen name={Routes.FORGET} component={Forget1} />
           <Stack.Screen name={Routes.OTP} component={Otp} />
-          <Stack.Screen
-            name={Routes.NEW_PASSWORD}
-            component={NewPassword}
-          />
+          <Stack.Screen name={Routes.NEW_PASSWORD} component={NewPassword} />
           <Stack.Screen name={Routes.SIGNUP} component={Signup} />
           <Stack.Screen name={Routes.LOGIN} component={Signin} />
         </Stack.Group>

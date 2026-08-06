@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Routes, Colors } from '../utils';
 
@@ -11,6 +12,7 @@ import Payment from '../screens/Payment';
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
+  const insets = useSafeAreaInsets();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -18,7 +20,7 @@ export default function TabNavigator() {
         tabBarShowLabel: false,
         tabBarStyle: {
           backgroundColor: Colors.white,
-          height: 60,
+          height: 60 + insets.bottom,
         },
       }}
     >

@@ -16,6 +16,7 @@ export const Routes = {
   ADDRESS: 'address',
   ADD_CARD: 'addcard',
   ORDER_DONE: 'orderdone',
+  ORDER: 'order',
 
   FIRST: 'first',
   SCREEN1: 'screen1',
@@ -25,6 +26,7 @@ export const Routes = {
   NEW_PASSWORD: 'newpassword',
   SIGNUP: 'signup',
   LOGIN: 'login',
+
 } as const;
 
 export type RouteName = (typeof Routes)[keyof typeof Routes];

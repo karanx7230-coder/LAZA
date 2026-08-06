@@ -69,7 +69,7 @@ export default function Home({ navigation }: any) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.back}
-          onPress={() => navigation.navigate(Routes.CART)}
+          onPress={() => navigation.navigate(Routes.ORDER)}
         >
           <Image
             style={styles.imagetop}

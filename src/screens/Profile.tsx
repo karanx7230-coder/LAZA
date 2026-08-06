@@ -10,14 +10,25 @@ import {
 } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { Routes } from '../utils';
-import { useAppSelector } from '../hooks/redux';
+import { useEffect, useState } from 'react';
 
 export default function Profile({ navigation }: any) {
+  const [user, setuser] = useState<string | any>(null);
   const { isDarkMode, toggleTheme, colors } = useTheme();
   const handleLogout = () => {
     auth().signOut();
   };
-  const user = useAppSelector(state => state.userreducer);
+  const fetchUser = async () => {
+    try {
+      const currentUser = auth().currentUser;
+      setuser(currentUser);
+    } catch (error) {
+      console.error('Error fetching user:', error);
+    }
+  };
+  useEffect(() => {
+    fetchUser();
+  }, []);
   return (
     <View style={[styles.mainview, { backgroundColor: colors.background }]}>
       <StatusBar
@@ -41,7 +52,9 @@ export default function Profile({ navigation }: any) {
             source={require('../assets/images/profile.png')}
             resizeMode="cover"
           />
-          <Text style={[styles.text, { color: colors.text }]}>{user.name}</Text>
+          <Text style={[styles.text, { color: colors.text }]}>
+            {user?.email}
+          </Text>
           <Text style={styles.text1}>
             verified Profile
             <Image
