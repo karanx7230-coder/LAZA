@@ -11,6 +11,8 @@ import {
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
+import { toggleWishlist } from '../store/redux/slice/wishlistSlice';
+
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { addToCart } from '../store/redux/slice/cartSlice';
 import QuantityStepper from '../components/QuantityStepper';
@@ -28,8 +30,9 @@ export default function Product({ route, navigation }: any) {
       navigation.navigate(Routes.CART);
     }
   };
+  const wishlistItems = useAppSelector(state => state.wishlist.items);
   const [quantity, setQuantity] = useState(1);
-
+  const isFavorite = wishlistItems.some(i => i.id === productData.id);
   const increaseQty = () => setQuantity(prev => prev + 1);
   const decreaseQty = () => {
     if (quantity > 1) setQuantity(prev => prev - 1);
@@ -56,12 +59,16 @@ export default function Product({ route, navigation }: any) {
               <Text style={styles.backtext}> ← </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.back}
-              onPress={() => navigation.navigate(Routes.CART)}
+              style={styles.wishlist}
+              onPress={() => dispatch(toggleWishlist(productData))}
             >
               <Image
-                style={styles.imagetop}
-                source={require('../assets/images/Cart.png')}
+                source={
+                  isFavorite
+                    ? require('../assets/images/heart1.png')
+                    : require('../assets/images/Heart.png')
+                }
+                style={styles.imagewish}
                 resizeMode="contain"
               />
             </TouchableOpacity>
@@ -211,6 +218,19 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     fontWeight: 'bold',
   },
+  wishlist: {
+    width: 45,
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 40,
+    marginHorizontal: 20,
+  },
+  imagewish: {
+    height: 25,
+    width: 25,
+    borderRadius: 20,
+  },
   backtext: {
     fontSize: 30,
     color: 'black',
@@ -219,16 +239,13 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     lineHeight: 30,
   },
+
   image: {
     width: '100%',
     height: 350,
     backgroundColor: '#e9e9e998',
   },
-  imagetop: {
-    height: 45,
-    width: 45,
-    borderRadius: 20,
-  },
+
   mainview: {
     paddingHorizontal: 20,
   },

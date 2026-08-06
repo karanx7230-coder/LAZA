@@ -5,6 +5,9 @@ import {
   TouchableOpacity,
   TextInput,
   Switch,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
@@ -15,107 +18,118 @@ export default function Address({ navigation }: any) {
   const [name, setname] = useState('');
   const [city, setcity] = useState('');
   const [country, setcountry] = useState('');
-  const [phone, setphone] = useState('');
+  const [phone, setphone] = useState('+91 ');
   const [fulladdress, setfulladdress] = useState('');
+  if (phone.length > 13) {
+    setphone(phone.slice(0, 13));
+  }
   const handlecheckkout = () => {
-    navigation.navigate(Routes.CART, {
-      updatedaddress: {
-        name,
-        city,
-        country,
-        phone,
-        fulladdress,
+    navigation.navigate(Routes.MAIN_TABS, {
+      screen: Routes.HOME_DRAWER,
+      params: {
+        screen: Routes.CART,
+        params: { updatedaddress: { name, city, country, phone, fulladdress } },
       },
     });
   };
   return (
-    <View style={[styles.headview, { backgroundColor: colors.background }]}>
-      <View style={styles.headerRow}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.backArrow}>←</Text>
-        </TouchableOpacity>
-        <Text style={[styles.pagehead, { color: colors.text }]}>Address</Text>
-      </View>
-      <View>
-        <Text style={[styles.head, { color: colors.text }]}>name</Text>
-        <TextInput
-          placeholder="mr you"
-          placeholderTextColor={'#959595'}
-          style={styles.input}
-          value={name}
-          onChangeText={setname}
-        />
-      </View>
-      <View style={styles.row}>
+    <KeyboardAvoidingView
+      style={[styles.mainview, { backgroundColor: colors.background }]}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.headerRow}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Text style={styles.backArrow}>←</Text>
+          </TouchableOpacity>
+          <Text style={[styles.pagehead, { color: colors.text }]}>Address</Text>
+        </View>
         <View>
-          <Text style={[styles.head, { color: colors.text }]}>City</Text>
+          <Text style={[styles.head, { color: colors.text }]}>name</Text>
           <TextInput
-            placeholder="roper"
+            placeholder="mr you"
             placeholderTextColor={'#959595'}
-            style={styles.input1}
-            value={city}
-            onChangeText={setcity}
+            style={styles.input}
+            value={name}
+            onChangeText={setname}
+          />
+        </View>
+        <View style={styles.row}>
+          <View>
+            <Text style={[styles.head, { color: colors.text }]}>City</Text>
+            <TextInput
+              placeholder="roper"
+              placeholderTextColor={'#959595'}
+              style={styles.input1}
+              value={city}
+              onChangeText={setcity}
+            />
+          </View>
+          <View>
+            <Text style={[styles.head, { color: colors.text }]}>Country</Text>
+            <TextInput
+              placeholder="furinagar"
+              placeholderTextColor={'#959595'}
+              style={styles.input1}
+              value={country}
+              onChangeText={setcountry}
+            />
+          </View>
+        </View>
+        <View>
+          <Text style={[styles.head, { color: colors.text }]}>
+            Phone-number
+          </Text>
+          <TextInput
+            placeholder="+91 98781-64914"
+            placeholderTextColor={'#959595'}
+            style={styles.input}
+            keyboardType="numeric"
+            value={phone}
+            onChangeText={setphone}
           />
         </View>
         <View>
-          <Text style={[styles.head, { color: colors.text }]}>Country</Text>
+          <Text style={[styles.head, { color: colors.text }]}>Address</Text>
           <TextInput
-            placeholder="furinagar"
+            placeholder="Chhatak, Sunamgonj 12/8AB"
             placeholderTextColor={'#959595'}
-            style={styles.input1}
-            value={country}
-            onChangeText={setcountry}
+            style={styles.input}
+            value={fulladdress}
+            onChangeText={setfulladdress}
           />
         </View>
-      </View>
-      <View>
-        <Text style={[styles.head, { color: colors.text }]}>Phone-number</Text>
-        <TextInput
-          placeholder="+91 98781-64914"
-          placeholderTextColor={'#959595'}
-          style={styles.input}
-          value={phone}
-          onChangeText={setphone}
-        />
-      </View>
-      <View>
-        <Text style={[styles.head, { color: colors.text }]}>Address</Text>
-        <TextInput
-          placeholder="Chhatak, Sunamgonj 12/8AB"
-          placeholderTextColor={'#959595'}
-          style={styles.input}
-          value={fulladdress}
-          onChangeText={setfulladdress}
-        />
-      </View>
-      <View style={styles.row2}>
-        <Text style={[styles.headbtn, { color: colors.text }]}>
-          save as primary address
-        </Text>
-        <Switch
-          value={isprimary}
-          onValueChange={setasprimary}
-          thumbColor={'#ffffff'}
-          trackColor={{ false: '#e0e0e0', true: '#3ac053' }}
-        />
-      </View>
-      <View style={styles.card} />
+        <View style={styles.row2}>
+          <Text style={[styles.headbtn, { color: colors.text }]}>
+            save as primary address
+          </Text>
+          <Switch
+            value={isprimary}
+            onValueChange={setasprimary}
+            thumbColor={'#ffffff'}
+            trackColor={{ false: '#e0e0e0', true: '#3ac053' }}
+          />
+        </View>
+        <View style={styles.card} />
+      </ScrollView>
       <View>
         <TouchableOpacity style={styles.last} onPress={handlecheckkout}>
           <Text style={styles.lasttext}>Set address</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 const styles = StyleSheet.create({
-  headview: {
+  mainview: {
     flex: 1,
-    backgroundColor: '#ffffff',
-    justifyContent: 'space-between',
+    backgroundColor: 'white',
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   headerRow: {
     flexDirection: 'row',
@@ -152,6 +166,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 10,
     paddingHorizontal: 20,
+    color: 'black',
   },
   row: {
     flexDirection: 'row',
@@ -176,7 +191,7 @@ const styles = StyleSheet.create({
     marginBottom: 170,
   },
   last: {
-	backgroundColor: Colors.primaryDark,
+    backgroundColor: Colors.primaryDark,
     height: 80,
     bottom: 0,
     left: 0,

@@ -28,11 +28,11 @@ export default function OrderDone({ navigation }: any) {
       </Text>
       <TouchableOpacity
         style={styles.addnew}
-        onPress={() => navigation.navigate(Routes.CART)}
+        onPress={() => navigation.navigate(Routes.MAIN_TABS)}
       >
         <Text style={styles.addtext}>Go to Orders</Text>
       </TouchableOpacity>
-     <Btn onPress={() => navigation.navigate(Routes.HOME_TAB)} title="Continue Shopping" />
+     <Btn onPress={() => navigation.navigate(Routes.MAIN_TABS)} title="Continue Shopping" />
     </View>
   );
 }

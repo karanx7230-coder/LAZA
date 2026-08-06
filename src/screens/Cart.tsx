@@ -126,14 +126,10 @@ export default function Cart({ route, navigation }: any) {
                 />
                 <View style={styles.adress}>
                   <Text style={styles.adresshead}>
-                    {passedAddress
-                      ? `${passedAddress.fullAddress}, ${passedAddress.country}`
-                      : 'fufurinagar, cartoonnetwork 555'}
+                    {passedAddress?.fulladdress}, {passedAddress?.country}
                   </Text>
                   <Text style={styles.adresssubhead}>
-                    {passedAddress
-                      ? `${passedAddress.city}, ${passedAddress.name}`
-                      : 'fufurinagar, cartoonnetwork 555'}
+                 {passedAddress?.city}, {passedAddress?.name}
                   </Text>
                 </View>
                 <Image

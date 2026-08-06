@@ -25,7 +25,7 @@ export default function TabNavigator() {
       }}
     >
       <Tab.Screen
-        name={Routes.HOME_TAB}
+        name={Routes.HOME}
         component={Home}
         options={{
           tabBarIcon: ({ focused }) =>
@@ -64,7 +64,7 @@ export default function TabNavigator() {
       />
 
       <Tab.Screen
-        name={Routes.CART_TAB}
+        name={Routes.CART}
         component={Cart}
         options={{
           tabBarIcon: ({ focused }) =>
