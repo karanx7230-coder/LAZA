@@ -242,14 +242,13 @@ export default function Signup({ navigation }: any) {
 
           <TouchableOpacity
             onPress={handleFirebaseSignUp}
-            style={styles.signupButton}
-            activeOpacity={0.8}
+            style={styles.createacc}
             disabled={loading}
           >
             {loading ? (
               <ActivityIndicator color={Colors.white} size="large" />
             ) : (
-              <Text style={styles.signupButtonText}>Sign Up</Text>
+              <Text style={styles.textsignin}>Sign Up</Text>
             )}
           </TouchableOpacity>
         </View>
@@ -341,17 +340,19 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '500',
   },
-  signupButton: {
+  createacc: {
     backgroundColor: Colors.primaryLight,
-    height: 100,
+    width: '120%',
+    paddingVertical: 20,
+    marginHorizontal: -20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: -20,
+    height: 80,
   },
-  signupButtonText: {
-    color: Colors.white,
+  textsignin: {
+    color: 'white',
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
   error: {
     color: Colors.googleRed,

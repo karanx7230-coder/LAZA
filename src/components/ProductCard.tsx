@@ -37,8 +37,8 @@ export default function ProductCard({
             <Image
               source={
                 isFavorite
-                  ? require('../assets/heart1.png')
-                  : require('../assets/Heart.png')
+                  ? require('../assets/images/heart1.png')
+                  : require('../assets/images/Heart.png')
               }
               style={styles.favoriteImage}
               resizeMode="contain"

@@ -74,7 +74,7 @@ export default function Otp({ navigation }: any) {
           <Text style={[styles.head, { color: colors.text }]}>
             Verification code
           </Text>
-          <Image source={require('../assets/lock.png')} />
+          <Image source={require('../assets/images/lock.png')} />
           <View style={styles.input}>
             <Text style={[styles.headotp, { color: colors.text }]}>
               OTP Code
@@ -108,7 +108,10 @@ export default function Otp({ navigation }: any) {
           ) : (
             <TouchableOpacity onPress={handleResend}>
               <Text
-	style={[styles.line, { color: Colors.primaryDark, fontWeight: 'bold' }]}
+                style={[
+                  styles.line,
+                  { color: Colors.primaryDark, fontWeight: 'bold' },
+                ]}
               >
                 Resend confirmation code
               </Text>
@@ -185,7 +188,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   otpButton: {
-	backgroundColor: Colors.primaryDark,
+    backgroundColor: Colors.primaryDark,
     position: 'absolute',
     bottom: 0,
     left: 0,

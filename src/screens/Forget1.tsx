@@ -13,6 +13,7 @@ import {
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
+import Btn from '../components/basiccomponents';
 export default function Forget1({ navigation }: any) {
   const { isDarkMode, colors } = useTheme();
 
@@ -43,7 +44,7 @@ export default function Forget1({ navigation }: any) {
             Forget Password
           </Text>
           <Image
-            source={require('../assets/biglock.png')}
+            source={require('../assets/images/biglock.png')}
             resizeMode="contain"
           ></Image>
           <View style={styles.input}>
@@ -64,12 +65,10 @@ export default function Forget1({ navigation }: any) {
             Please write your email to receive a confirmation code to set a new
             password.
           </Text>
-          <TouchableOpacity
+          <Btn
             onPress={() => navigation.navigate(Routes.OTP)}
-            style={styles.otpButton}
-          >
-            <Text style={styles.otpText}>Confirm Email</Text>
-          </TouchableOpacity>
+            title="Confirm Email"
+          />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -123,7 +122,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   otpButton: {
-	backgroundColor: Colors.primaryDark,
+    backgroundColor: Colors.primaryDark,
     position: 'absolute',
     bottom: 0,
     left: 0,

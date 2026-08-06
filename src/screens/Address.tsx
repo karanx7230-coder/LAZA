@@ -105,7 +105,7 @@ export default function Address({ navigation }: any) {
       <View style={styles.card} />
       <View>
         <TouchableOpacity style={styles.last} onPress={handlecheckkout}>
-          <Text style={styles.lasttext}>Checkout</Text>
+          <Text style={styles.lasttext}>Set address</Text>
         </TouchableOpacity>
       </View>
     </View>

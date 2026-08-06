@@ -13,6 +13,7 @@ import {
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
+import Btn from '../components/basiccomponents';
 
 export default function NewPassword({ navigation }: any) {
   const [passwordFocused, setpasswordFocused] = useState(false);
@@ -142,9 +143,7 @@ export default function NewPassword({ navigation }: any) {
 
           <Text style={styles.line}>Please set a new password.</Text>
 
-          <TouchableOpacity onPress={handleConfirm} style={styles.otpButton}>
-            <Text style={styles.otpText}>Confirm password</Text>
-          </TouchableOpacity>
+          <Btn onPress={handleConfirm} title="Confirm Password" />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -205,7 +204,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   otpButton: {
-	backgroundColor: Colors.primaryDark,
+    backgroundColor: Colors.primaryDark,
     position: 'absolute',
     bottom: 0,
     left: 0,

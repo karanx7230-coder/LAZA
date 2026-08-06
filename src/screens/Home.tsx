@@ -63,7 +63,7 @@ export default function Home({ navigation }: any) {
         >
           <Image
             style={styles.imagetop}
-            source={require('../assets/Menu.png')}
+            source={require('../assets/images/Menu.png')}
             resizeMode="contain"
           />
         </TouchableOpacity>
@@ -73,7 +73,7 @@ export default function Home({ navigation }: any) {
         >
           <Image
             style={styles.imagetop}
-            source={require('../assets/Cart.png')}
+            source={require('../assets/images/Cart.png')}
             resizeMode="contain"
           />
         </TouchableOpacity>
@@ -85,7 +85,7 @@ export default function Home({ navigation }: any) {
       <View style={styles.searchrow}>
         <View style={styles.search}>
           <Image
-            source={require('../assets/searchgrey.png')}
+            source={require('../assets/images/searchgrey.png')}
             style={styles.image}
             resizeMode="contain"
           />
@@ -284,5 +284,6 @@ const styles = StyleSheet.create({
   },
   brandname: {
     fontSize: 15,
+    fontWeight: 'bold',
   },
 });

@@ -52,7 +52,7 @@ export default function Reviews({ navigation, route }: any) {
                 4.8
               </Text>
               <Image
-                source={require('../assets/Star.png')}
+                source={require('../assets/images/Star.png')}
                 resizeMode="contain"
                 style={styles.starIcon}
               />
@@ -64,7 +64,7 @@ export default function Reviews({ navigation, route }: any) {
           style={styles.addReviewBtn}
         >
           <Image
-            source={require('../assets/addreview.png')}
+            source={require('../assets/images/addreview.png')}
             resizeMode="contain"
             style={styles.addReviewIcon}
           />

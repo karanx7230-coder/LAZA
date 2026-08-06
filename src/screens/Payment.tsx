@@ -13,16 +13,15 @@ import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
 export default function Payment({ navigation }: any) {
   const [isrememberd, setIsRemembered] = useState(true);
-const {  colors } = useTheme();
-  const [name,setname]=useState("")
-  const [numb,setnumb]=useState("")
-  const [exp,setexp]=useState("")
-  const [cvv,setcvv]=useState("")
+  const { colors } = useTheme();
+  const [name, setname] = useState('');
+  const [numb, setnumb] = useState('');
+  const [exp, setexp] = useState('');
+  const [cvv, setcvv] = useState('');
 
   return (
-     <View style={[styles.view, { backgroundColor: colors.background }]}>
-    <ScrollView  style={styles.view1}>
-     
+    <View style={[styles.view, { backgroundColor: colors.background }]}>
+      <ScrollView style={styles.view1}>
         <View style={styles.headerRow}>
           <TouchableOpacity
             style={styles.backButton}
@@ -30,12 +29,14 @@ const {  colors } = useTheme();
           >
             <Text style={styles.backArrow}>←</Text>
           </TouchableOpacity>
-          <Text  style={[styles.headTitle,{color:colors.text}]}>Payment</Text>
+          <Text style={[styles.headTitle, { color: colors.text }]}>
+            Payment
+          </Text>
           <View style={styles.viewgap} />
         </View>
 
         <Image
-          source={require('../assets/Card.png')}
+          source={require('../assets/images/Card.png')}
           resizeMode="contain"
           style={styles.imagecard}
         />
@@ -46,7 +47,7 @@ const {  colors } = useTheme();
             onPress={() => navigation.navigate(Routes.ADD_CARD)}
           >
             <Image
-              source={require('../assets/Plus.png')}
+              source={require('../assets/images/Plus.png')}
               style={styles.imgplus}
             />
             <Text style={styles.addtext}>Add new card</Text>
@@ -54,7 +55,7 @@ const {  colors } = useTheme();
         </View>
 
         <View>
-          <Text  style={[styles.head,{color:colors.text}]}>Card Owner</Text>
+          <Text style={[styles.head, { color: colors.text }]}>Card Owner</Text>
           <TextInput
             placeholder="Mrh Raju"
             placeholderTextColor={'#959595'}
@@ -65,7 +66,7 @@ const {  colors } = useTheme();
         </View>
 
         <View>
-          <Text  style={[styles.head,{color:colors.text}]}>Card Number</Text>
+          <Text style={[styles.head, { color: colors.text }]}>Card Number</Text>
           <TextInput
             placeholder="5254 7634 8734 7690"
             placeholderTextColor={'#959595'}
@@ -77,41 +78,43 @@ const {  colors } = useTheme();
 
         <View style={styles.row}>
           <View style={styles.input2}>
-            <Text style={[styles.head,{color:colors.text}]}>EXP</Text>
+            <Text style={[styles.head, { color: colors.text }]}>EXP</Text>
             <TextInput
               placeholder="24/24"
               placeholderTextColor={'#959595'}
               style={styles.input1}
               value={exp}
-            onChangeText={setexp}
+              onChangeText={setexp}
             />
           </View>
           <View style={styles.input2}>
-            <Text style={[styles.head,{color:colors.text}]}>CVV</Text>
+            <Text style={[styles.head, { color: colors.text }]}>CVV</Text>
             <TextInput
               placeholder="7763"
               placeholderTextColor={'#959595'}
               style={styles.input1}
               value={cvv}
-            onChangeText={setcvv}
+              onChangeText={setcvv}
             />
           </View>
         </View>
 
         <View style={styles.head1}>
-          <Text  style={[styles.head,{color:colors.text}]}>Save card info</Text>
+          <Text style={[styles.head, { color: colors.text }]}>
+            Save card info
+          </Text>
           <Switch
             value={isrememberd}
             onValueChange={setIsRemembered}
             trackColor={{ false: '#d3d3d3', true: '#41b1008e' }}
           />
         </View>
-       </ScrollView>
+      </ScrollView>
 
       <TouchableOpacity style={styles.last} onPress={navigation.goBack}>
         <Text style={styles.lasttext}>Save Card</Text>
       </TouchableOpacity>
-   </View>
+    </View>
   );
 }
 
@@ -165,8 +168,8 @@ const styles = StyleSheet.create({
     height: 200,
   },
   addnew: {
-	backgroundColor: Colors.primarySoft,
-	borderColor: '#c77af3',
+    backgroundColor: Colors.primarySoft,
+    borderColor: '#c77af3',
     borderWidth: 1,
     height: 50,
     borderRadius: 10,
@@ -213,7 +216,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   last: {
-	backgroundColor: Colors.primaryDark,
+    backgroundColor: Colors.primaryDark,
     height: 70,
     justifyContent: 'center',
     alignItems: 'center',

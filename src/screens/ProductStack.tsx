@@ -107,7 +107,7 @@ export default function Productstack({ route, navigation }: any) {
             >
               <Image
                 style={styles.imagetop}
-                source={require('../assets/Cart.png')}
+                source={require('../assets/images/Cart.png')}
                 resizeMode="contain"
               />
             </TouchableOpacity>

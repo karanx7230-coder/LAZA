@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
+import Btn from '../components/basiccomponents';
 GoogleSignin.configure({
   webClientId:
     '1065925478043-cimr44d4veci0egq2grlivtb5bj2r002.apps.googleusercontent.com',
@@ -47,7 +48,7 @@ export default function Screen2({ navigation }: any) {
       <TouchableOpacity style={styles.facebookBtn}>
         <Image
           style={styles.imgf}
-          source={require('../assets/facebook.png')}
+          source={require('../assets/images/facebook.png')}
           resizeMode="contain"
         />
         <Text style={styles.btnText}>Facebook</Text>
@@ -56,7 +57,7 @@ export default function Screen2({ navigation }: any) {
       <TouchableOpacity style={styles.TwitterBtn}>
         <Image
           style={styles.imgf}
-          source={require('../assets/twitter.png')}
+          source={require('../assets/images/twitter.png')}
           resizeMode="contain"
         />
         <Text style={styles.btnText}>Twitter</Text>
@@ -70,7 +71,7 @@ export default function Screen2({ navigation }: any) {
       >
         <Image
           style={styles.imgf}
-          source={require('../assets/google.png')}
+          source={require('../assets/images/google.png')}
           resizeMode="contain"
         />
         <Text style={styles.btnText}>Google</Text>
@@ -82,17 +83,14 @@ export default function Screen2({ navigation }: any) {
           style={styles.loginPrompt}
         >
           <Text style={styles.acchave}>
-            Already have an account?
-            <Text style={[styles.signin, { color: colors.text }]}>Signin</Text>
+            Already have an account?{' '}
+            <Text style={[styles.signin, { color: colors.text }]}>Sigin </Text>
           </Text>
         </TouchableOpacity>
-
-        <TouchableOpacity
+        <Btn
           onPress={() => navigation.navigate(Routes.SIGNUP)}
-          style={styles.createacc}
-        >
-          <Text style={styles.textsignin}>Create an Account</Text>
-        </TouchableOpacity>
+          title="Create an Account"
+        />
       </View>
     </View>
   );
@@ -116,7 +114,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-	backgroundColor: Colors.navy,
+    backgroundColor: Colors.navy,
     padding: 15,
     borderRadius: 8,
     width: '85%',
@@ -126,7 +124,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-	backgroundColor: Colors.infoBlue,
+    backgroundColor: Colors.infoBlue,
     padding: 15,
     width: '85%',
     borderRadius: 8,
@@ -136,7 +134,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-	backgroundColor: Colors.error,
+    backgroundColor: Colors.error,
     padding: 15,
     width: '85%',
     borderRadius: 8,
@@ -163,23 +161,12 @@ const styles = StyleSheet.create({
   acchave: {
     color: '#9E9E9E',
     fontSize: 14,
+    // width: '100%',
+    textAlign: 'center',
   },
   signin: {
     color: '#333333',
     fontWeight: 'bold',
     fontSize: 14,
-  },
-  createacc: {
-	backgroundColor: Colors.primaryLight,
-    width: '100%',
-    paddingVertical: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 80,
-  },
-  textsignin: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
   },
 });

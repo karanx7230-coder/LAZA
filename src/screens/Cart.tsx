@@ -13,6 +13,7 @@ import { Colors, Routes } from '../utils';
 import { formatPrice } from '../utils/format';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import {
+  clearCart,
   decreaseQuantity,
   increaseQuantity,
   removeFromCart,
@@ -96,7 +97,7 @@ export default function Cart({ route, navigation }: any) {
                     onPress={() => dispatch(removeFromCart(item.id))}
                   >
                     <Image
-                      source={require('../assets/Delete.png')}
+                      source={require('../assets/images/Delete.png')}
                       resizeMode="contain"
                     />
                   </TouchableOpacity>
@@ -114,7 +115,7 @@ export default function Cart({ route, navigation }: any) {
         <TouchableOpacity onPress={() => navigation.navigate(Routes.ADDRESS)}>
           <View style={styles.row}>
             <Image
-              source={require('../assets/map.png')}
+              source={require('../assets/images/map.png')}
               resizeMode="contain"
               style={styles.mapimage}
             />
@@ -131,7 +132,7 @@ export default function Cart({ route, navigation }: any) {
               </Text>
             </View>
             <Image
-              source={require('../assets/Check.png')}
+              source={require('../assets/images/Check.png')}
               resizeMode="contain"
               style={styles.tick}
             />
@@ -146,7 +147,7 @@ export default function Cart({ route, navigation }: any) {
           onPress={() => navigation.navigate(Routes.PAYMENT)}
         >
           <Image
-            source={require('../assets/visa.png')}
+            source={require('../assets/images/visa.png')}
             resizeMode="cover"
             style={styles.visa}
           />
@@ -155,7 +156,7 @@ export default function Cart({ route, navigation }: any) {
             <Text>**** 7640</Text>
           </View>
           <Image
-            source={require('../assets/Check.png')}
+            source={require('../assets/images/Check.png')}
             resizeMode="contain"
             style={styles.visatick}
           />
@@ -187,6 +188,7 @@ export default function Cart({ route, navigation }: any) {
           <TouchableOpacity
             style={styles.last}
             onPress={() => {
+              dispatch(clearCart());
               dispatch(
                 addOrder({
                   id: Date.now().toString(),

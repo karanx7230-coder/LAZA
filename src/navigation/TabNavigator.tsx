@@ -31,7 +31,7 @@ export default function TabNavigator() {
               <Text style={{ fontSize: 12, color: Colors.primary }}>home</Text>
             ) : (
               <Image
-                source={require('../assets/home1.png')}
+                source={require('../assets/images/home1.png')}
                 style={{ width: 40, height: 35 }}
                 resizeMode="cover"
               />
@@ -53,7 +53,7 @@ export default function TabNavigator() {
               <Text style={{ fontSize: 12 }}>wish list</Text>
             ) : (
               <Image
-                source={require('../assets/dil.png')}
+                source={require('../assets/images/dil.png')}
                 style={{ width: 40, height: 40, opacity: 1 }}
                 resizeMode="contain"
               />
@@ -70,7 +70,7 @@ export default function TabNavigator() {
               <Text style={{ fontSize: 12 }}>Cart</Text>
             ) : (
               <Image
-                source={require('../assets/bag1.png')}
+                source={require('../assets/images/bag1.png')}
                 style={{ width: 35, height: 35, opacity: 1 }}
                 resizeMode="contain"
               />
@@ -86,7 +86,7 @@ export default function TabNavigator() {
               <Text style={{ fontSize: 12 }}>batua</Text>
             ) : (
               <Image
-                source={require('../assets/batua.png')}
+                source={require('../assets/images/batua.png')}
                 style={{ width: 40, height: 40, opacity: 1 }}
                 resizeMode="contain"
               />

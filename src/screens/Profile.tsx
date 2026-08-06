@@ -30,7 +30,7 @@ export default function Profile({ navigation }: any) {
           style={styles.back}
           onPress={() => navigation.closeDrawer()}
         >
-          <Image source={require('../assets/Menu.png')} />
+          <Image source={require('../assets/images/Menu.png')} />
         </TouchableOpacity>
       </View>
 
@@ -38,14 +38,14 @@ export default function Profile({ navigation }: any) {
         <TouchableOpacity>
           <Image
             style={styles.image}
-            source={require('../assets/profile.png')}
+            source={require('../assets/images/profile.png')}
             resizeMode="cover"
           />
           <Text style={[styles.text, { color: colors.text }]}>{user.name}</Text>
           <Text style={styles.text1}>
             verified Profile
             <Image
-              source={require('../assets/verify.png')}
+              source={require('../assets/images/verify.png')}
               resizeMode="contain"
             />
           </Text>
@@ -61,7 +61,7 @@ export default function Profile({ navigation }: any) {
         <View style={styles.row}>
           <Image
             style={styles.image1}
-            source={require('../assets/sun.png')}
+            source={require('../assets/images/sun.png')}
             resizeMode="contain"
           />
           <Text style={[styles.text2, { color: colors.text }]}>Dark Mode</Text>
@@ -80,7 +80,7 @@ export default function Profile({ navigation }: any) {
         <TouchableOpacity style={styles.row}>
           <Image
             style={styles.image1}
-            source={require('../assets/Info.png')}
+            source={require('../assets/images/Info.png')}
             resizeMode="contain"
           />
           <Text style={[styles.text2, { color: colors.text }]}>
@@ -96,7 +96,7 @@ export default function Profile({ navigation }: any) {
         >
           <Image
             style={styles.image1}
-            source={require('../assets/lock.png')}
+            source={require('../assets/images/lock.png')}
             resizeMode="contain"
           />
           <Text style={[styles.text2, { color: colors.text }]}>Password</Text>
@@ -110,7 +110,7 @@ export default function Profile({ navigation }: any) {
         >
           <Image
             style={styles.image1}
-            source={require('../assets/Bag.png')}
+            source={require('../assets/images/Bag.png')}
             resizeMode="contain"
           />
           <Text style={[styles.text2, { color: colors.text }]}>Order</Text>
@@ -124,7 +124,7 @@ export default function Profile({ navigation }: any) {
         >
           <Image
             style={styles.image1}
-            source={require('../assets/Wallet.png')}
+            source={require('../assets/images/Wallet.png')}
             resizeMode="contain"
           />
           <Text style={[styles.text2, { color: colors.text }]}>My Cards</Text>
@@ -138,7 +138,7 @@ export default function Profile({ navigation }: any) {
         >
           <Image
             style={styles.image1}
-            source={require('../assets/Heart.png')}
+            source={require('../assets/images/Heart.png')}
             resizeMode="contain"
           />
           <Text style={[styles.text2, { color: colors.text }]}>Wishlist</Text>
@@ -149,7 +149,7 @@ export default function Profile({ navigation }: any) {
         <TouchableOpacity onPress={handleLogout} style={styles.row}>
           <Image
             style={styles.image1}
-            source={require('../assets/Logout.png')}
+            source={require('../assets/images/Logout.png')}
             resizeMode="contain"
           />
           <Text style={styles.text3}>Logout</Text>

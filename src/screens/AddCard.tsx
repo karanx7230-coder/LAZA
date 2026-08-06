@@ -11,13 +11,12 @@ import { useTheme } from '../context/ThemeContext';
 import { Colors } from '../utils';
 
 export default function AddCard({ navigation }: any) {
-  
   const { colors } = useTheme();
-   const [name,setname]=useState("")
-    const [numb,setnumb]=useState("")
-    const [exp,setexp]=useState("")
-    const [cvv,setcvv]=useState("")
-  
+  const [name, setname] = useState('');
+  const [numb, setnumb] = useState('');
+  const [exp, setexp] = useState('');
+  const [cvv, setcvv] = useState('');
+
   return (
     <View style={[styles.view, { backgroundColor: colors.background }]}>
       <View style={styles.view1}>
@@ -35,17 +34,17 @@ export default function AddCard({ navigation }: any) {
         </View>
         <View style={styles.row}>
           <Image
-            source={require('../assets/frame1.png')}
+            source={require('../assets/images/frame1.png')}
             resizeMode="contain"
             style={styles.imagecard}
           />
           <Image
-            source={require('../assets/frame2.png')}
+            source={require('../assets/images/frame2.png')}
             resizeMode="contain"
             style={styles.imagecard}
           />
           <Image
-            source={require('../assets/frame3.png')}
+            source={require('../assets/images/frame3.png')}
             resizeMode="contain"
             style={styles.imagecard}
           />
@@ -57,7 +56,7 @@ export default function AddCard({ navigation }: any) {
             placeholder="Mrh Raju"
             placeholderTextColor={'#959595'}
             style={styles.input}
-             value={name}
+            value={name}
             onChangeText={setname}
           />
         </View>
@@ -68,7 +67,7 @@ export default function AddCard({ navigation }: any) {
             placeholder="5254 7634 8734 7690"
             placeholderTextColor={'#959595'}
             style={styles.input}
-             value={numb}
+            value={numb}
             onChangeText={setnumb}
           />
         </View>
@@ -80,8 +79,8 @@ export default function AddCard({ navigation }: any) {
               placeholder="24/24"
               placeholderTextColor={'#959595'}
               style={styles.input1}
-               value={exp}
-            onChangeText={setexp}
+              value={exp}
+              onChangeText={setexp}
             />
           </View>
           <View style={styles.input2}>
@@ -90,8 +89,8 @@ export default function AddCard({ navigation }: any) {
               placeholder="7763"
               placeholderTextColor={'#959595'}
               style={styles.input1}
-               value={cvv}
-            onChangeText={setcvv}
+              value={cvv}
+              onChangeText={setcvv}
             />
           </View>
         </View>
@@ -151,8 +150,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   addnew: {
-	backgroundColor: Colors.primarySoft,
-	borderColor: '#c77af3',
+    backgroundColor: Colors.primarySoft,
+    borderColor: '#c77af3',
     borderWidth: 1,
     height: 50,
     borderRadius: 10,
@@ -198,7 +197,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   last: {
-	backgroundColor: Colors.primaryDark,
+    backgroundColor: Colors.primaryDark,
     height: 70,
     justifyContent: 'center',
     alignItems: 'center',

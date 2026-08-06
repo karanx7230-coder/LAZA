@@ -25,7 +25,7 @@ export default function Screen1({ navigation }: any) {
         translucent
       />
       <ImageBackground
-        source={require('../assets/man.png')}
+        source={require('../assets/images/man.png')}
         style={styles.image}
         resizeMode="cover"
       >
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     padding: 15,
     width: 140,
     alignItems: 'center',
-	backgroundColor: Colors.primary,
+    backgroundColor: Colors.primary,
   },
   menText: {
     color: '#5b5858',
@@ -126,9 +126,10 @@ const styles = StyleSheet.create({
   },
   skip: {
     alignItems: 'center',
-    padding: 20,
+    padding: 10,
   },
   skiptext: {
+    fontWeight: 'bold',
     color: '#625e5e',
   },
 });
