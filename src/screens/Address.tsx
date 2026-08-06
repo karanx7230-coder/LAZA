@@ -12,7 +12,10 @@ import {
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
+import { setAddress } from '../store/redux/slice/adressSlice';
+import { useAppDispatch } from '../hooks/redux';
 export default function Address({ navigation }: any) {
+  const dispatch = useAppDispatch();
   const [isprimary, setasprimary] = useState(true);
   const { colors } = useTheme();
   const [name, setname] = useState('');
@@ -24,12 +27,12 @@ export default function Address({ navigation }: any) {
     setphone(phone.slice(0, 13));
   }
   const handlecheckkout = () => {
+    dispatch(
+      setAddress({ name, city, country, phone, fulladdress, isprimary }),
+    );
     navigation.navigate(Routes.MAIN_TABS, {
       screen: Routes.HOME_DRAWER,
-      params: {
-        screen: Routes.CART,
-        params: { updatedaddress: { name, city, country, phone, fulladdress } },
-      },
+      params: { screen: Routes.CART },
     });
   };
   return (

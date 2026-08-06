@@ -9,12 +9,12 @@ import userReducer from '../slice/userslice';
 import cartReducer from '../slice/cartSlice';
 import wishlistReducer from '../slice/wishlistSlice';
 import ordersReducer from '../slice/ordersSlice';
-
+import addressReducer from '../slice/adressSlice';
 const persistConfig = {
   key: 'root',
   version: 1,
   storage: AsyncStorage,
-  whitelist: ['userreducer', 'cart', 'wishlist'],
+  whitelist: ['userreducer', 'cart', 'wishlist', 'address'  ],
   migrate: (state: PersistedState) => Promise.resolve(state),
 };
 
@@ -23,6 +23,7 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   wishlist: wishlistReducer,
   orders: ordersReducer,
+  address: addressReducer, 
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

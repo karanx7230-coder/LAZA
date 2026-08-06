@@ -20,10 +20,12 @@ import {
 } from '../store/redux/slice/cartSlice';
 import { addOrder } from '../store/redux/slice/ordersSlice';
 import QuantityStepper from '../components/QuantityStepper';
-export default function Cart({ route, navigation }: any) {
+// import { useAppSelector } from '../hooks/redux';
+
+export default function Cart({ navigation }: any) {
   const { isDarkMode, colors } = useTheme();
   const dispatch = useAppDispatch();
-  const passedAddress = route?.params?.updatedaddress;
+  // const passedAddress = route?.params?.updatedaddress;
   const shippingCost = 5;
   const items = useAppSelector(state => state.cart.items);
 
@@ -32,6 +34,7 @@ export default function Cart({ route, navigation }: any) {
     0,
   );
   const totalAmount = subtotal + shippingCost;
+  const Address = useAppSelector(state => state.address);
 
   return (
     <View style={[styles.view, { backgroundColor: colors.background }]}>
@@ -40,7 +43,7 @@ export default function Cart({ route, navigation }: any) {
         backgroundColor="transparent"
         translucent
       />
-      <View style={styles.headerRow}>
+      <View style={[styles.headerRow, styles.sectionPad]}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.navigate(Routes.MAIN_TABS)}
@@ -63,7 +66,7 @@ export default function Cart({ route, navigation }: any) {
             : undefined
         }
         renderItem={({ item }: any) => (
-          <View style={styles.itemCard}>
+          <View style={[styles.itemCard, styles.sectionPad]}>
             <View style={styles.imageContainer}>
               <Image
                 source={{ uri: item.thumbnail }}
@@ -103,7 +106,10 @@ export default function Cart({ route, navigation }: any) {
         )}
         ListEmptyComponent={
           <View
-            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+            style={[
+              { flex: 1, justifyContent: 'center', alignItems: 'center' },
+              styles.sectionPad,
+            ]}
           >
             <Text style={{ fontSize: 18, color: 'gray' }}>
               Your cart is empty!
@@ -112,10 +118,11 @@ export default function Cart({ route, navigation }: any) {
         }
         ListFooterComponent={
           <View style={styles.footerContainer}>
-            <Text style={[styles.title, { color: colors.text }]}>
+            <Text style={[styles.title, styles.sectionPad, { color: colors.text }]}>
               Delivery Address
             </Text>
             <TouchableOpacity
+              style={styles.sectionPad}
               onPress={() => navigation.navigate(Routes.ADDRESS)}
             >
               <View style={styles.row}>
@@ -126,10 +133,10 @@ export default function Cart({ route, navigation }: any) {
                 />
                 <View style={styles.adress}>
                   <Text style={styles.adresshead}>
-                    {passedAddress?.fulladdress}, {passedAddress?.country}
+                    {Address?.fulladdress}, {Address?.country}
                   </Text>
                   <Text style={styles.adresssubhead}>
-                 {passedAddress?.city}, {passedAddress?.name}
+                    {Address?.city}, {Address?.name}
                   </Text>
                 </View>
                 <Image
@@ -140,11 +147,11 @@ export default function Cart({ route, navigation }: any) {
               </View>
             </TouchableOpacity>
 
-            <Text style={[styles.title, { color: colors.text }]}>
+            <Text style={[styles.title, styles.sectionPad, { color: colors.text }]}>
               Payment Method
             </Text>
             <TouchableOpacity
-              style={styles.row1}
+              style={[styles.row1, styles.sectionPad]}
               onPress={() => navigation.navigate(Routes.PAYMENT)}
             >
               <Image
@@ -163,7 +170,7 @@ export default function Cart({ route, navigation }: any) {
               />
             </TouchableOpacity>
 
-            <View>
+            <View style={styles.sectionPad}>
               <Text style={[styles.title, { color: colors.text }]}>
                 Order Info
               </Text>
@@ -189,6 +196,7 @@ export default function Cart({ route, navigation }: any) {
               </View>
             </View>
 
+            {/* No sectionPad here on purpose — this button stays edge-to-edge/full width */}
             <View>
               <TouchableOpacity
                 style={styles.last}
@@ -218,6 +226,8 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  sectionPad: {
     paddingHorizontal: 20,
   },
   priceviewbox: {
@@ -330,7 +340,7 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     margin: 10,
-    marginLeft: 190,
+    marginLeft: 150,
   },
   deletetouch: {
     width: 32,
@@ -359,7 +369,7 @@ const styles = StyleSheet.create({
     height: 50,
     marginVertical: 20,
     marginBottom: 1,
-    marginHorizontal: -20,
+    width: '100%',
   },
   lasttext: {
     alignSelf: 'center',
