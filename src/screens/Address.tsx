@@ -9,12 +9,14 @@ import {
   ScrollView,
   Platform,
   Image,
+  Alert,
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
 import { setAddress } from '../store/redux/slice/adressSlice';
 import { useAppDispatch } from '../hooks/redux';
+
 export default function Address({ navigation, route }: any) {
   const dispatch = useAppDispatch();
   const [isprimary, setasprimary] = useState(true);
@@ -24,18 +26,34 @@ export default function Address({ navigation, route }: any) {
   const [country, setcountry] = useState('');
   const [phone, setphone] = useState('+91 ');
   const [fulladdress, setfulladdress] = useState('');
+
   const handlePhoneChange = (text: string) => {
     setphone(text.slice(0, 13));
   };
+
   useEffect(() => {
     const loc = route.params?.savedLocation;
     if (loc) {
-      if (loc.fulladdress) setfulladdress(loc.fulladdress);
-      if (loc.city) setcity(loc.city);
-      if (loc.country) setcountry(loc.country);
+      setfulladdress(
+        `Latitude: ${loc.latitude.toFixed(
+          6,
+        )}, Longitude: ${loc.longitude.toFixed(6)}`,
+      );
     }
-  }, [route.params]);
+  }, [route.params?.savedLocation]);
+
   const handlecheckkout = () => {
+    if (
+      !name ||
+      !city ||
+      !country ||
+      !phone ||
+      !fulladdress ||
+      phone.length < 13
+    ) {
+      Alert.alert('Please fill all the fields');
+      return;
+    }
     dispatch(
       setAddress({ name, city, country, phone, fulladdress, isprimary }),
     );
@@ -44,6 +62,7 @@ export default function Address({ navigation, route }: any) {
       params: { screen: Routes.CART },
     });
   };
+
   return (
     <KeyboardAvoidingView
       style={[styles.mainview, { backgroundColor: colors.background }]}

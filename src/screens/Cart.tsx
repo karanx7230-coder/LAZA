@@ -118,7 +118,9 @@ export default function Cart({ navigation }: any) {
         }
         ListFooterComponent={
           <View style={styles.footerContainer}>
-            <Text style={[styles.title, styles.sectionPad, { color: colors.text }]}>
+            <Text
+              style={[styles.title, styles.sectionPad, { color: colors.text }]}
+            >
               Delivery Address
             </Text>
             <TouchableOpacity
@@ -131,23 +133,34 @@ export default function Cart({ navigation }: any) {
                   resizeMode="contain"
                   style={styles.mapimage}
                 />
-                <View style={styles.adress}>
-                  <Text style={styles.adresshead}>
-                    {Address?.fulladdress}, {Address?.country}
-                  </Text>
-                  <Text style={styles.adresssubhead}>
-                    {Address?.city}, {Address?.name}
-                  </Text>
-                </View>
-                <Image
-                  source={require('../assets/images/Check.png')}
-                  resizeMode="contain"
-                  style={styles.tick}
-                />
+                {Address?.name != '' ? (
+                  <View style={styles.adress}>
+                    <Text style={styles.adresshead}>
+                      {Address?.name}, {Address?.city}, {Address?.country}
+                    </Text>
+                    <Text style={styles.adresssubhead}>
+                      {Address?.fulladdress}
+                    </Text>
+                  </View>
+                ) : (
+                  <View style={styles.adress}>
+                    <Text style={styles.adresshead}>
+                      Tap to fill the adress
+                    </Text>
+                  </View>
+                )}
+                {Address?.name != '' && (
+                  <Image
+                    source={require('../assets/images/Check.png')}
+                    resizeMode="contain"
+                    style={styles.tick}
+                  />
+                )}
               </View>
             </TouchableOpacity>
-
-            <Text style={[styles.title, styles.sectionPad, { color: colors.text }]}>
+            <Text
+              style={[styles.title, styles.sectionPad, { color: colors.text }]}
+            >
               Payment Method
             </Text>
             <TouchableOpacity
@@ -228,7 +241,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   sectionPad: {
-    paddingHorizontal: 20,
+    marginHorizontal: 20,
   },
   priceviewbox: {
     flexDirection: 'row',
