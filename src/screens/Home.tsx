@@ -16,7 +16,7 @@ import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { toggleWishlist } from '../store/redux/slice/wishlistSlice';
-import { loadProducts } from '../store/redux/slice/productSlice'; // rename import path once you rename the file to productsSlice.ts
+import { loadProducts } from '../store/redux/slice/productSlice';
 import ProductCard from '../components/ProductCard';
 
 export default function Home({ navigation }: any) {
@@ -25,7 +25,6 @@ export default function Home({ navigation }: any) {
 
   const wishlistItems = useAppSelector(state => state.wishlist.items);
 
-  // Data now comes from the products slice instead of local state.
   const cloths = useAppSelector(state => state.products.products);
   const loading = useAppSelector(state => state.products.loading);
   const error = useAppSelector(state => state.products.error);
@@ -47,9 +46,6 @@ export default function Home({ navigation }: any) {
   });
 
   useEffect(() => {
-    // Cache-first: if `cloths` already has data (rehydrated from AsyncStorage),
-    // it renders immediately below. This dispatch either confirms that data
-    // is fresh (online) or silently no-ops into "keep cache" (offline).
     dispatch(loadProducts());
   }, [dispatch]);
 
@@ -141,9 +137,6 @@ export default function Home({ navigation }: any) {
     </View>
   );
 
-  // Only show the full-screen spinner when there's truly nothing to show yet
-  // (first-ever launch, nothing cached). Once there's cached data, we show it
-  // instantly and let `loading` refresh quietly in the background instead.
   if (loading && cloths.length === 0) {
     return (
       <View
@@ -167,7 +160,6 @@ export default function Home({ navigation }: any) {
     );
   }
 
-  // No cache and offline (or fetch failed with nothing to fall back on).
   if (!loading && cloths.length === 0 && error) {
     return (
       <View
