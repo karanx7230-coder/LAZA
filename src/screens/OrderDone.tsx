@@ -28,12 +28,12 @@ export default function OrderDone({ navigation }: any) {
       </Text>
       <TouchableOpacity
         style={styles.addnew}
-        onPress={() => navigation.navigate(Routes.ORDER)}
+        onPress={() => navigation.replace(Routes.ORDER)}
       >
         <Text style={styles.addtext}>Go to Orders</Text>
       </TouchableOpacity>
       <Btn
-        onPress={() => navigation.navigate(Routes.MAIN_TABS)}
+        onPress={() => navigation.replace(Routes.MAIN_TABS)}
         title="Continue Shopping"
       />
     </View>

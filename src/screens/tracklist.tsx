@@ -93,7 +93,7 @@ export default function TrackingScreen({ navigation }: any) {
       );
       return;
     }
-    navigation.navigate(Routes.ADDRESS, {
+    navigation.replace(Routes.ADDRESS, {
       savedLocation: {
         latitude: currentPosition.latitude,
         longitude: currentPosition.longitude,

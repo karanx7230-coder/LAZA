@@ -224,7 +224,7 @@ export default function Cart({ navigation }: any) {
           );
 
           dispatch(clearCart());
-          navigation.navigate(Routes.ORDER_DONE);
+          navigation.replace(Routes.ORDER_DONE);
         }}
       >
         <Text style={styles.lasttext}>Checkout</Text>

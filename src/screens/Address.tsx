@@ -57,7 +57,7 @@ export default function Address({ navigation, route }: any) {
       return;
     }
     dispatch(setAddress({ name, city, country, phone, fulladdress }));
-    navigation.navigate(Routes.MAIN_TABS, {
+    navigation.replace(Routes.MAIN_TABS, {
       screen: Routes.HOME_DRAWER,
       params: { screen: Routes.CART },
     });
