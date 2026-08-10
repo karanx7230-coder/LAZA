@@ -20,6 +20,7 @@ import AddCard from '../screens/AddCard';
 import OrderDone from '../screens/OrderDone';
 import ProductStack from '../screens/ProductStack';
 import Orders from '../screens/orders';
+import TrackingScreen from '../screens/tracklist';
 
 const Stack = createNativeStackNavigator();
 export default function StackNavigator({ user }: { user: any }) {

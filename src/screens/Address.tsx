@@ -9,8 +9,6 @@ import {
   ScrollView,
   Platform,
   Image,
-  PermissionsAndroid,
-  Alert,
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
@@ -37,9 +35,6 @@ export default function Address({ navigation, route }: any) {
       if (loc.country) setcountry(loc.country);
     }
   }, [route.params]);
-  if (phone.length > 13) {
-    setphone(phone.slice(0, 13));
-  }
   const handlecheckkout = () => {
     dispatch(
       setAddress({ name, city, country, phone, fulladdress, isprimary }),
@@ -48,55 +43,6 @@ export default function Address({ navigation, route }: any) {
       screen: Routes.HOME_DRAWER,
       params: { screen: Routes.CART },
     });
-  };
-
-  const requestLocationPermission = async () => {
-    if (Platform.OS !== 'android') return true;
-
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: 'Location Permission',
-          message:
-            'App ko map par aapki location dikhane ke liye permission chahiye',
-          buttonNeutral: 'Baad me poocho',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
-
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('Location permission mil gayi');
-        return true;
-      } else {
-        console.log('Location permission deny ho gayi');
-        Alert.alert(
-          'Permission for location',
-          'used to display your location on map',
-        );
-        return false;
-      }
-    } catch (err) {
-      console.warn(err);
-      return false;
-    }
-  };
-  // useEffect(() => {
-  //   const setupLocation = async () => {
-  //     const already = await checkLocationPermission();
-  //     if (!already) {
-  //       await requestLocationPermission();
-  //     }
-  //   };
-  //   setupLocation();
-  // }, []);
-  const checkLocationPermission = async () => {
-    const hasPermission = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    );
-    console.log('Permission already hai kya:', hasPermission);
-    return hasPermission;
   };
   return (
     <KeyboardAvoidingView
@@ -155,7 +101,7 @@ export default function Address({ navigation, route }: any) {
             style={styles.input}
             keyboardType="numeric"
             value={phone}
-            onChangeText={setphone}
+            onChangeText={handlePhoneChange}
           />
         </View>
         <View>
