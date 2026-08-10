@@ -12,6 +12,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, Routes } from '../utils';
 import { useAppSelector } from '../hooks/redux';
+import ProductCard from '../components/ProductCard';
 
 export default function Wishlist({ navigation }: any) {
   const items = useAppSelector(state => state.wishlist.items);
@@ -62,34 +63,19 @@ export default function Wishlist({ navigation }: any) {
           <Text style={titleTextStyle}>Wishlist</Text>
           <View style={styles.headerSpacer} />
         </View>
-
         <FlatList
+          columnWrapperStyle={{ justifyContent: 'space-between' }}
           data={items}
           numColumns={2}
           contentContainerStyle={styles.flatListContent}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={styles.container}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate(Routes.PRODUCT, { productData: item })
-                }
-                style={styles.touchbox}
-              >
-                <Image
-                  source={{ uri: item.thumbnail }}
-                  style={styles.image}
-                  resizeMode="contain"
-                />
-
-                <Text style={styles.name} numberOfLines={1}>
-                  {item.title}
-                </Text>
-                <Text style={styles.price} numberOfLines={1}>
-                  ${item.price}
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <ProductCard
+              product={item}
+              onPress={() =>
+                navigation.navigate(Routes.PRODUCT, { productData: item })
+              }
+            />
           )}
         />
       </View>
@@ -140,83 +126,6 @@ const styles = StyleSheet.create({
   },
   flatListContent: {
     paddingBottom: 20,
-  },
-  item: {
-    flexDirection: 'row',
-    marginBottom: 15,
-    alignItems: 'center',
-    backgroundColor: Colors.white,
-    padding: 15,
-    borderRadius: 15,
-  },
-  img: {
-    width: 70,
-    height: 70,
-    marginRight: 15,
-    borderRadius: 10,
-    backgroundColor: '#f4f4f4',
-  },
-  itemTextWrapper: {
-    flex: 1,
-  },
-
-  //card styles
-  container: {
-    height: 'auto',
-    width: 'auto',
-  },
-  touchbox: {
-    flex: 1,
-    backgroundColor: '#f0f0f0',
-    padding: 10,
-    marginVertical: 8,
-    marginHorizontal: 5,
-    alignItems: 'center',
-    width: 170,
-    borderRadius: 10,
-  },
-  image: {
-    width: 160,
-    height: 200,
-    marginBottom: 10,
-    backgroundColor: '#ffffff',
-  },
-  favoriteTouch: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    padding: 8,
-    borderRadius: 20,
-  },
-  favoriteImage: {
-    width: 20,
-    height: 20,
-  },
-  name: {
-    fontSize: 14,
-    fontWeight: '500',
-    textAlign: 'center',
-    marginBottom: 5,
-    color: '#333',
-    width: 150,
-  },
-  price: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#000',
+    marginHorizontal: 15,
   },
 });
-// <TouchableOpacity
-//   style={styles.item}
-//   onPress={() =>
-//     navigation.navigate(Routes.PRODUCT, { productData: item })
-//   }
-// >
-//   <Image source={{ uri: item.thumbnail }} style={styles.img} />
-//   <View style={styles.itemTextWrapper}>
-//     <Text style={styles.name} numberOfLines={1}>
-//       {item.title}
-//     </Text>
-//     <Text style={styles.price}>${item.price}</Text>
-//   </View>
-// </TouchableOpacity>

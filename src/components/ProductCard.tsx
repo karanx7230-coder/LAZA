@@ -11,9 +11,9 @@ import { Product } from '../types';
 
 interface Props {
   product: Product;
-  isFavorite: boolean;
+  isFavorite?: boolean;
   onPress: () => void;
-  onToggleFavorite: () => void;
+  onToggleFavorite?: () => void;
 }
 
 export default function ProductCard({

@@ -12,48 +12,46 @@ import {
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { DrawerActions } from '@react-navigation/native';
-import API from '../api/api';
 import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { toggleWishlist } from '../store/redux/slice/wishlistSlice';
+import { loadProducts } from '../store/redux/slice/productSlice'; // rename import path once you rename the file to productsSlice.ts
 import ProductCard from '../components/ProductCard';
-import { DrawerProgressContext } from '@react-navigation/drawer';
 
 export default function Home({ navigation }: any) {
   const { isDarkMode, colors } = useTheme();
   const dispatch = useAppDispatch();
+
   const wishlistItems = useAppSelector(state => state.wishlist.items);
-  const [cloths, setCloths] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+
+  // Data now comes from the products slice instead of local state.
+  const cloths = useAppSelector(state => state.products.products);
+  const loading = useAppSelector(state => state.products.loading);
+  const error = useAppSelector(state => state.products.error);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const categories = ['All', 'Fragrances', 'Furniture', 'Beauty', 'Groceries'];
+
   const filteredProducts = cloths.filter(item => {
     const categoryMatch =
       selectedCategory === 'All' ||
-      item.category.toLowerCase() === selectedCategory.toLowerCase();
+      (item.category ?? '').toLowerCase() === selectedCategory.toLowerCase();
 
-    const searchMatch = item .toLowerCase().includes(searchQuery.toLowerCase());
+    const searchMatch = item.title
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
 
     return categoryMatch && searchMatch;
   });
+
   useEffect(() => {
-    const getProductsFromAPI = async () => {
-      try {
-        const response = await API.get('/products');
-        console.log(JSON.stringify(response));
-
-        setCloths(response.data.products);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getProductsFromAPI();
-  }, []);
+    // Cache-first: if `cloths` already has data (rehydrated from AsyncStorage),
+    // it renders immediately below. This dispatch either confirms that data
+    // is fresh (online) or silently no-ops into "keep cache" (offline).
+    dispatch(loadProducts());
+  }, [dispatch]);
 
   const ListHeader = () => (
     <View>
@@ -143,7 +141,10 @@ export default function Home({ navigation }: any) {
     </View>
   );
 
-  if (loading) {
+  // Only show the full-screen spinner when there's truly nothing to show yet
+  // (first-ever launch, nothing cached). Once there's cached data, we show it
+  // instantly and let `loading` refresh quietly in the background instead.
+  if (loading && cloths.length === 0) {
     return (
       <View
         style={{
@@ -162,6 +163,40 @@ export default function Home({ navigation }: any) {
         <Text style={{ marginTop: 10, color: colors.text }}>
           Loading New Arrivals...
         </Text>
+      </View>
+    );
+  }
+
+  // No cache and offline (or fetch failed with nothing to fall back on).
+  if (!loading && cloths.length === 0 && error) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: colors.background,
+          padding: 20,
+        }}
+      >
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor="transparent"
+          translucent
+        />
+        <Text
+          style={{ color: colors.text, textAlign: 'center', marginBottom: 12 }}
+        >
+          {error === 'OFFLINE_NO_CACHE'
+            ? "You're offline and there's nothing saved yet."
+            : 'Something went wrong loading products.'}
+        </Text>
+        <TouchableOpacity
+          style={styles.brand}
+          onPress={() => dispatch(loadProducts())}
+        >
+          <Text style={styles.brandname}>Retry</Text>
+        </TouchableOpacity>
       </View>
     );
   }

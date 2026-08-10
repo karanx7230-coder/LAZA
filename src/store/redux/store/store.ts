@@ -10,11 +10,13 @@ import cartReducer from '../slice/cartSlice';
 import wishlistReducer from '../slice/wishlistSlice';
 import ordersReducer from '../slice/ordersSlice';
 import addressReducer from '../slice/adressSlice';
+import productsReducer from '../slice/productSlice'; // TODO: rename file to productsSlice.ts for consistency, then update this path
+
 const persistConfig = {
   key: 'root',
   version: 1,
   storage: AsyncStorage,
-  whitelist: ['userreducer', 'cart', 'wishlist', 'address'  ],
+  whitelist: ['userreducer', 'cart', 'wishlist', 'address', 'orders', 'products'],
   migrate: (state: PersistedState) => Promise.resolve(state),
 };
 
@@ -23,7 +25,8 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   wishlist: wishlistReducer,
   orders: ordersReducer,
-  address: addressReducer, 
+  address: addressReducer,
+  products: productsReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -55,7 +55,7 @@ export default function Orders({ navigation }: any) {
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity
-            onPress={() => navigation.goBack()}
+            onPress={() => navigation.replace(Routes.MAIN_TABS)}
             style={styles.backButton}
           >
             <Text style={styles.backArrow}>←</Text>
@@ -71,9 +71,9 @@ export default function Orders({ navigation }: any) {
           renderItem={({ item: order }) => (
             <TouchableOpacity
               style={styles.orderCard}
-            //   onPress={() =>
-            //     navigation.navigate(Routes.ORDER_DETAILS, { order })
-            //   }
+              //   onPress={() =>
+              //     navigation.navigate(Routes.ORDER_DETAILS, { order })
+              //   }
             >
               <View style={styles.orderTopRow}>
                 <Text style={styles.orderId}>

@@ -9,13 +9,6 @@ export default function OrderDone({ navigation }: any) {
 
   return (
     <View style={[styles.view, { backgroundColor: colors.background }]}>
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigation.goBack()}
-      >
-        <Text style={styles.backArrow}>←</Text>
-      </TouchableOpacity>
-
       <Image
         source={require('../assets/images/confirm.png')}
         style={styles.imageconfirm}
