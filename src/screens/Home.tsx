@@ -18,6 +18,7 @@ import { Colors, Routes } from '../utils';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { toggleWishlist } from '../store/redux/slice/wishlistSlice';
 import ProductCard from '../components/ProductCard';
+import { DrawerProgressContext } from '@react-navigation/drawer';
 
 export default function Home({ navigation }: any) {
   const { isDarkMode, colors } = useTheme();
@@ -33,9 +34,7 @@ export default function Home({ navigation }: any) {
       selectedCategory === 'All' ||
       item.category.toLowerCase() === selectedCategory.toLowerCase();
 
-    const searchMatch = item.title
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
+    const searchMatch = item .toLowerCase().includes(searchQuery.toLowerCase());
 
     return categoryMatch && searchMatch;
   });
@@ -43,9 +42,11 @@ export default function Home({ navigation }: any) {
     const getProductsFromAPI = async () => {
       try {
         const response = await API.get('/products');
+        console.log(JSON.stringify(response));
 
         setCloths(response.data.products);
-      } catch {
+      } catch (error) {
+        console.error('Error fetching products:', error);
       } finally {
         setLoading(false);
       }

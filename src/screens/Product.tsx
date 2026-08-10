@@ -23,7 +23,11 @@ export default function Product({ route, navigation }: any) {
   const isItemInCart = useAppSelector(state =>
     state.cart.items.some(item => item.id === productData.id),
   );
+  const isOutOfStock =
+    productData.stock === 0 ||
+    productData.availabilityStatus === 'Out of Stock';
   const handlePress = () => {
+    if (isOutOfStock) return;
     if (!isItemInCart) {
       dispatch(addToCart({ ...productData, quantity }));
     } else {
@@ -187,13 +191,24 @@ export default function Product({ route, navigation }: any) {
       <View>
         <TouchableOpacity
           onPress={handlePress}
+          disabled={isOutOfStock}
           style={[
             styles.addtocart,
-            { backgroundColor: isItemInCart ? '#3281ffa7' : Colors.primary },
+            {
+              backgroundColor: isOutOfStock
+                ? '#c9c9c9'
+                : isItemInCart
+                ? '#3281ffa7'
+                : Colors.primary,
+            },
           ]}
         >
           <Text style={styles.cart}>
-            {isItemInCart ? 'Go to Cart' : 'Add to Cart'}
+            {isOutOfStock
+              ? 'Out of Stock'
+              : isItemInCart
+              ? 'Go to Cart'
+              : 'Add to Cart'}
           </Text>
         </TouchableOpacity>
       </View>

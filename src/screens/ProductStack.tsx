@@ -28,6 +28,9 @@ export default function Productstack({ route, navigation }: any) {
   const isItemInCart = useAppSelector(state =>
     state.cart.items.some(item => item.id === productData?.id),
   );
+  const isOutOfStock =
+    productData?.stock === 0 ||
+    productData?.availabilityStatus === 'Out of Stock';
 
   const themeStyles = useMemo(
     () =>
@@ -40,13 +43,17 @@ export default function Productstack({ route, navigation }: any) {
           color: colors.text,
         },
         buttonBackground: {
-          backgroundColor: isItemInCart ? '#3281ffa7' : Colors.primary,
+          backgroundColor: isOutOfStock
+            ? '#c9c9c9'
+            : isItemInCart
+            ? '#3281ffa7'
+            : Colors.primary,
         },
         quantityValue: {
           color: colors.text,
         },
       }),
-    [colors.background, colors.text, isItemInCart],
+    [colors.background, colors.text, isItemInCart, isOutOfStock],
   );
 
   useEffect(() => {
@@ -77,6 +84,7 @@ export default function Productstack({ route, navigation }: any) {
   const increaseQty = () => setQuantity(prev => prev + 1);
 
   const handlePress = () => {
+    if (isOutOfStock) return;
     if (!isItemInCart) {
       dispatch(addToCart({ ...productData, quantity }));
     } else {
@@ -218,10 +226,15 @@ export default function Productstack({ route, navigation }: any) {
 
       <TouchableOpacity
         onPress={handlePress}
+        disabled={isOutOfStock}
         style={[styles.addtocart, themeStyles.buttonBackground]}
       >
         <Text style={styles.cart}>
-          {isItemInCart ? 'Go to Cart' : 'Add to Cart'}
+          {isOutOfStock
+            ? 'Out of Stock'
+            : isItemInCart
+            ? 'Go to Cart'
+            : 'Add to Cart'}
         </Text>
       </TouchableOpacity>
     </View>
