@@ -208,30 +208,27 @@ export default function Cart({ navigation }: any) {
                 </Text>
               </View>
             </View>
-
-            {/* No sectionPad here on purpose — this button stays edge-to-edge/full width */}
-            <View>
-              <TouchableOpacity
-                style={styles.last}
-                onPress={() => {
-                  dispatch(
-                    addOrder({
-                      id: Date.now().toString(),
-                      items,
-                      total: totalAmount,
-                      date: new Date().toISOString(),
-                    }),
-                  );
-                  dispatch(clearCart());
-                  navigation.navigate(Routes.ORDER_DONE);
-                }}
-              >
-                <Text style={styles.lasttext}>Checkout</Text>
-              </TouchableOpacity>
-            </View>
           </View>
         }
       />
+      <TouchableOpacity
+        style={styles.last}
+        onPress={() => {
+          dispatch(
+            addOrder({
+              id: Date.now().toString(),
+              items,
+              total: totalAmount,
+              date: new Date().toISOString(),
+            }),
+          );
+
+          dispatch(clearCart());
+          navigation.navigate(Routes.ORDER_DONE);
+        }}
+      >
+        <Text style={styles.lasttext}>Checkout</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -376,17 +373,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 10,
   },
-
   last: {
     backgroundColor: Colors.primaryDark,
-    height: 50,
-    marginVertical: 20,
-    marginBottom: 1,
+    height: 55,
     width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 0,
   },
   lasttext: {
-    alignSelf: 'center',
-    padding: 10,
     color: 'white',
     fontSize: 17,
     fontWeight: '600',

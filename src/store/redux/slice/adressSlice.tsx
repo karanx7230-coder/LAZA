@@ -6,10 +6,9 @@ export interface Address {
   country: string;
   phone: string;
   fulladdress: string;
-  isprimary: boolean;
 }
 
-const initialState: Address | null = null;
+// const initialState: Address | null = null;
 
 const addressSlice = createSlice({
   name: 'address',

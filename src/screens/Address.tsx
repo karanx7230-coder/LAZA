@@ -11,21 +11,23 @@ import {
   Image,
   Alert,
 } from 'react-native';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
+
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
 import { setAddress } from '../store/redux/slice/adressSlice';
-import { useAppDispatch } from '../hooks/redux';
 
 export default function Address({ navigation, route }: any) {
+  const Address = useAppSelector(state => state.address);
   const dispatch = useAppDispatch();
   const [isprimary, setasprimary] = useState(true);
   const { colors } = useTheme();
-  const [name, setname] = useState('');
-  const [city, setcity] = useState('');
-  const [country, setcountry] = useState('');
-  const [phone, setphone] = useState('+91 ');
-  const [fulladdress, setfulladdress] = useState('');
+  const [name, setname] = useState(Address?.name);
+  const [city, setcity] = useState(Address?.city);
+  const [country, setcountry] = useState(Address?.country);
+  const [phone, setphone] = useState(Address?.phone || '+91 ');
+  const [fulladdress, setfulladdress] = useState(Address?.fulladdress || '');
 
   const handlePhoneChange = (text: string) => {
     setphone(text.slice(0, 13));
@@ -54,9 +56,7 @@ export default function Address({ navigation, route }: any) {
       Alert.alert('Please fill all the fields');
       return;
     }
-    dispatch(
-      setAddress({ name, city, country, phone, fulladdress, isprimary }),
-    );
+    dispatch(setAddress({ name, city, country, phone, fulladdress }));
     navigation.navigate(Routes.MAIN_TABS, {
       screen: Routes.HOME_DRAWER,
       params: { screen: Routes.CART },
@@ -133,17 +133,7 @@ export default function Address({ navigation, route }: any) {
             onChangeText={setfulladdress}
           />
         </View>
-        <View style={styles.row2}>
-          <Text style={[styles.headbtn, { color: colors.text }]}>
-            save as primary address
-          </Text>
-          <Switch
-            value={isprimary}
-            onValueChange={setasprimary}
-            thumbColor={'#ffffff'}
-            trackColor={{ false: '#e0e0e0', true: '#3ac053' }}
-          />
-        </View>
+
         <TouchableOpacity
           //  onPress={checkLocationPermission}
           onPress={() => navigation.navigate(Routes.Track)}
@@ -153,6 +143,14 @@ export default function Address({ navigation, route }: any) {
             resizeMode="contain"
             style={styles.card}
           />
+          <Text
+            style={[
+              styles.headbtn,
+              { color: colors.text, alignSelf: 'center' },
+            ]}
+          >
+            Get Current Location
+          </Text>
         </TouchableOpacity>
       </ScrollView>
       <View>
@@ -228,7 +226,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   card: {
-    height: 200,
+    alignSelf: 'center',
+    height: 300,
     width: 350,
   },
   last: {

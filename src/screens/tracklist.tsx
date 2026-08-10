@@ -4,11 +4,11 @@ import {
   StyleSheet,
   PermissionsAndroid,
   Platform,
+  TouchableOpacity,
   Alert,
-  Button,
   Text,
 } from 'react-native';
-import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import { Routes } from '../utils';
 
@@ -38,36 +38,30 @@ export default function TrackingScreen({ navigation }: any) {
     latitude: number;
     longitude: number;
   } | null>(null);
-  const [trail, setTrail] = useState<{ latitude: number; longitude: number }[]>(
-    [],
-  );
-  const [isTracking, setIsTracking] = useState(false);
-  const watchIdRef = useRef<number | null>(null);
   const mapRef = useRef<MapView | null>(null);
 
   // Ek baar mount pe permission ensure karo
   useEffect(() => {
     (async () => {
       const already = await checkLocationPermission();
-      if (!already) {
+
+      if (already) {
+        await Getcurrent();
+      } else {
         const ok = await requestLocationPermission();
-        if (!ok) {
+        if (ok) {
+          await Getcurrent();
+        } else {
           Alert.alert(
-            'Permission chahiye',
-            'Tracking ke liye location permission zaroori hai',
+            'Permission denied',
+            'need permission to access location',
           );
         }
       }
     })();
-
-    return () => {
-      if (watchIdRef.current !== null) {
-        Geolocation.clearWatch(watchIdRef.current);
-      }
-    };
   }, []);
 
-  const startTracking = async () => {
+  const Getcurrent = async () => {
     const hasPermission = await checkLocationPermission();
     if (!hasPermission) {
       const ok = await requestLocationPermission();
@@ -81,7 +75,6 @@ export default function TrackingScreen({ navigation }: any) {
           longitude: position.coords.longitude,
         };
         setCurrentPosition(coords);
-        setTrail([coords]);
         mapRef.current?.animateToRegion({
           ...coords,
           latitudeDelta: 0.01,
@@ -91,38 +84,7 @@ export default function TrackingScreen({ navigation }: any) {
       error => console.warn('getCurrentPosition error:', error),
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
     );
-
-    watchIdRef.current = Geolocation.watchPosition(
-      position => {
-        const coords = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        };
-        setCurrentPosition(coords);
-        setTrail(prev => [...prev, coords]);
-      },
-      error => console.warn('watchPosition error:', error),
-      {
-        enableHighAccuracy: true,
-        distanceFilter: 5,
-        interval: 5000,
-        fastestInterval: 2000,
-      },
-    );
-
-    setIsTracking(true);
   };
-
-  const stopTracking = () => {
-    if (watchIdRef.current !== null) {
-      Geolocation.clearWatch(watchIdRef.current);
-      watchIdRef.current = null;
-    }
-    setIsTracking(false);
-  };
-
-  // Sirf lat/lng bhejo — Address screen inhe Full Address field mein
-  // "Latitude: ..., Longitude: ..." ke roop mein daal dega.
   const handleSave = () => {
     if (!currentPosition) {
       Alert.alert(
@@ -155,24 +117,12 @@ export default function TrackingScreen({ navigation }: any) {
         {currentPosition && (
           <Marker coordinate={currentPosition} title="Aap yahan hain" />
         )}
-
-        {trail.length > 1 && (
-          <Polyline coordinates={trail} strokeColor="#1E90FF" strokeWidth={4} />
-        )}
       </MapView>
 
       <View style={styles.controls}>
-        <Text style={styles.statusText}>
-          {isTracking ? 'Tracking chal rahi hai...' : 'Tracking band hai'}
-        </Text>
-
-        <View style={styles.buttonsRow}>
-          <Button
-            title={isTracking ? 'Stop Tracking' : 'Start Tracking'}
-            onPress={isTracking ? stopTracking : startTracking}
-          />
-          <Button title="Save" onPress={handleSave} />
-        </View>
+        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+          <Text>Save Location</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -182,17 +132,22 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   map: { flex: 1 },
   controls: {
-    padding: 16,
-    backgroundColor: '#fff',
+    position: 'absolute',
+    bottom: 40,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+  },
+  saveButton: {
+    backgroundColor: '#007AFF',
+    padding: 12,
+    width: 150,
+    alignItems: 'center',
+    borderRadius: 8,
   },
   statusText: {
     marginBottom: 8,
     fontSize: 14,
     color: '#333',
-  },
-  buttonsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 8,
   },
 });
