@@ -27,7 +27,10 @@ export default function Product({ route, navigation }: any) {
     if (!isItemInCart) {
       dispatch(addToCart({ ...productData, quantity }));
     } else {
-      navigation.navigate(Routes.CART);
+      navigation.navigate(Routes.MAIN_TABS, {
+        screen: Routes.HOME_DRAWER,
+        params: { screen: Routes.CART },
+      });
     }
   };
   const wishlistItems = useAppSelector(state => state.wishlist.items);

@@ -17,7 +17,7 @@ import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
 import { setAddress } from '../store/redux/slice/adressSlice';
 import { useAppDispatch } from '../hooks/redux';
-export default function Address({ navigation }: any) {
+export default function Address({ navigation, route }: any) {
   const dispatch = useAppDispatch();
   const [isprimary, setasprimary] = useState(true);
   const { colors } = useTheme();
@@ -26,6 +26,17 @@ export default function Address({ navigation }: any) {
   const [country, setcountry] = useState('');
   const [phone, setphone] = useState('+91 ');
   const [fulladdress, setfulladdress] = useState('');
+  const handlePhoneChange = (text: string) => {
+    setphone(text.slice(0, 13));
+  };
+  useEffect(() => {
+    const loc = route.params?.savedLocation;
+    if (loc) {
+      if (loc.fulladdress) setfulladdress(loc.fulladdress);
+      if (loc.city) setcity(loc.city);
+      if (loc.country) setcountry(loc.country);
+    }
+  }, [route.params]);
   if (phone.length > 13) {
     setphone(phone.slice(0, 13));
   }

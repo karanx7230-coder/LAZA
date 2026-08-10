@@ -118,7 +118,12 @@ export default function Profile({ navigation }: any) {
 
       <View style={styles.lines}>
         <TouchableOpacity
-          onPress={() => navigation.navigate(Routes.CART)}
+          onPress={() =>
+            navigation.navigate(Routes.MAIN_TABS, {
+              screen: Routes.HOME_DRAWER,
+              params: { screen: Routes.CART },
+            })
+          }
           style={styles.row}
         >
           <Image
@@ -132,7 +137,12 @@ export default function Profile({ navigation }: any) {
 
       <View style={styles.lines}>
         <TouchableOpacity
-          onPress={() => navigation.navigate(Routes.PAYMENT)}
+          onPress={() =>
+            navigation.navigate(Routes.MAIN_TABS, {
+              screen: Routes.HOME_DRAWER,
+              params: { screen: Routes.PAYMENT },
+            })
+          }
           style={styles.row}
         >
           <Image
@@ -146,7 +156,12 @@ export default function Profile({ navigation }: any) {
 
       <View style={styles.lines}>
         <TouchableOpacity
-          onPress={() => navigation.navigate(Routes.WISHLIST)}
+          onPress={() =>
+            navigation.navigate(Routes.MAIN_TABS, {
+              screen: Routes.HOME_DRAWER,
+              params: { screen: Routes.WISHLIST },
+            })
+          }
           style={styles.row}
         >
           <Image

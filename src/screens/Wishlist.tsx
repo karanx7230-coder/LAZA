@@ -7,13 +7,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   StatusBar,
-  ImageBackground,
 } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, Routes } from '../utils';
 import { useAppSelector } from '../hooks/redux';
-import Product from './Product';
 
 export default function Wishlist({ navigation }: any) {
   const items = useAppSelector(state => state.wishlist.items);

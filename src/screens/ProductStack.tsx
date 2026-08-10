@@ -80,7 +80,10 @@ export default function Productstack({ route, navigation }: any) {
     if (!isItemInCart) {
       dispatch(addToCart({ ...productData, quantity }));
     } else {
-      navigation.navigate(Routes.CART);
+      navigation.navigate(Routes.MAIN_TABS, {
+        screen: Routes.HOME_DRAWER,
+        params: { screen: Routes.CART },
+      });
     }
   };
 
@@ -103,7 +106,12 @@ export default function Productstack({ route, navigation }: any) {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.back}
-              onPress={() => navigation.navigate(Routes.CART)}
+              onPress={() =>
+                navigation.navigate(Routes.MAIN_TABS, {
+                  screen: Routes.HOME_DRAWER,
+                  params: { screen: Routes.CART },
+                })
+              }
             >
               <Image
                 style={styles.imagetop}

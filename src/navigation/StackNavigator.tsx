@@ -12,18 +12,12 @@ import Forget1 from '../screens/Forget1';
 import Signin from '../screens/Signin';
 import Otp from '../screens/Otp';
 import NewPassword from '../screens/NewPassword';
-import Cart from '../screens/Cart';
-import TrackingScreen from '../screens/tracklist';
 import Product from '../screens/Product';
 import Reviews from '../screens/Reviews';
 import AddReview from '../screens/AddReview';
 import Address from '../screens/Address';
-import Payment from '../screens/Payment';
 import AddCard from '../screens/AddCard';
 import OrderDone from '../screens/OrderDone';
-import Profile from '../screens/Profile';
-import Wishlist from '../screens/Wishlist';
-import Home from '../screens/Home';
 import ProductStack from '../screens/ProductStack';
 import Orders from '../screens/orders';
 
@@ -38,11 +32,7 @@ export default function StackNavigator({ user }: { user: any }) {
       {user ? (
         <Stack.Group>
           <Stack.Screen name={Routes.MAIN_TABS} component={DrawerNavigator} />
-          {/* <Stack.Screen name={Routes.HOME} component={Home} />
-          <Stack.Screen name={Routes.CART} component={Cart} />
-          <Stack.Screen name={Routes.WISHLIST} component={Wishlist} />
-          <Stack.Screen name={Routes.PAYMENT} component={Payment} />
-          <Stack.Screen name={Routes.PROFILE} component={Profile} /> */}
+          <Stack.Screen name={Routes.NEW_PASSWORD} component={NewPassword} />
           <Stack.Screen name={Routes.PRODUCT} component={Product} />
           <Stack.Screen name={Routes.Track} component={TrackingScreen} />
           <Stack.Screen name={Routes.PRODUCT_STACK} component={ProductStack} />
