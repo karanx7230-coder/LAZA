@@ -1,10 +1,8 @@
 import React from 'react';
-import { Image, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
 import { Routes, Colors } from '../utils';
-
 import Home from '../screens/Home';
 import Cart from '../screens/Cart';
 import Wishlist from '../screens/Wishlist';

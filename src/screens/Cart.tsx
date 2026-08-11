@@ -6,7 +6,6 @@ import {
   FlatList,
   Image,
   StatusBar,
-  Alert,
 } from 'react-native';
 import React from 'react';
 import { useTheme } from '../context/ThemeContext';
@@ -21,12 +20,10 @@ import {
 } from '../store/redux/slice/cartSlice';
 import { addOrder } from '../store/redux/slice/ordersSlice';
 import QuantityStepper from '../components/QuantityStepper';
-// import { useAppSelector } from '../hooks/redux';
 
 export default function Cart({ navigation }: any) {
   const { isDarkMode, colors } = useTheme();
   const dispatch = useAppDispatch();
-  // const passedAddress = route?.params?.updatedaddress;
   const shippingCost = 5;
   const items = useAppSelector(state => state.cart.items);
 

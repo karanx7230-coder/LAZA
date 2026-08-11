@@ -4,7 +4,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Switch,
   KeyboardAvoidingView,
   ScrollView,
   Platform,
@@ -19,16 +18,16 @@ import { Colors, Routes } from '../utils';
 import { setAddress } from '../store/redux/slice/adressSlice';
 
 export default function Address({ navigation, route }: any) {
-  const Address = useAppSelector(state => state.address);
+  const savedAddress = useAppSelector(state => state.address);
   const dispatch = useAppDispatch();
-  const [isprimary, setasprimary] = useState(true);
   const { colors } = useTheme();
-  const [name, setname] = useState(Address?.name);
-  const [city, setcity] = useState(Address?.city);
-  const [country, setcountry] = useState(Address?.country);
-  const [phone, setphone] = useState(Address?.phone || '+91 ');
-  const [fulladdress, setfulladdress] = useState(Address?.fulladdress || '');
-
+  const [name, setname] = useState(savedAddress?.name);
+  const [city, setcity] = useState(savedAddress?.city);
+  const [country, setcountry] = useState(savedAddress?.country);
+  const [phone, setphone] = useState(savedAddress?.phone || '+91 ');
+  const [fulladdress, setfulladdress] = useState(
+    savedAddress?.fulladdress || '',
+  );
   const handlePhoneChange = (text: string) => {
     setphone(text.slice(0, 13));
   };
@@ -56,7 +55,7 @@ export default function Address({ navigation, route }: any) {
       Alert.alert('Please fill all the fields');
       return;
     }
-    
+
     dispatch(setAddress({ name, city, country, phone, fulladdress }));
     navigation.replace(Routes.MAIN_TABS, {
       screen: Routes.HOME_DRAWER,

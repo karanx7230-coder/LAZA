@@ -1,15 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  ActivityIndicator,
-  StyleSheet,
-  PermissionsAndroid,
-  Platform,
-  Alert,
-  StatusBar,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import { View, StyleSheet, StatusBar, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';

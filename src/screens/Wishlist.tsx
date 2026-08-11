@@ -1,13 +1,5 @@
 import React, { useMemo } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  StatusBar,
-} from 'react-native';
+import { View, Text, FlatList, StyleSheet, StatusBar } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, Routes } from '../utils';
@@ -59,7 +51,7 @@ export default function Wishlist({ navigation }: any) {
           <Text style={titleTextStyle}>Wishlist</Text>
         </View>
         <FlatList
-          columnWrapperStyle={{ justifyContent: 'space-between' }}
+          columnWrapperStyle={styles.just}
           data={items}
           numColumns={2}
           contentContainerStyle={styles.flatListContent}
@@ -121,4 +113,5 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     marginHorizontal: 15,
   },
+  just: { justifyContent: 'space-between' },
 });

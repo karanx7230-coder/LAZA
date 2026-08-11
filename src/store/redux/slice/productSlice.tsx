@@ -30,7 +30,7 @@ export const loadProducts = createAsyncThunk<
   if (!isConnected) {
     const cached = getState().products.products;
     if (cached.length > 0) {
-      return cached; 
+      return cached;
     }
     return rejectWithValue('OFFLINE_NO_CACHE');
   }
@@ -39,6 +39,8 @@ export const loadProducts = createAsyncThunk<
     const res = await axios.get('https://dummyjson.com/products?limit=0');
     return res.data.products as Product[];
   } catch (err) {
+    console.log(err);
+
     const cached = getState().products.products;
     if (cached.length > 0) {
       return cached;

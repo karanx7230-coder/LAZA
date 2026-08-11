@@ -84,7 +84,7 @@ export default function Product({ route, navigation }: any) {
 
         <View style={styles.mainview}>
           <View style={styles.view2}>
-            <View style={styles.subname}></View>
+            <View style={styles.subname} />
             <Text style={styles.subname}>price</Text>
           </View>
           <View style={styles.view3}>

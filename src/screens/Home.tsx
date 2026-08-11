@@ -1,18 +1,15 @@
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
-  Image,
-  ScrollView,
   FlatList,
   ActivityIndicator,
   StatusBar,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
-import {  Routes } from '../utils';
+import { Routes } from '../utils';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { toggleWishlist } from '../store/redux/slice/wishlistSlice';
 import { loadProducts } from '../store/redux/slice/productSlice';
@@ -30,7 +27,6 @@ export default function Home({ navigation }: any) {
   const error = useAppSelector(state => state.products.error);
 
   const [searchQuery, setSearchQuery] = useState('');
-  // const categoriesapi= cloths
   const [selectedCategory, setSelectedCategory] = useState('All');
   const categories: string[] = [
     'All',
@@ -130,7 +126,7 @@ export default function Home({ navigation }: any) {
           />
         }
         numColumns={2}
-        columnWrapperStyle={{ justifyContent: 'space-between' }}
+        columnWrapperStyle={styles.just}
         showsVerticalScrollIndicator={false}
         data={filteredProducts}
         extraData={wishlistItems.length}
@@ -178,6 +174,7 @@ const styles = StyleSheet.create({
     width: 52,
     borderRadius: 20,
   },
+
   hello: {
     fontWeight: '900',
     fontSize: 40,
@@ -214,6 +211,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  just: { justifyContent: 'space-between' },
+
   choose: {
     fontSize: 22,
   },

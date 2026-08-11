@@ -46,7 +46,7 @@ export default function Forget1({ navigation }: any) {
           <Image
             source={require('../assets/images/biglock.png')}
             resizeMode="contain"
-          ></Image>
+           />
           <View style={styles.input}>
             <Text style={[styles.heade, { color: colors.text }]}>
               Email address
@@ -59,7 +59,7 @@ export default function Forget1({ navigation }: any) {
                 { borderColor: emailFocused ? 'blue' : 'grey' },
               ]}
               placeholderTextColor={'black'}
-            ></TextInput>
+             />
           </View>
           <Text style={styles.line}>
             Please write your email to receive a confirmation code to set a new
