@@ -11,9 +11,8 @@ import {
   StatusBar,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { DrawerActions } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
-import { Colors, Routes } from '../utils';
+import {  Routes } from '../utils';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { toggleWishlist } from '../store/redux/slice/wishlistSlice';
 import { loadProducts } from '../store/redux/slice/productSlice';

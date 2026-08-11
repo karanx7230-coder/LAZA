@@ -13,6 +13,15 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, Routes } from '../utils';
 import { useAppSelector } from '../hooks/redux';
 import { formatPrice } from '../utils/format';
+import { OrderStatus } from '../types';
+
+const statusColors: Record<OrderStatus, string> = {
+  Placed: '#f0a500',
+  Processing: '#3b82f6',
+  Shipped: '#8b5cf6',
+  Delivered: '#22c55e',
+  Cancelled: '#ef4444',
+};
 
 export default function Orders({ navigation }: any) {
   const orders = useAppSelector(state => state.orders.orders);
@@ -84,6 +93,30 @@ export default function Orders({ navigation }: any) {
                 </Text>
               </View>
 
+              {order.status && (
+                <View
+                  style={[
+                    styles.statusBadge,
+                    { backgroundColor: `${statusColors[order.status]}20` },
+                  ]}
+                >
+                  <View
+                    style={[
+                      styles.statusDot,
+                      { backgroundColor: statusColors[order.status] },
+                    ]}
+                  />
+                  <Text
+                    style={[
+                      styles.statusText,
+                      { color: statusColors[order.status] },
+                    ]}
+                  >
+                    {order.status}
+                  </Text>
+                </View>
+              )}
+
               {order.items.slice(0, 2).map((product: any) => (
                 <View key={product.id} style={styles.item}>
                   <Image
@@ -106,6 +139,47 @@ export default function Orders({ navigation }: any) {
                   +{order.items.length - 2} more item
                   {order.items.length - 2 > 1 ? 's' : ''}
                 </Text>
+              )}
+
+              {order.shippingAddress && (
+                <View style={styles.infoBlock}>
+                  <Text style={styles.infoLabel}>Shipping to</Text>
+                  <Text style={styles.infoValue} numberOfLines={1}>
+                    {order.shippingAddress.name}, {order.shippingAddress.city},{' '}
+                    {order.shippingAddress.country}
+                  </Text>
+                  <Text style={styles.infoSubValue} numberOfLines={1}>
+                    {order.shippingAddress.fulladdress}
+                  </Text>
+                </View>
+              )}
+
+              {order.payment && (
+                <View style={styles.infoBlock}>
+                  <Text style={styles.infoLabel}>Payment</Text>
+                  <Text style={styles.infoValue}>
+                    {order.payment.owner} · •••• {order.payment.last4}
+                  </Text>
+                </View>
+              )}
+
+              <View style={styles.divider} />
+
+              {typeof order.subtotal === 'number' && (
+                <View style={styles.breakdownRow}>
+                  <Text style={styles.breakdownLabel}>Subtotal</Text>
+                  <Text style={styles.breakdownValue}>
+                    {formatPrice(order.subtotal)}
+                  </Text>
+                </View>
+              )}
+              {typeof order.shipping === 'number' && (
+                <View style={styles.breakdownRow}>
+                  <Text style={styles.breakdownLabel}>Shipping</Text>
+                  <Text style={styles.breakdownValue}>
+                    {formatPrice(order.shipping)}
+                  </Text>
+                </View>
               )}
 
               <View style={styles.orderFooter}>
@@ -193,6 +267,25 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.textMedium,
   },
+  statusBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
+    marginBottom: 10,
+  },
+  statusDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginRight: 6,
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -224,6 +317,47 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     marginBottom: 8,
   },
+  infoBlock: {
+    marginTop: 8,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#f5f5f5',
+  },
+  infoLabel: {
+    fontSize: 11,
+    color: Colors.textMedium,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginBottom: 2,
+  },
+  infoValue: {
+    fontSize: 13,
+    color: Colors.textPrimary,
+    fontWeight: '500',
+  },
+  infoSubValue: {
+    fontSize: 12,
+    color: Colors.textMedium,
+    marginTop: 1,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#f0f0f0',
+    marginTop: 10,
+  },
+  breakdownRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 6,
+  },
+  breakdownLabel: {
+    fontSize: 13,
+    color: Colors.textMedium,
+  },
+  breakdownValue: {
+    fontSize: 13,
+    color: Colors.textPrimary,
+  },
   orderFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -243,3 +377,7 @@ const styles = StyleSheet.create({
     color: Colors.black,
   },
 });
+// const handleClearData = async () => {
+//   await persistor.purge(); // clears the persisted AsyncStorage data
+//   await persistor.flush(); // ensures the purge is written immediately
+// };

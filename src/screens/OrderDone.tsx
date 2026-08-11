@@ -2,17 +2,22 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import React from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
-import Btn from '../components/basiccomponents';
-
 export default function OrderDone({ navigation }: any) {
   const { colors } = useTheme();
 
   return (
     <View style={[styles.view, { backgroundColor: colors.background }]}>
+      <TouchableOpacity
+        onPress={() => navigation.replace(Routes.MAIN_TABS)}
+        style={styles.backButton}
+      >
+        <Text style={styles.backArrow}>←</Text>
+      </TouchableOpacity>
       <Image
         source={require('../assets/images/confirm.png')}
         style={styles.imageconfirm}
       />
+      {/* onPress={() => navigation.replace(Routes.MAIN_TABS)} */}
 
       <Text style={styles.head}>Order Confirmed!</Text>
       <Text style={styles.line}>
@@ -25,10 +30,6 @@ export default function OrderDone({ navigation }: any) {
       >
         <Text style={styles.addtext}>Go to Orders</Text>
       </TouchableOpacity>
-      <Btn
-        onPress={() => navigation.replace(Routes.MAIN_TABS)}
-        title="Continue Shopping"
-      />
     </View>
   );
 }

@@ -59,6 +59,7 @@ export default function Profile({ navigation }: any) {
             verified Profile
             <Image
               source={require('../assets/images/verify.png')}
+              style={styles.img}
               resizeMode="contain"
             />
           </Text>
@@ -197,6 +198,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 10,
     justifyContent: 'space-between',
+  },
+  img: {
+    height: 15,
+    width: 15,
   },
   back: {
     width: 45,

@@ -6,6 +6,7 @@ import {
   FlatList,
   Image,
   StatusBar,
+  Alert,
 } from 'react-native';
 import React from 'react';
 import { useTheme } from '../context/ThemeContext';
@@ -234,15 +235,64 @@ export default function Cart({ navigation }: any) {
       <TouchableOpacity
         style={styles.last}
         onPress={() => {
+          if (!hasAddress || !hascard || items.length === 0) {
+            console.log('CHECKOUT BLOCKED:', {
+              hasAddress,
+              hascard,
+              cartItems: items.length,
+            });
+            return;
+          }
+
+          console.log('========== ORDER DATA ==========');
+          console.log('ORDER ID:', Date.now().toString());
+          console.log('ITEMS:', items);
+          console.log('SUBTOTAL:', subtotal);
+          console.log('SHIPPING:', shippingCost);
+          console.log('TOTAL:', totalAmount);
+          console.log('DATE:', new Date().toISOString());
+          console.log('STATUS:', 'Placed');
+          console.log(
+            'SHIPPING ADDRESS:',
+            Address!.name,
+            Address?.city,
+            Address?.country,
+            Address?.fulladdress,
+            Address?.phone,
+          );
+          console.log('PAYMENT:', card!.owner, card!.card_number);
+          console.log('========== FULL ORDER ==========');
           dispatch(
             addOrder({
               id: Date.now().toString(),
+
               items,
+
+              subtotal,
+
+              shipping: shippingCost,
+
               total: totalAmount,
+
               date: new Date().toISOString(),
+
+              status: 'Placed',
+
+              shippingAddress: {
+                name: Address!.name,
+                city: Address!.city,
+                country: Address!.country,
+                phone: Address!.phone,
+                fulladdress: Address!.fulladdress,
+              },
+
+              payment: {
+                owner: card!.owner,
+                last4: card!.card_number.replace(/\s/g, '').slice(-4),
+              },
             }),
           );
-
+          console.log('✅ addOrder dispatched');
           dispatch(clearCart());
           navigation.replace(Routes.ORDER_DONE);
         }}

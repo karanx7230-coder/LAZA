@@ -33,9 +33,29 @@ export interface User {
   email: string;
 }
 
+export interface ShippingAddress {
+  name: string;
+  city: string;
+  country: string;
+  phone: string;
+  fulladdress: string;
+}
+
+export interface PaymentSnapshot {
+  owner: string;
+  last4: string;
+}
+
+export type OrderStatus = 'Placed' | 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
+
 export interface Order {
   id: string;
   items: CartItem[];
+  subtotal: number;
+  shipping: number;
   total: number;
   date: string;
+  status: OrderStatus;
+  shippingAddress: ShippingAddress;
+  payment: PaymentSnapshot;
 }
