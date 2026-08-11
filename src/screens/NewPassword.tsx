@@ -34,7 +34,7 @@ export default function NewPassword({ navigation }: any) {
         setErrorMessage('Passwords do not match!');
       } else {
         setErrorMessage('');
-        navigation.navigate(Routes.MAIN_TABS);
+        navigation.replace(Routes.LOGIN);
       }
     }
   };
