@@ -105,7 +105,7 @@ export default function Profile({ navigation }: any) {
 
       <View style={styles.lines}>
         <TouchableOpacity
-          onPress={() => navigation.navigate(Routes.NEW_PASSWORD)}
+          // onPress={() => navigation.navigate(Routes.NEW_PASSWORD)}
           style={styles.row}
         >
           <Image
@@ -119,12 +119,7 @@ export default function Profile({ navigation }: any) {
 
       <View style={styles.lines}>
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate(Routes.MAIN_TABS, {
-              screen: Routes.HOME_DRAWER,
-              params: { screen: Routes.CART },
-            })
-          }
+          onPress={() => navigation.navigate(Routes.ORDER)}
           style={styles.row}
         >
           <Image
@@ -200,8 +195,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   img: {
-    height: 15,
-    width: 15,
+    height: 35,
+    width: 35,
+    marginTop: 30,
   },
   back: {
     width: 45,

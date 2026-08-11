@@ -33,8 +33,6 @@ export const Routes = {
   LOGIN: 'login',
 } as const;
 
-export type RouteName = (typeof Routes)[keyof typeof Routes];
-
 // export const Routes = {
 //   MAIN_TABS: 'MainTabs',
 //   HOME_DRAWER: 'HomeDrawer',
