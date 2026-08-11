@@ -56,6 +56,7 @@ export default function Address({ navigation, route }: any) {
       Alert.alert('Please fill all the fields');
       return;
     }
+    
     dispatch(setAddress({ name, city, country, phone, fulladdress }));
     navigation.replace(Routes.MAIN_TABS, {
       screen: Routes.HOME_DRAWER,
@@ -70,12 +71,6 @@ export default function Address({ navigation, route }: any) {
     >
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.headerRow}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={styles.backArrow}>←</Text>
-          </TouchableOpacity>
           <Text style={[styles.pagehead, { color: colors.text }]}>Address</Text>
         </View>
         <View>

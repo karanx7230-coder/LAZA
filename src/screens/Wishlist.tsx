@@ -13,10 +13,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, Routes } from '../utils';
 import { useAppSelector } from '../hooks/redux';
 import ProductCard from '../components/ProductCard';
+import { useDispatch } from 'react-redux';
+import { toggleWishlist } from '../store/redux/slice/wishlistSlice';
 
 export default function Wishlist({ navigation }: any) {
   const items = useAppSelector(state => state.wishlist.items);
-
+  const dispatch = useDispatch();
   const { isDarkMode, colors } = useTheme();
   const insets = useSafeAreaInsets();
 
@@ -54,14 +56,7 @@ export default function Wishlist({ navigation }: any) {
     <View style={pageStyle}>
       <View style={styles.container1}>
         <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}
-          >
-            <Text style={styles.backArrow}>←</Text>
-          </TouchableOpacity>
           <Text style={titleTextStyle}>Wishlist</Text>
-          <View style={styles.headerSpacer} />
         </View>
         <FlatList
           columnWrapperStyle={{ justifyContent: 'space-between' }}
@@ -72,6 +67,8 @@ export default function Wishlist({ navigation }: any) {
           renderItem={({ item }) => (
             <ProductCard
               product={item}
+              isFavorite
+              onToggleFavorite={() => dispatch(toggleWishlist(item))}
               onPress={() =>
                 navigation.navigate(Routes.PRODUCT, { productData: item })
               }
@@ -92,9 +89,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
     marginVertical: 20,
   },
   backButton: {
@@ -110,10 +104,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: Colors.black,
     textAlign: 'center',
+    alignSelf: 'center',
   },
-  headerSpacer: {
-    width: 40,
-  },
+
   center: {
     flex: 1,
     justifyContent: 'center',

@@ -30,11 +30,15 @@ export default function TabNavigator() {
         options={{
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <Text style={{ fontSize: 12, color: Colors.primary }}>home</Text>
-            ) : (
               <Image
                 source={require('../assets/images/home1.png')}
                 style={{ width: 40, height: 35 }}
+                resizeMode="cover"
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/home1.png')}
+                style={{ width: 40, height: 35, opacity: 0.5 }}
                 resizeMode="cover"
               />
             ),
@@ -52,11 +56,15 @@ export default function TabNavigator() {
         options={{
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <Text style={{ fontSize: 12 }}>wish list</Text>
-            ) : (
               <Image
                 source={require('../assets/images/dil.png')}
                 style={{ width: 40, height: 40, opacity: 1 }}
+                resizeMode="contain"
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/dil.png')}
+                style={{ width: 40, height: 40, opacity: 0.5 }}
                 resizeMode="contain"
               />
             ),
@@ -69,11 +77,15 @@ export default function TabNavigator() {
         options={{
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <Text style={{ fontSize: 12 }}>Cart</Text>
-            ) : (
               <Image
                 source={require('../assets/images/bag1.png')}
                 style={{ width: 35, height: 35, opacity: 1 }}
+                resizeMode="contain"
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/bag1.png')}
+                style={{ width: 35, height: 35, opacity: 0.5 }}
                 resizeMode="contain"
               />
             ),
@@ -85,11 +97,15 @@ export default function TabNavigator() {
         options={{
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <Text style={{ fontSize: 12 }}>batua</Text>
-            ) : (
               <Image
                 source={require('../assets/images/batua.png')}
                 style={{ width: 40, height: 40, opacity: 1 }}
+                resizeMode="contain"
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/batua.png')}
+                style={{ width: 40, height: 40, opacity: 0.5 }}
                 resizeMode="contain"
               />
             ),

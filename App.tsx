@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator, StyleSheet, PermissionsAndroid, Platform, Alert } from 'react-native';
+import {
+  View,
+  ActivityIndicator,
+  StyleSheet,
+  PermissionsAndroid,
+  Platform,
+  Alert,
+  StatusBar,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -22,6 +32,7 @@ import {
   handleNotificationNavigation,
   handleForegroundNotification,
 } from './src/service/notification';
+import { Colors } from './src/utils';
 
 export default function App() {
   return (
@@ -84,8 +95,13 @@ function AppRoot() {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#9B72FF" />
+      <View style={styles.view}>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent
+        />
+        <Text style={styles.text}> LAZA</Text>
       </View>
     );
   }
@@ -105,6 +121,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: Colors.white,
   },
+  view: {
+    flex: 1,
+    backgroundColor: Colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: { fontSize: 25, color: Colors.white },
 });

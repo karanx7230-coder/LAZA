@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { toggleWishlist } from '../store/redux/slice/wishlistSlice';
 import { loadProducts } from '../store/redux/slice/productSlice';
 import ProductCard from '../components/ProductCard';
+import HomeListHeader from '../components/listheaderHome';
 
 export default function Home({ navigation }: any) {
   const { isDarkMode, colors } = useTheme();
@@ -30,9 +31,14 @@ export default function Home({ navigation }: any) {
   const error = useAppSelector(state => state.products.error);
 
   const [searchQuery, setSearchQuery] = useState('');
+  // const categoriesapi= cloths
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const categories = ['All', 'Fragrances', 'Furniture', 'Beauty', 'Groceries'];
-
+  const categories: string[] = [
+    'All',
+    ...new Set(
+      cloths.map(item => item.category).filter((c): c is string => !!c),
+    ),
+  ];
   const filteredProducts = cloths.filter(item => {
     const categoryMatch =
       selectedCategory === 'All' ||
@@ -48,94 +54,6 @@ export default function Home({ navigation }: any) {
   useEffect(() => {
     dispatch(loadProducts());
   }, [dispatch]);
-
-  const ListHeader = () => (
-    <View>
-      <View style={styles.viewtop}>
-        <TouchableOpacity
-          style={styles.back}
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-        >
-          <Image
-            style={styles.imagetop}
-            source={require('../assets/images/Menu.png')}
-            resizeMode="contain"
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.back}
-          onPress={() => navigation.navigate(Routes.ORDER)}
-        >
-          <Image
-            style={styles.imagetop}
-            source={require('../assets/images/Cart.png')}
-            resizeMode="contain"
-          />
-        </TouchableOpacity>
-      </View>
-      <Text style={[styles.hello, { color: colors.text }]}>Hello</Text>
-      <Text style={[styles.welcome, { color: colors.text }]}>
-        Welcome to Laza.
-      </Text>
-      <View style={styles.searchrow}>
-        <View style={styles.search}>
-          <Image
-            source={require('../assets/images/searchgrey.png')}
-            style={styles.image}
-            resizeMode="contain"
-          />
-          <TextInput
-            style={styles.textput}
-            placeholder="Search..."
-            placeholderTextColor={'#9a9797'}
-            value={searchQuery}
-            onChangeText={text => setSearchQuery(text)}
-          />
-        </View>
-      </View>
-      <View style={styles.space}>
-        <Text style={[styles.choose, { color: colors.text }]}>
-          Choose Category
-        </Text>
-        <Text style={styles.viewall}>View All</Text>
-      </View>
-      <View style={styles.categoryrow}>
-        <ScrollView
-          horizontal={true}
-          style={styles.brandbox}
-          showsHorizontalScrollIndicator={false}
-        >
-          {categories.map(cat => (
-            <TouchableOpacity
-              key={cat}
-              style={[
-                styles.brand,
-                selectedCategory === cat && { backgroundColor: Colors.primary },
-              ]}
-              onPress={() => setSelectedCategory(cat)}
-            >
-              <Text
-                style={[
-                  styles.brandname,
-                  selectedCategory === cat && { color: '#fff' },
-                ]}
-              >
-                {cat}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-      <View style={styles.space}>
-        <Text style={[styles.choose, { color: colors.text }]}>
-          New Arrivals
-        </Text>
-        <TouchableOpacity>
-          <Text style={styles.viewall}>View All</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
 
   if (loading && cloths.length === 0) {
     return (
@@ -201,7 +119,17 @@ export default function Home({ navigation }: any) {
         translucent
       />
       <FlatList
-        ListHeaderComponent={ListHeader}
+        ListHeaderComponent={
+          <HomeListHeader
+            navigation={navigation}
+            colors={colors}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            categories={categories}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+        }
         numColumns={2}
         columnWrapperStyle={{ justifyContent: 'space-between' }}
         showsVerticalScrollIndicator={false}
@@ -229,7 +157,8 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     backgroundColor: '#f9d7d719',
-    padding: 15,
+    paddingHorizontal: 15,
+    paddingTop: 20,
   },
   viewtop: {
     flexDirection: 'row',

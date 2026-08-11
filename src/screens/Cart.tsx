@@ -35,6 +35,9 @@ export default function Cart({ navigation }: any) {
   );
   const totalAmount = subtotal + shippingCost;
   const Address = useAppSelector(state => state.address);
+  const hasAddress = !!Address?.name?.trim();
+  const card = useAppSelector(state => state.card);
+  const hascard = !!card?.owner?.trim();
 
   return (
     <View style={[styles.view, { backgroundColor: colors.background }]}>
@@ -111,7 +114,7 @@ export default function Cart({ navigation }: any) {
               styles.sectionPad,
             ]}
           >
-            <Text style={{ fontSize: 18, color: 'gray' }}>
+            <Text style={{ fontSize: 18, color: 'gray', fontWeight: '200' }}>
               Your cart is empty!
             </Text>
           </View>
@@ -133,7 +136,7 @@ export default function Cart({ navigation }: any) {
                   resizeMode="contain"
                   style={styles.mapimage}
                 />
-                {Address?.name != '' ? (
+                {hasAddress ? (
                   <View style={styles.adress}>
                     <Text style={styles.adresshead}>
                       {Address?.name}, {Address?.city}, {Address?.country}
@@ -149,7 +152,7 @@ export default function Cart({ navigation }: any) {
                     </Text>
                   </View>
                 )}
-                {Address?.name != '' && (
+                {hasAddress && (
                   <Image
                     source={require('../assets/images/Check.png')}
                     resizeMode="contain"
@@ -172,15 +175,32 @@ export default function Cart({ navigation }: any) {
                 resizeMode="cover"
                 style={styles.visa}
               />
-              <View>
-                <Text>Visa Classic</Text>
-                <Text>**** 7640</Text>
-              </View>
-              <Image
-                source={require('../assets/images/Check.png')}
-                resizeMode="contain"
-                style={styles.visatick}
-              />
+              {hascard ? (
+                <View>
+                  <View>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Text>{card?.owner}</Text>
+                    </View>
+                    <Text>
+                      ****
+                      {card?.card_number?.replace(/\s/g, '').slice(-4)}
+                    </Text>
+                  </View>
+                </View>
+              ) : (
+                <View>
+                  <View>
+                    <Text>fill the card details</Text>
+                  </View>
+                </View>
+              )}
+              {hascard && (
+                <Image
+                  source={require('../assets/images/Check.png')}
+                  resizeMode="contain"
+                  style={styles.visatick}
+                />
+              )}
             </TouchableOpacity>
 
             <View style={styles.sectionPad}>
