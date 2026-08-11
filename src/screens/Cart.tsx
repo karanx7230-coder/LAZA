@@ -6,6 +6,7 @@ import {
   FlatList,
   Image,
   StatusBar,
+  Alert,
 } from 'react-native';
 import React from 'react';
 import { useTheme } from '../context/ThemeContext';
@@ -232,33 +233,29 @@ export default function Cart({ navigation }: any) {
       <TouchableOpacity
         style={styles.last}
         onPress={() => {
-          if (!hasAddress || !hascard || items.length === 0) {
-            console.log('CHECKOUT BLOCKED:', {
-              hasAddress,
-              hascard,
-              cartItems: items.length,
-            });
+          if (items.length === 0) {
+            Alert.alert(
+              'Cart is Empty',
+              'Please add at least one product to your cart before checkout.',
+            );
             return;
           }
 
-          console.log('========== ORDER DATA ==========');
-          console.log('ORDER ID:', Date.now().toString());
-          console.log('ITEMS:', items);
-          console.log('SUBTOTAL:', subtotal);
-          console.log('SHIPPING:', shippingCost);
-          console.log('TOTAL:', totalAmount);
-          console.log('DATE:', new Date().toISOString());
-          console.log('STATUS:', 'Placed');
-          console.log(
-            'SHIPPING ADDRESS:',
-            Address!.name,
-            Address?.city,
-            Address?.country,
-            Address?.fulladdress,
-            Address?.phone,
-          );
-          console.log('PAYMENT:', card!.owner, card!.card_number);
-          console.log('========== FULL ORDER ==========');
+          if (!hasAddress) {
+            Alert.alert(
+              'Address Required',
+              'Please add a shipping address before checkout.',
+            );
+            return;
+          }
+
+          if (!hascard) {
+            Alert.alert(
+              'Card Required',
+              'Please add a payment card before checkout.',
+            );
+            return;
+          }
           dispatch(
             addOrder({
               id: Date.now().toString(),
@@ -289,7 +286,6 @@ export default function Cart({ navigation }: any) {
               },
             }),
           );
-          console.log('✅ addOrder dispatched');
           dispatch(clearCart());
           navigation.replace(Routes.ORDER_DONE);
         }}
