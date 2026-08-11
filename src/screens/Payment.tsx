@@ -83,7 +83,7 @@ export default function Payment({ navigation }: any) {
         </View>
 
         <Image
-          source={require('../assets/images/cardVisa.png')}
+          source={require('../assets/images/CardVisa.png')}
           resizeMode="contain"
           style={styles.imagecard}
         />
