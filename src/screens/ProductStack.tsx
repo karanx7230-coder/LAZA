@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTheme } from '../context/ThemeContext';
-import API from '../api/api';
+import { useGetProductQuery } from '../api/api';
 import { Colors, Routes } from '../utils';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { addToCart } from '../store/redux/slice/cartSlice';
@@ -19,12 +19,15 @@ import QuantityStepper from '../components/QuantityStepper';
 export default function Productstack({ route, navigation }: any) {
   const { colors } = useTheme();
   const dispatch = useAppDispatch();
-  const [productData, setProductData] = useState(
-    route.params?.productData || null,
-  );
-  const [loading, setLoading] = useState(!route.params?.productData);
-  const [quantity, setQuantity] = useState(1);
   const productId = route?.params?.id;
+  const {
+    data: productData,
+    isLoading,
+    error,
+  } = useGetProductQuery(productId, {
+    skip: !productId,
+  });
+  const [quantity, setQuantity] = useState(1);
   const isItemInCart = useAppSelector(state =>
     state.cart.items.some(item => item.id === productData?.id),
   );
@@ -56,28 +59,20 @@ export default function Productstack({ route, navigation }: any) {
     [colors.background, colors.text, isItemInCart, isOutOfStock],
   );
 
-  useEffect(() => {
-    if (!productData && productId) {
-      API.get(`/products/${productId}`)
-        .then(({ data }) => {
-          setProductData(data);
-          setLoading(false);
-        })
-        .catch(err => {
-          console.error(err);
-          setLoading(false);
-        });
-    }
-  }, [productId, productData]);
-
-  if (loading || !productData) {
+  if (isLoading || !productData) {
     return (
       <View style={[styles.screen, styles.loading]}>
         <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
   }
-
+  if (error || !productData) {
+    return (
+      <View style={[styles.screen, styles.loading]}>
+        <Text>check your internet</Text>
+      </View>
+    );
+  }
   const decreaseQty = () => {
     if (quantity > 1) setQuantity(prev => prev - 1);
   };

@@ -1,13 +1,17 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image } from 'react-native';
+import { Image, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Routes, Colors } from '../utils';
 import Home from '../screens/Home';
 import Cart from '../screens/Cart';
 import Wishlist from '../screens/Wishlist';
-import Payment from '../screens/Payment';
+import Orders from '../screens/orders';
 const Tab = createBottomTabNavigator();
+
+const NoAnimationTabButton = (props: any) => (
+  <Pressable {...props} android_ripple={null} style={props.style} />
+);
 
 export default function TabNavigator() {
   const insets = useSafeAreaInsets();
@@ -20,6 +24,7 @@ export default function TabNavigator() {
           backgroundColor: Colors.white,
           height: 60 + insets.bottom,
         },
+        tabBarButton: props => <NoAnimationTabButton {...props} />,
       }}
     >
       <Tab.Screen
@@ -90,8 +95,8 @@ export default function TabNavigator() {
         }}
       />
       <Tab.Screen
-        name={Routes.PAYMENT}
-        component={Payment}
+        name={Routes.ORDER}
+        component={Orders}
         options={{
           tabBarIcon: ({ focused }) =>
             focused ? (
