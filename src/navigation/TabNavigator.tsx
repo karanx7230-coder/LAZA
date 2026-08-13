@@ -50,12 +50,6 @@ export default function TabNavigator() {
       <Tab.Screen
         name={Routes.WISHLIST}
         component={Wishlist}
-        listeners={({ navigation }) => ({
-          tabPress: e => {
-            e.preventDefault();
-            navigation.navigate(Routes.WISHLIST, { brandName: undefined });
-          },
-        })}
         options={{
           tabBarIcon: ({ focused }) =>
             focused ? (
