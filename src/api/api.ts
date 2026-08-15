@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Product } from '../types';
 
 const API = axios.create({
   baseURL: 'https://dummyjson.com',
@@ -16,11 +17,11 @@ export const api2 = createApi({
     baseUrl: 'https://dummyjson.com',
   }),
   endpoints: builder => ({
-    getProducts: builder.query({
+    getProducts: builder.query<Product[], void>({
       query: () => '/products',
     }),
 
-    getProduct: builder.query({
+    getProduct: builder.query<Product, string>({
       query: productId => `/products/${productId}`,
     }),
   }),

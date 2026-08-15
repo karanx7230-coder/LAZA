@@ -12,6 +12,7 @@ import ordersReducer from '../slice/ordersSlice';
 import addressReducer from '../slice/adressSlice';
 import productsReducer from '../slice/productSlice'; // TODO: rename file to productsSlice.ts for consistency, then update this path
 import cardReducer from '../slice/cardSlice';
+import { api2 } from '../../../api/api';
 const persistConfig = {
   key: 'root',
   version: 1,
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
   address: addressReducer,
   products: productsReducer,
   card: cardReducer,
+  [api2.reducerPath]: api2.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -47,7 +49,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
       },
-    }),
+    }).concat(api2.middleware),
 });
 
 export const persistor = persistStore(store);

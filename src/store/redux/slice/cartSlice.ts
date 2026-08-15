@@ -21,18 +21,18 @@ const cartSlice = createSlice({
         state.items.push({ ...action.payload });
       }
     },
-    removeFromCart: (state, action: PayloadAction<string>) => {
+    removeFromCart: (state, action: PayloadAction<number>) => {
       state.items = state.items.filter(
         cartItem => cartItem.id !== action.payload,
       );
     },
-    increaseQuantity: (state, action: PayloadAction<string>) => {
+    increaseQuantity: (state, action: PayloadAction<number>) => {
       const item = state.items.find(cartItem => cartItem.id === action.payload);
       if (item) {
         item.quantity += 1;
       }
     },
-    decreaseQuantity: (state, action: PayloadAction<string>) => {
+    decreaseQuantity: (state, action: PayloadAction<number>) => {
       const item = state.items.find(cartItem => cartItem.id === action.payload);
       if (item && item.quantity > 1) {
         item.quantity -= 1;

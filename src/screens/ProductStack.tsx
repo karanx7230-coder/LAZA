@@ -8,7 +8,7 @@ import {
   ImageBackground,
   ActivityIndicator,
 } from 'react-native';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useGetProductQuery } from '../api/api';
 import { Colors, Routes } from '../utils';
@@ -23,7 +23,7 @@ export default function Productstack({ route, navigation }: any) {
   const {
     data: productData,
     isLoading,
-    error,
+    isError,
   } = useGetProductQuery(productId, {
     skip: !productId,
   });
@@ -66,7 +66,7 @@ export default function Productstack({ route, navigation }: any) {
       </View>
     );
   }
-  if (error || !productData) {
+  if (isError) {
     return (
       <View style={[styles.screen, styles.loading]}>
         <Text>check your internet</Text>

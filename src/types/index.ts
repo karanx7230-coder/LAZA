@@ -7,7 +7,7 @@ export interface Review {
 }
 
 export interface Product {
-  id: string;
+  id: number;
   title: string;
   description?: string;
   price: number;
@@ -18,6 +18,7 @@ export interface Product {
   stock?: number;
   brand?: string;
   discountPercentage?: number;
+  availabilityStatus?: string;
   reviews?: Review[];
 }
 

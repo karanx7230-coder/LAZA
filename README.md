@@ -1,97 +1,115 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# LAZA
 
-# Getting Started
+LAZA is a mobile e-commerce app built with **React Native** (0.85) and **TypeScript**. It includes user authentication, an offline-capable product catalog, cart / wishlist / orders / addresses / payment-cards, a live tracking map, push notifications and deep linking.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Tech Stack
 
-## Step 1: Start Metro
+- **React Native 0.85.2** · **React 19** · **TypeScript 5.8**
+- **State**: Redux Toolkit 2.x + `redux-persist` (AsyncStorage)
+- **Navigation**: react-navigation v7 (native-stack + drawer + bottom-tabs)
+- **Backend/API**: Firebase (Auth + Cloud Messaging), `dummyjson.com` product API
+- **Other**: notifee (local notifications), react-native-maps + geolocation-service (tracking), NetInfo (offline detection)
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Prerequisites
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- Node.js >= 22.11.0
+- React Native environment set up ([guide](https://reactnative.dev/docs/set-up-your-environment))
+- Firebase project with a `google-services.json` placed in `android/app/` (used by auth & messaging)
+- For the map/tracking features: a device or emulator with location enabled and the fine-location permission
 
-```sh
-# Using npm
-npm start
+> The product catalog is loaded from the public `dummyjson.com` API — no backend setup is required to run the core shopping flow.
 
-# OR using Yarn
-yarn start
-```
-
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
+## Getting Started
 
 ```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+yarn          # install dependencies
+yarn start    # start Metro
 ```
 
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+Then, in a second terminal:
 
 ```sh
-bundle install
+yarn android  # build & run on Android
+# or
+yarn ios      # build & run on iOS (requires CocoaPods: bundle exec pod install first)
 ```
 
-Then, and every time you update your native dependencies, run:
+## Scripts
 
-```sh
-bundle exec pod install
+| Script        | Description                       |
+| ------------- | --------------------------------- |
+| `yarn start`  | Start Metro dev server            |
+| `yarn android`| Run on Android                    |
+| `yarn ios`    | Run on iOS                        |
+| `yarn lint`   | Run ESLint                        |
+| `yarn test`   | Run Jest tests                    |
+
+## Project Structure
+
+```
+src/
+├── api/                 # HTTP clients (axios + RTK Query slice)
+├── components/          # Reusable UI (ProductCard, QuantityStepper, …)
+├── constants/           # Routes, Colors
+├── context/             # ThemeContext (dark/light mode)
+├── hooks/               # useAppDispatch / useAppSelector
+├── navigation/          # Stack, Drawer, Tab navigators + navigation service
+├── screens/             # All screens
+├── service/             # Notifications (FCM/notifee), deep linking
+├── store/
+│   ├── redux/slice/     # user, cart, wishlist, orders, address, card, products
+│   └── redux/store/     # Redux store + persist config
+├── types/               # Shared TypeScript types
+└── utils/               # Barrel: routes, colors, formatters
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+### Key folders explained
 
-```sh
-# Using npm
-npm run ios
+- `src/navigation/StackNavigator.tsx` — root stack. Swaps between the **logged-in** group (tabs + detail screens) and the **logged-out** group (onboarding, login, signup, reset password) based on the Firebase auth state.
+- `src/navigation/DrawerNavigator.tsx` — drawer whose content is the **Profile** screen.
+- `src/navigation/TabNavigator.tsx` — bottom tabs: Home, Wishlist, Cart, Payment.
+- `src/store/redux/store/store.ts` — `configureStore` + `redux-persist`. Whitelisted state survives restarts: `userreducer`, `cart`, `wishlist`, `address`, `orders`, `products`, `card`.
+- `src/store/redux/slice/productSlice.tsx` — offline cache-first product loading: if online it fetches all products from the API, if offline it uses the persisted cache.
+- `src/service/notification.js` — FCM token, foreground/background notification handling (notifee).
+- `src/service/link.js` — deep links into product detail.
 
-# OR using Yarn
-yarn ios
+## Navigation Map
+
+```
+StackNavigator
+├── Logged in:
+│   ├── MAIN_TABS ── DrawerNavigator ── TabNavigator
+│   │                                 ├── Home
+│   │                                 ├── Wishlist
+│   │                                 ├── Cart
+│   │                                 └── Payment
+│   ├── Product / ProductStack / Reviews / AddReview
+│   ├── Address / Track (tracking map)
+│   ├── AddCard / Orders / OrderDone / NewPassword
+└── Logged out:
+    ├── FirstScreen → Screen1 → Screen2 → Login / Signup
+    └── Forget → OTP → NewPassword
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+Cross-navigator navigation (e.g. Cart screen from a stack screen) uses the nested form:
+`navigate(MAIN_TABS → HOME_DRAWER → <tab>)`.
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+## State & Data Flow
 
-## Step 3: Modify your app
+- **Auth**: `App.tsx` listens to `auth().onAuthStateChanged`, stores the user in the Redux `userreducer`, and re-renders the navigator with the matching screen group.
+- **Catalog**: `Home` dispatches `loadProducts` (productSlice). Data is persisted, so the app works offline after the first load. Search + category filtering is done client-side.
+- **Cart / Wishlist / Orders**: synchronous Redux slices; the cart and wishlist persist across sessions. Checkout builds an order and clears the cart.
 
-Now that you have successfully run the app, let's make changes!
+## Known Issues / Pending Work
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+- ~~**RTK Query slice is not connected to the store.**~~ **Fixed.** `src/api/api.ts` defines an `api2` RTK Query slice (`getProducts`, `getProduct`); it is now registered in `store.ts` via `[api2.reducerPath]: api2.reducer` (root reducer) and `.concat(api2.middleware)` (middleware). The api reducer is intentionally **not** in the redux-persist whitelist.
+- ~~**`Product.id` type mismatch.**~~ **Fixed.** The `Product` interface in `src/types/index.ts` now declares `id: number`, matching the dummyjson API. Cart/wishlist reducers and their action payloads were updated to `number` accordingly.
+- ~~**`Product` type is missing `availabilityStatus`**~~ **Fixed.** Added `availabilityStatus?: string` to the `Product` type.
+- ~~**RTK Query endpoints are untyped**~~ **Fixed.** `getProducts: builder.query<Product[], void>` and `getProduct: builder.query<Product, string>` are typed against the shared `Product` interface.
+- ~~**Unused imports / dead error check in ProductStack**~~ **Fixed.** `useEffect` import removed; the hook now destructures `isError` instead of `error`, and the unreachable `|| !productData` condition was removed.
+- `formatCardNumber` (previously in `src/utils/format.ts`) was removed; payment screens format card numbers inline.
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+## Troubleshooting
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+- **Clearing stale persisted state**: the app persists Redux state; if you change persisted shapes during development you may need to clear app data (`adb shell pm clear com.laza` or reinstall) so the old cache doesn't conflict.
+- **Notifications**: request permission on first launch; the FCM token is logged via `getFCMToken`.
