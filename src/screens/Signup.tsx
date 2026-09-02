@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
-  },
+    },
   error: {
     color: Colors.googleRed,
     fontSize: 12,

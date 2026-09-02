@@ -36,13 +36,13 @@ yarn ios      # build & run on iOS (requires CocoaPods: bundle exec pod install 
 
 ## Scripts
 
-| Script        | Description                       |
-| ------------- | --------------------------------- |
-| `yarn start`  | Start Metro dev server            |
-| `yarn android`| Run on Android                    |
-| `yarn ios`    | Run on iOS                        |
-| `yarn lint`   | Run ESLint                        |
-| `yarn test`   | Run Jest tests                    |
+| Script         | Description            |
+| -------------- | ---------------------- |
+| `yarn start`   | Start Metro dev server |
+| `yarn android` | Run on Android         |
+| `yarn ios`     | Run on iOS             |
+| `yarn lint`    | Run ESLint             |
+| `yarn test`    | Run Jest tests         |
 
 ## Project Structure
 
@@ -87,7 +87,7 @@ StackNavigator
 │   ├── Address / Track (tracking map)
 │   ├── AddCard / Orders / OrderDone / NewPassword
 └── Logged out:
-    ├── FirstScreen → Screen1 → Screen2 → Login / Signup
+    ├── FirstScreen → Screen1 → Login / Signup
     └── Forget → OTP → NewPassword
 ```
 

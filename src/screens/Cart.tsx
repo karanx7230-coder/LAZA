@@ -8,7 +8,7 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
 import { formatPrice } from '../utils/format';
@@ -23,6 +23,7 @@ import { addOrder } from '../store/redux/slice/ordersSlice';
 import QuantityStepper from '../components/QuantityStepper';
 
 export default function Cart({ navigation }: any) {
+  const [isReady, setIsReady] = useState(false);
   const { isDarkMode, colors } = useTheme();
   const dispatch = useAppDispatch();
   const shippingCost = 5;
@@ -37,7 +38,13 @@ export default function Cart({ navigation }: any) {
   const hasAddress = !!Address?.name?.trim();
   const card = useAppSelector(state => state.card);
   const hascard = !!card?.owner?.trim();
-
+  useEffect(() => {
+    if (items.length > 0 && hasAddress && hascard) {
+      setIsReady(true);
+    } else {
+      setIsReady(false);
+    }
+  }, [items, hasAddress, hascard]);
   return (
     <View style={[styles.view, { backgroundColor: colors.background }]}>
       <StatusBar
@@ -231,7 +238,7 @@ export default function Cart({ navigation }: any) {
         }
       />
       <TouchableOpacity
-        style={styles.last}
+        style={[styles.last, !isReady && { backgroundColor: '#8a5cf665' }]}
         onPress={() => {
           if (items.length === 0) {
             Alert.alert(

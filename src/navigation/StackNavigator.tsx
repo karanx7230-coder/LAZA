@@ -6,7 +6,6 @@ import { Routes } from '../utils';
 import DrawerNavigator from './DrawerNavigator';
 import FirstScreen from '../screens/FirstScreen';
 import Screen1 from '../screens/Screen1';
-import Screen2 from '../screens/Screen2';
 import Signup from '../screens/Signup';
 import Forget1 from '../screens/Forget1';
 import Signin from '../screens/Signin';
@@ -21,6 +20,7 @@ import OrderDone from '../screens/OrderDone';
 import ProductStack from '../screens/ProductStack';
 import Orders from '../screens/orders';
 import TrackingScreen from '../screens/tracklist';
+import Payment from '../screens/Payment';
 
 const Stack = createNativeStackNavigator();
 export default function StackNavigator({ user }: { user: any }) {
@@ -41,6 +41,7 @@ export default function StackNavigator({ user }: { user: any }) {
           <Stack.Screen name={Routes.ADD_REVIEW} component={AddReview} />
           <Stack.Screen name={Routes.ADDRESS} component={Address} />
           <Stack.Screen name={Routes.ADD_CARD} component={AddCard} />
+          <Stack.Screen name={Routes.PAYMENT} component={Payment} />
           <Stack.Screen name={Routes.ORDER_DONE} component={OrderDone} />
           <Stack.Screen name={Routes.ORDER} component={Orders} />
         </Stack.Group>
@@ -48,7 +49,6 @@ export default function StackNavigator({ user }: { user: any }) {
         <Stack.Group>
           <Stack.Screen name={Routes.FIRST} component={FirstScreen} />
           <Stack.Screen name={Routes.SCREEN1} component={Screen1} />
-          <Stack.Screen name={Routes.SCREEN2} component={Screen2} />
           <Stack.Screen name={Routes.FORGET} component={Forget1} />
           <Stack.Screen name={Routes.OTP} component={Otp} />
           <Stack.Screen name={Routes.NEW_PASSWORD} component={NewPassword} />

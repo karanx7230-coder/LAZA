@@ -46,14 +46,14 @@ export default function Profile({ navigation }: any) {
       </View>
 
       <View style={styles.row}>
-        <TouchableOpacity>
+        <TouchableOpacity style={{ width: 200 }}>
           <Image
             style={styles.image}
             source={require('../assets/images/profile.png')}
             resizeMode="cover"
           />
           <Text style={[styles.text, { color: colors.text }]}>
-            {user?.email}
+            {user?.email?.split('@')[0]}
           </Text>
           <Text style={styles.text1}>
             verified Profile
@@ -211,7 +211,6 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    width: 260,
   },
   text: {
     fontSize: 25,

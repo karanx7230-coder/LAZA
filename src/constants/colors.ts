@@ -3,24 +3,20 @@ export const Colors = {
   primaryDark: '#8b5cf6',
   primaryLight: '#9A75FA',
   primarySoft: '#f4e8ff',
-
   white: '#FFFFFF',
   black: '#000000',
-
   textPrimary: '#1D1E20',
   textDark: '#282828',
   textMedium: '#898484',
   textLight: '#959595',
   textMuted: '#b4b4b4',
-
   bgSoft: '#f0f0f0',
   bgLight: '#f8f8f8',
   bgCard: '#f9f9f9',
   border: '#E7E8EA',
-
   success: '#4ade80',
   error: '#E94335',
-  googleRed: '#EA4335',
+  googleRed: '#ff0000',
   infoBlue: '#2CA4F4',
-  navy: '#4D6AB4',
-} as const;
+  navy: '#0865FE',
+};
