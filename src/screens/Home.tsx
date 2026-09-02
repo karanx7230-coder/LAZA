@@ -141,6 +141,7 @@ export default function Home({ navigation }: any) {
         keyExtractor={(item, index) =>
           item.id ? item.id.toString() : index.toString()
         }
+        //performance keh liye 
         initialNumToRender={6}
         maxToRenderPerBatch={6}
         windowSize={5}
