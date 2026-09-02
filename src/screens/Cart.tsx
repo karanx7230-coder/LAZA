@@ -21,6 +21,7 @@ import {
 } from '../store/redux/slice/cartSlice';
 import { addOrder } from '../store/redux/slice/ordersSlice';
 import QuantityStepper from '../components/QuantityStepper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Cart({ navigation }: any) {
   const [isReady, setIsReady] = useState(false);
@@ -46,24 +47,26 @@ export default function Cart({ navigation }: any) {
     }
   }, [items, hasAddress, hascard]);
   return (
-    <View style={[styles.view, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.view, { backgroundColor: colors.background }]}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor="transparent"
         translucent
       />
-      <View style={[styles.headerRow, styles.sectionPad]}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.navigate(Routes.MAIN_TABS)}
-        >
-          <Text style={styles.backArrow}>←</Text>
-        </TouchableOpacity>
-        <Text style={[styles.head, { color: colors.text }]}>My Cart</Text>
-        <View style={styles.view1} />
-      </View>
 
       <FlatList
+        ListHeaderComponent={
+          <View style={[styles.headerRow, styles.sectionPad]}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => navigation.navigate(Routes.MAIN_TABS)}
+            >
+              <Text style={styles.backArrow}>←</Text>
+            </TouchableOpacity>
+            <Text style={[styles.head, { color: colors.text }]}>My Cart</Text>
+            <View style={styles.view1} />
+          </View>
+        }
         data={items}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item, index) =>
@@ -234,72 +237,75 @@ export default function Cart({ navigation }: any) {
                 </Text>
               </View>
             </View>
+            <TouchableOpacity
+              style={[
+                styles.last,
+                !isReady && { backgroundColor: '#8a5cf665' },
+              ]}
+              onPress={() => {
+                if (items.length === 0) {
+                  Alert.alert(
+                    'Cart is Empty',
+                    'Please add at least one product to your cart before checkout.',
+                  );
+                  return;
+                }
+
+                if (!hasAddress) {
+                  Alert.alert(
+                    'Address Required',
+                    'Please add a shipping address before checkout.',
+                  );
+                  return;
+                }
+
+                if (!hascard) {
+                  Alert.alert(
+                    'Card Required',
+                    'Please add a payment card before checkout.',
+                  );
+                  return;
+                }
+                dispatch(
+                  addOrder({
+                    id: Date.now().toString(),
+
+                    items,
+
+                    subtotal,
+
+                    shipping: shippingCost,
+
+                    total: totalAmount,
+
+                    date: new Date().toISOString(),
+
+                    status: 'Placed',
+
+                    shippingAddress: {
+                      name: Address!.name,
+                      city: Address!.city,
+                      country: Address!.country,
+                      phone: Address!.phone,
+                      fulladdress: Address!.fulladdress,
+                    },
+
+                    payment: {
+                      owner: card!.owner,
+                      last4: card!.card_number.replace(/\s/g, '').slice(-4),
+                    },
+                  }),
+                );
+                dispatch(clearCart());
+                navigation.replace(Routes.ORDER_DONE);
+              }}
+            >
+              <Text style={styles.lasttext}>Checkout</Text>
+            </TouchableOpacity>
           </View>
         }
       />
-      <TouchableOpacity
-        style={[styles.last, !isReady && { backgroundColor: '#8a5cf665' }]}
-        onPress={() => {
-          if (items.length === 0) {
-            Alert.alert(
-              'Cart is Empty',
-              'Please add at least one product to your cart before checkout.',
-            );
-            return;
-          }
-
-          if (!hasAddress) {
-            Alert.alert(
-              'Address Required',
-              'Please add a shipping address before checkout.',
-            );
-            return;
-          }
-
-          if (!hascard) {
-            Alert.alert(
-              'Card Required',
-              'Please add a payment card before checkout.',
-            );
-            return;
-          }
-          dispatch(
-            addOrder({
-              id: Date.now().toString(),
-
-              items,
-
-              subtotal,
-
-              shipping: shippingCost,
-
-              total: totalAmount,
-
-              date: new Date().toISOString(),
-
-              status: 'Placed',
-
-              shippingAddress: {
-                name: Address!.name,
-                city: Address!.city,
-                country: Address!.country,
-                phone: Address!.phone,
-                fulladdress: Address!.fulladdress,
-              },
-
-              payment: {
-                owner: card!.owner,
-                last4: card!.card_number.replace(/\s/g, '').slice(-4),
-              },
-            }),
-          );
-          dispatch(clearCart());
-          navigation.replace(Routes.ORDER_DONE);
-        }}
-      >
-        <Text style={styles.lasttext}>Checkout</Text>
-      </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
@@ -331,7 +337,7 @@ const styles = StyleSheet.create({
   head: {
     fontSize: 22,
     fontWeight: 'bold',
-    marginTop: 30,
+    marginTop: 10,
   },
   backButton: {
     width: 50,
@@ -450,7 +456,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
-    marginBottom: 0,
+    marginBottom: 100,
   },
   lasttext: {
     color: 'white',

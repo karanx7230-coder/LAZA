@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   StatusBar,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Routes } from '../utils';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
@@ -28,23 +28,31 @@ export default function Home({ navigation }: any) {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const categories: string[] = [
-    'All',
-    ...new Set(
-      cloths.map(item => item.category).filter((c): c is string => !!c),
-    ),
-  ];
-  const filteredProducts = cloths.filter(item => {
-    const categoryMatch =
-      selectedCategory === 'All' ||
-      (item.category ?? '').toLowerCase() === selectedCategory.toLowerCase();
+  const categories = useMemo(
+    () => [
+      'All',
+      ...new Set(
+        cloths.map(item => item.category).filter((c): c is string => !!c),
+      ),
+    ],
+    [cloths],
+  );
+  const filteredProducts = useMemo(
+    () =>
+      cloths.filter(item => {
+        const categoryMatch =
+          selectedCategory === 'All' ||
+          (item.category ?? '').toLowerCase() ===
+            selectedCategory.toLowerCase();
 
-    const searchMatch = item.title
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
+        const searchMatch = item.title
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase());
 
-    return categoryMatch && searchMatch;
-  });
+        return categoryMatch && searchMatch;
+      }),
+    [cloths, selectedCategory, searchQuery],
+  );
 
   useEffect(() => {
     dispatch(loadProducts());
@@ -133,6 +141,10 @@ export default function Home({ navigation }: any) {
         keyExtractor={(item, index) =>
           item.id ? item.id.toString() : index.toString()
         }
+        initialNumToRender={6}
+        maxToRenderPerBatch={6}
+        windowSize={5}
+        removeClippedSubviews
         renderItem={({ item }) => (
           <ProductCard
             product={item}

@@ -7,7 +7,7 @@ import {
   ScrollView,
   StyleSheet,
 } from 'react-native';
-import React from 'react';
+import React, { memo } from 'react';
 import { DrawerActions } from '@react-navigation/native';
 import { Colors, Routes } from '../utils';
 
@@ -21,7 +21,7 @@ type Props = {
   setSelectedCategory: (cat: string) => void;
 };
 
-export default function HomeListHeader({
+export default memo(function HomeListHeader({
   navigation,
   colors,
   searchQuery,
@@ -117,7 +117,7 @@ export default function HomeListHeader({
       </View>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   viewtop: {

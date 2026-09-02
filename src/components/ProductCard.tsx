@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   View,
   Text,
@@ -16,7 +16,7 @@ interface Props {
   onToggleFavorite?: () => void;
 }
 
-export default function ProductCard({
+export default memo(function ProductCard({
   product,
   isFavorite,
   onPress,
@@ -55,7 +55,7 @@ export default function ProductCard({
       </TouchableOpacity>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {

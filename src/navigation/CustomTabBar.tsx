@@ -6,8 +6,8 @@ import { Colors, Routes } from '../utils';
 const TAB_ICONS: Record<string, { icon: any; iconActive: any; label: string }> =
   {
     [Routes.HOME]: {
-      icon: require('../assets/images/home1.png'),
-      iconActive: require('../assets/images/home1.png'),
+      icon: require('../assets/images/home.png'),
+      iconActive: require('../assets/images/home.png'),
       label: 'Home',
     },
     [Routes.WISHLIST]: {
@@ -62,7 +62,7 @@ export const CustomTabBar = ({ state, navigation }: any) => {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 20,
     left: 0,
     right: 0,
     paddingHorizontal: 16,
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   },
   bar: {
     flexDirection: 'row',
-    backgroundColor: '#9a7777',
+    backgroundColor: '#9B72FF',
     borderRadius: 30,
     height: 68,
     alignItems: 'center',
@@ -89,18 +89,19 @@ const styles = StyleSheet.create({
     borderRadius: 40,
   },
   itemActive: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.white,
     flexDirection: 'row',
     alignItems: 'center',
     height: 44,
   },
   label: {
     fontSize: 13,
-    color: Colors.white,
+    color: '#000',
     marginLeft: 6,
   },
   icon: {
-    width: 44,
-    height: 44,
+    width: 24,
+    height: 24,
+    tintColor: '#000',
   },
 });
