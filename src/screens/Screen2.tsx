@@ -12,23 +12,21 @@ import {
 import { useTheme } from '../context/ThemeContext';
 import { Colors, Routes } from '../utils';
 import Btn from '../components/basiccomponents';
-GoogleSignin.configure({
-  webClientId:
-    '1065925478043-cimr44d4veci0egq2grlivtb5bj2r002.apps.googleusercontent.com',
-});
 export default function Screen2({ navigation }: any) {
   const ongooglebuttonpress = async () => {
     try {
-      await GoogleSignin.hasPlayServices({
-        showPlayServicesUpdateDialog: true,
-      });
-      const signinresult = await GoogleSignin.signIn();
-      const idtoken = signinresult.data?.idToken;
-      if (!idtoken) {
-        throw new Error('no id token found');
-      }
-      const googlecredential = auth.GoogleAuthProvider.credential(idtoken);
-      return auth().signInWithCredential(googlecredential);
+      await fetch('https://dummyjson.com/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: 'emilys',
+          password: 'emilyspass',
+          expiresInMins: 30,
+        }),
+        credentials: 'include',
+      })
+        .then(res => res.json())
+        .then(console.log);
     } catch (error) {
       console.error('google login error:', error);
     }

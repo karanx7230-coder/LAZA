@@ -33,7 +33,17 @@ export interface User {
   name: string;
   email: string;
 }
-
+export interface Userapi {
+  id: number;
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  gender: 'male' | 'female' | 'other';
+  image: string;
+  accessToken: string;
+  refreshToken: string;
+}
 export interface ShippingAddress {
   name: string;
   city: string;
@@ -47,7 +57,12 @@ export interface PaymentSnapshot {
   last4: string;
 }
 
-export type OrderStatus = 'Placed' | 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
+export type OrderStatus =
+  | 'Placed'
+  | 'Processing'
+  | 'Shipped'
+  | 'Delivered'
+  | 'Cancelled';
 
 export interface Order {
   id: string;
