@@ -43,16 +43,6 @@ export default memo(function HomeListHeader({
             resizeMode="contain"
           />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.back}
-          onPress={() => navigation.navigate(Routes.ORDER)}
-        >
-          <Image
-            style={styles.imagetop}
-            source={require('../../assets/images/Cart.png')}
-            resizeMode="contain"
-          />
-        </TouchableOpacity>
       </View>
       <Text style={[styles.hello, { color: colors.text }]}>Hello</Text>
       <Text style={[styles.welcome, { color: colors.text }]}>

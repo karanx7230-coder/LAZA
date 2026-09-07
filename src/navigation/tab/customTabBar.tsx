@@ -47,7 +47,12 @@ export const CustomTabBar = ({ state, navigation }: any) => {
             >
               <Image
                 source={isFocused ? tab.iconActive : tab.icon}
-                style={[styles.icon, { opacity: isFocused ? 1 : 0.5 }]}
+                style={[
+                  styles.icon,
+                  {
+                    tintColor: isFocused ? 'black' : 'white',
+                  },
+                ]}
                 resizeMode="contain"
               />
               {isFocused && <Text style={styles.label}>{tab.label}</Text>}

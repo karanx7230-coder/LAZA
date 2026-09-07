@@ -12,6 +12,7 @@ import {
   Alert,
   ActivityIndicator,
   StatusBar,
+  Image,
 } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 import React, { useMemo, useState } from 'react';
@@ -58,6 +59,7 @@ export default function Signup({ navigation }: any) {
   const [errors, setErrors] = useState<FormState>(initialForm);
   const [isRemembered, setIsRemembered] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [show, setshow] = useState(false);
   const [focusedField, setFocusedField] = useState<FormField | null>(null);
   const { isDarkMode, colors } = useTheme();
 
@@ -220,8 +222,40 @@ export default function Signup({ navigation }: any) {
                   onChangeText={handleChange('password')}
                   onFocus={handleFocus('password')}
                   onBlur={handleBlur('password')}
-                  secureTextEntry={true}
+                  secureTextEntry={show}
                 />
+                {show ? (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setshow(!show);
+                    }}
+                  >
+                    <Image
+                      source={require('../../assets/images/hide.png')}
+                      style={{
+                        height: 25,
+                        width: 25,
+                        marginHorizontal: 20,
+                      }}
+                    />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setshow(!show);
+                    }}
+                  >
+                    <Image
+                      source={require('../../assets/images/view.png')}
+                      style={{
+                        height: 25,
+                        width: 25,
+                        marginHorizontal: 20,
+                      }}
+                    />
+                  </TouchableOpacity>
+                )}
+
                 {form.password.length > 0 && !errors.password ? (
                   <Text style={styles.strongText}>Strong</Text>
                 ) : null}

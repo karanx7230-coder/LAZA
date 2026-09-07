@@ -7,6 +7,7 @@ type ThemeContextType = {
     background: string;
     text: string;
     card: string;
+    special?: string;
   };
 };
 
@@ -18,14 +19,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   const toggleTheme = () => {
-    setIsDarkMode((prev) => !prev);
+    setIsDarkMode(prev => !prev);
   };
 
   // Pre-define your color palettes here so you don't have to write them on every screen
   const colors = {
     background: isDarkMode ? '#151515' : '#FFFFFF',
     text: isDarkMode ? '#FFFFFF' : '#000000',
-    card: isDarkMode ? '#575656' : '#f9f9f9', // Great for product cards or bottom bars
+    card: isDarkMode ? '#575656' : '#f9f9f9',
+    special: isDarkMode ? '#575656' : '#f9f9f9', // Great for product cards or bottom bars
   };
 
   return (

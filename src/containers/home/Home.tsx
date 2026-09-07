@@ -22,7 +22,6 @@ export default function Home({ navigation }: any) {
   const dispatch = useAppDispatch();
 
   const wishlistItems = useAppSelector(state => state.wishlist.items);
-
   const cloths = useAppSelector(state => state.products.products);
   const loading = useAppSelector(state => state.products.loading);
   const error = useAppSelector(state => state.products.error);
@@ -142,7 +141,7 @@ export default function Home({ navigation }: any) {
         keyExtractor={(item, index) =>
           item.id ? item.id.toString() : index.toString()
         }
-        //performance keh liye 
+        //performance keh liye
         initialNumToRender={6}
         maxToRenderPerBatch={6}
         windowSize={5}
@@ -161,5 +160,3 @@ export default function Home({ navigation }: any) {
     </View>
   );
 }
-
-
