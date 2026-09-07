@@ -22,13 +22,37 @@ import { Colors, Routes } from '../../utils';
 
 import styles from './Signin.styles';
 
+type FormField = keyof FormState;
+
+interface FormState {
+  email: string;
+  password: string;
+}
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+
+const initialForm: FormState = {
+  email: '',
+  password: '',
+};
+
+const validateField = (field: FormField, value: string): string => {
+  if (value.length === 0) return '';
+  switch (field) {
+    case 'email':
+      return EMAIL_REGEX.test(value) ? '' : 'Enter a valid email address';
+    case 'password':
+      return PASSWORD_REGEX.test(value) ? '' : 'Password is too weak';
+  }
+};
+
 export default function Signin({ navigation }: any) {
+  const [form, setForm] = useState<FormState>(initialForm);
+  const [errors, setErrors] = useState<FormState>(initialForm);
   const [isRemembered, setIsRemembered] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [usernameFocused, setusernameFocused] = useState(false);
-  const [passwordFocused, setpasswordFocused] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [focusedField, setFocusedField] = useState<FormField | null>(null);
   const [loading, setLoading] = useState(false);
   const { isDarkMode, colors } = useTheme();
 
@@ -45,26 +69,40 @@ export default function Signin({ navigation }: any) {
     [colors.background, colors.text],
   );
 
-  const emailInputStyle = [
+  const inputStyle = (field: FormField) => [
     styles.input,
-    usernameFocused ? styles.inputFocused : styles.inputBlurred,
+    focusedField === field ? styles.inputFocused : styles.inputBlurred,
   ];
 
-  const passwordInputStyle = [
-    styles.input,
-    passwordFocused ? styles.inputFocused : styles.inputBlurred,
-  ];
+  const handleChange = (field: FormField) => (text: string) => {
+    setForm(prev => ({ ...prev, [field]: text }));
+    setErrors(prev => ({ ...prev, [field]: validateField(field, text) }));
+  };
+
+  const handleFocus = (field: FormField) => () => setFocusedField(field);
+
+  const handleBlur = (field: FormField) => () => {
+    setFocusedField(null);
+    setErrors(prev => ({
+      ...prev,
+      [field]: validateField(field, form[field]),
+    }));
+  };
 
   const handleLogin = async () => {
-    if (!email || !password) {
+    if (!form.email || !form.password) {
       Alert.alert('Missing Fields', 'Please enter your email and password.');
+      return;
+    }
+    if (errors.email || errors.password) {
+      Alert.alert('Invalid Input', 'Please fix the errors before logging in.');
       return;
     }
 
     setLoading(true);
 
     try {
-      await auth().signInWithEmailAndPassword(email, password);
+      await auth().signInWithEmailAndPassword(form.email, form.password);
     } catch (error: any) {
       if (
         error.code === 'auth/user-not-found' ||
@@ -102,7 +140,7 @@ export default function Signin({ navigation }: any) {
               style={styles.back}
               onPress={() => navigation.goBack()}
             >
-              <Text style={styles.backtext}> â† </Text>
+              <Text style={styles.backtext}> ← </Text>
             </TouchableOpacity>
             <Text style={[styles.signup, themeStyles.textColor]}>Welcome</Text>
             <Text style={styles.line1}>Please enter your data to continue</Text>
@@ -111,26 +149,29 @@ export default function Signin({ navigation }: any) {
               <Text style={[styles.type, themeStyles.textColor]}>E mail</Text>
               <View style={styles.line}>
                 <TextInput
-                  onFocus={() => setusernameFocused(true)}
-                  onBlur={() => setusernameFocused(false)}
-                  style={emailInputStyle}
-                  value={email}
-                  onChangeText={setEmail}
+                  onFocus={handleFocus('email')}
+                  onBlur={handleBlur('email')}
+                  style={inputStyle('email')}
+                  value={form.email}
+                  onChangeText={handleChange('email')}
                   autoCapitalize="none"
                   keyboardType="email-address"
                 />
               </View>
+              {errors.email ? (
+                <Text style={styles.error}>{errors.email}</Text>
+              ) : null}
             </View>
             <View style={styles.textinput}>
               <Text style={[styles.type, themeStyles.textColor]}>Password</Text>
               <View style={styles.line}>
                 <TextInput
-                  onFocus={() => setpasswordFocused(true)}
-                  onBlur={() => setpasswordFocused(false)}
-                  style={passwordInputStyle}
+                  onFocus={handleFocus('password')}
+                  onBlur={handleBlur('password')}
+                  style={inputStyle('password')}
                   secureTextEntry={!showPassword}
-                  value={password}
-                  onChangeText={setPassword}
+                  value={form.password}
+                  onChangeText={handleChange('password')}
                   autoCapitalize="none"
                 />
                 <TouchableOpacity
@@ -146,6 +187,9 @@ export default function Signin({ navigation }: any) {
                   />
                 </TouchableOpacity>
               </View>
+              {errors.password ? (
+                <Text style={styles.error}>{errors.password}</Text>
+              ) : null}
               <View>
                 <TouchableOpacity
                   onPress={() => navigation.navigate(Routes.FORGET)}
@@ -191,5 +235,3 @@ export default function Signin({ navigation }: any) {
     </SafeAreaView>
   );
 }
-
-

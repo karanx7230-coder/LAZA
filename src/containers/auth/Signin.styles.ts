@@ -121,6 +121,11 @@ const styles = StyleSheet.create({
   footer: {
     paddingHorizontal: -20,
   },
+  error: {
+    color: Colors.error,
+    fontSize: 12,
+    marginTop: 5,
+  },
 });
 
 export default styles;

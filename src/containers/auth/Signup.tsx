@@ -19,18 +19,46 @@ import { Colors } from '../../utils';
 
 import styles from './Signup.styles';
 
+type FormField = keyof FormState;
+
+interface FormState {
+  username: string;
+  email: string;
+  password: string;
+}
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+const USERNAME_MIN_LENGTH = 5;
+
+const initialForm: FormState = {
+  username: '',
+  email: '',
+  password: '',
+};
+
+const validateField = (field: FormField, value: string): string => {
+  if (value.length === 0) return '';
+  switch (field) {
+    case 'username':
+      return value.length >= USERNAME_MIN_LENGTH
+        ? ''
+        : `Must be at least ${USERNAME_MIN_LENGTH} characters`;
+    case 'email':
+      return EMAIL_REGEX.test(value) ? '' : 'Enter a valid email address';
+    case 'password':
+      return PASSWORD_REGEX.test(value)
+        ? ''
+        : 'Password must be 8+ characters and contain a number';
+  }
+};
+
 export default function Signup({ navigation }: any) {
-  const [username, setUsername] = useState('');
+  const [form, setForm] = useState<FormState>(initialForm);
+  const [errors, setErrors] = useState<FormState>(initialForm);
   const [isRemembered, setIsRemembered] = useState(false);
-  const [usernameError, setUsernameError] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [usernameFocused, setUsernameFocused] = useState(false);
-  const [emailFocused, setEmailFocused] = useState(false);
-  const [passwordFocused, setPasswordFocused] = useState(false);
+  const [focusedField, setFocusedField] = useState<FormField | null>(null);
   const { isDarkMode, colors } = useTheme();
 
   const themeStyles = useMemo(
@@ -46,65 +74,32 @@ export default function Signup({ navigation }: any) {
     [colors.background, colors.text],
   );
 
-  const usernameInputStyle = [
+  const inputStyle = (field: FormField) => [
     styles.input,
-    usernameFocused ? styles.inputFocused : styles.inputBlurred,
+    focusedField === field ? styles.inputFocused : styles.inputBlurred,
   ];
 
-  const emailInputStyle = [
-    styles.input,
-    emailFocused ? styles.inputFocused : styles.inputBlurred,
-  ];
-
-  const passwordInputStyle = [
-    styles.input,
-    passwordFocused ? styles.inputFocused : styles.inputBlurred,
-  ];
-
-  const handleUsernameChange = (text: string) => {
-    setUsername(text);
-    if (text.length > 0 && text.length < 5) {
-      setUsernameError('Must be at least 5 characters');
-    } else {
-      setUsernameError('');
-    }
+  const handleChange = (field: FormField) => (text: string) => {
+    setForm(prev => ({ ...prev, [field]: text }));
+    setErrors(prev => ({ ...prev, [field]: validateField(field, text) }));
   };
 
-  const handleEmailChange = (text: string) => {
-    setEmail(text);
-    if (text.length === 0) {
-      setEmailError('');
-    } else if (!text.includes('@')) {
-      setEmailError('Must contain @');
-    } else if (!text.includes('.')) {
-      setEmailError("Email must contain a '.'");
-    } else {
-      setEmailError('');
-    }
-  };
+  const handleFocus = (field: FormField) => () => setFocusedField(field);
 
-  const handlepasswordChange = (text: string) => {
-    setPassword(text);
-    const hasNumber = /[0-9]/.test(text);
-    const isLongEnough = text.length >= 8;
-
-    if (text.length === 0) {
-      setPasswordError('');
-    } else if (!isLongEnough) {
-      setPasswordError('Must be at least 8 characters');
-    } else if (!hasNumber) {
-      setPasswordError('Must contain at least one number');
-    } else {
-      setPasswordError('');
-    }
+  const handleBlur = (field: FormField) => () => {
+    setFocusedField(null);
+    setErrors(prev => ({
+      ...prev,
+      [field]: validateField(field, form[field]),
+    }));
   };
 
   const handleFirebaseSignUp = async () => {
-    if (!username || !email || !password) {
+    if (!form.username || !form.email || !form.password) {
       Alert.alert('Missing Fields', 'Please fill out all fields.');
       return;
     }
-    if (usernameError || emailError || passwordError) {
+    if (errors.username || errors.email || errors.password) {
       Alert.alert('Invalid Input', 'Please fix the errors before signing up.');
       return;
     }
@@ -113,23 +108,30 @@ export default function Signup({ navigation }: any) {
 
     try {
       const userCredential = await auth().createUserWithEmailAndPassword(
-        email,
-        password,
+        form.email,
+        form.password,
       );
 
       await userCredential.user.updateProfile({
-        displayName: username,
+        displayName: form.username,
       });
     } catch (error: any) {
       if (error.code === 'auth/email-already-in-use') {
-        setEmailError('That email address is already in use!');
+        setErrors(prev => ({
+          ...prev,
+          email: 'That email address is already in use!',
+        }));
       } else if (error.code === 'auth/invalid-email') {
-        setEmailError('That email address is invalid!');
+        setErrors(prev => ({
+          ...prev,
+          email: 'That email address is invalid!',
+        }));
       } else if (error.code === 'auth/weak-password') {
-        setPasswordError('Password is too weak.');
+        setErrors(prev => ({ ...prev, password: 'Password is too weak.' }));
       } else {
         Alert.alert('Signup Error', error.message);
       }
+      console.log(error.message);
     } finally {
       setLoading(false);
     }
@@ -157,7 +159,7 @@ export default function Signup({ navigation }: any) {
               style={styles.backButton}
               onPress={() => navigation.goBack()}
             >
-              <Text style={styles.backArrow}>â†</Text>
+              <Text style={styles.backArrow}>←</Text>
             </TouchableOpacity>
 
             <Text style={[styles.title, themeStyles.textColor]}>Sign Up</Text>
@@ -168,19 +170,19 @@ export default function Signup({ navigation }: any) {
               </Text>
               <View style={styles.inputRow}>
                 <TextInput
-                  style={usernameInputStyle}
-                  value={username}
-                  onChangeText={handleUsernameChange}
-                  onFocus={() => setUsernameFocused(true)}
-                  onBlur={() => setUsernameFocused(false)}
+                  style={inputStyle('username')}
+                  value={form.username}
+                  onChangeText={handleChange('username')}
+                  onFocus={handleFocus('username')}
+                  onBlur={handleBlur('username')}
                   autoCapitalize="none"
                 />
-                {username.length >= 5 ? (
-                  <Text style={styles.checkMark}>âœ“</Text>
+                {form.username.length >= USERNAME_MIN_LENGTH ? (
+                  <Text style={styles.checkMark}>✓</Text>
                 ) : null}
               </View>
-              {usernameError ? (
-                <Text style={styles.error}>{usernameError}</Text>
+              {errors.username ? (
+                <Text style={styles.error}>{errors.username}</Text>
               ) : null}
             </View>
 
@@ -190,20 +192,20 @@ export default function Signup({ navigation }: any) {
               </Text>
               <View style={styles.inputRow}>
                 <TextInput
-                  style={emailInputStyle}
-                  value={email}
-                  onChangeText={handleEmailChange}
-                  onFocus={() => setEmailFocused(true)}
-                  onBlur={() => setEmailFocused(false)}
+                  style={inputStyle('email')}
+                  value={form.email}
+                  onChangeText={handleChange('email')}
+                  onFocus={handleFocus('email')}
+                  onBlur={handleBlur('email')}
                   autoCapitalize="none"
                   keyboardType="email-address"
                 />
-                {email.length > 0 && emailError === '' ? (
-                  <Text style={styles.checkMark}>âœ“</Text>
+                {form.email.length > 0 && !errors.email ? (
+                  <Text style={styles.checkMark}>✓</Text>
                 ) : null}
               </View>
-              {emailError ? (
-                <Text style={styles.error}>{emailError}</Text>
+              {errors.email ? (
+                <Text style={styles.error}>{errors.email}</Text>
               ) : null}
             </View>
 
@@ -213,19 +215,19 @@ export default function Signup({ navigation }: any) {
               </Text>
               <View style={styles.inputRow}>
                 <TextInput
-                  style={passwordInputStyle}
-                  value={password}
-                  onChangeText={handlepasswordChange}
-                  onFocus={() => setPasswordFocused(true)}
-                  onBlur={() => setPasswordFocused(false)}
+                  style={inputStyle('password')}
+                  value={form.password}
+                  onChangeText={handleChange('password')}
+                  onFocus={handleFocus('password')}
+                  onBlur={handleBlur('password')}
                   secureTextEntry={true}
                 />
-                {password.length > 0 && passwordError === '' ? (
+                {form.password.length > 0 && !errors.password ? (
                   <Text style={styles.strongText}>Strong</Text>
                 ) : null}
               </View>
-              {passwordError ? (
-                <Text style={styles.error}>{passwordError}</Text>
+              {errors.password ? (
+                <Text style={styles.error}>{errors.password}</Text>
               ) : null}
             </View>
 
@@ -258,5 +260,3 @@ export default function Signup({ navigation }: any) {
     </KeyboardAvoidingView>
   );
 }
-
-
