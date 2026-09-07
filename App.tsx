@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import auth from '@react-native-firebase/auth';
-import StackNavigator from './src/navigation/StackNavigator';
+import StackNavigator from './src/navigation/stack/stackNavigation';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { navigationRef } from './src/navigation/navigationService';
 import useDeepLinking from './src/service/link';
