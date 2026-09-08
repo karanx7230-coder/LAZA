@@ -107,7 +107,7 @@ export default function Productstack({ route, navigation }: any) {
               style={styles.back}
               onPress={() => navigation.goBack()}
             >
-              <Text style={styles.backtext}> â† </Text>
+           <Text style={styles.backtext}> ← </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.back}
@@ -185,7 +185,7 @@ export default function Productstack({ route, navigation }: any) {
 
                   <View style={styles.viewrating}>
                     <Text style={styles.rating}>
-                      {productData.reviews[0].rating} â˜…
+                      {productData.reviews[0].rating} stars
                     </Text>
                   </View>
                 </View>
@@ -237,5 +237,3 @@ export default function Productstack({ route, navigation }: any) {
     </View>
   );
 }
-
-

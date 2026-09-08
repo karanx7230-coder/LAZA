@@ -68,7 +68,7 @@ export default function Orders({ navigation }: any) {
             onPress={() => navigation.replace(Routes.MAIN_TABS)}
             style={styles.backButton}
           >
-            <Text style={styles.backArrow}>â†</Text>
+            <Text style={styles.backArrow}>←</Text>
           </TouchableOpacity>
           <Text style={titleTextStyle}>Orders</Text>
           <View style={styles.headerSpacer} />
@@ -199,7 +199,6 @@ export default function Orders({ navigation }: any) {
     </View>
   );
 }
-
 
 // const handleClearData = async () => {
 //   await persistor.purge(); // clears the persisted AsyncStorage data

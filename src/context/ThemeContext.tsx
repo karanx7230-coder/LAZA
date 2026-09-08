@@ -11,10 +11,8 @@ type ThemeContextType = {
   };
 };
 
-// 2. Create the Context
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-// 3. Create the Provider Component
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -22,12 +20,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setIsDarkMode(prev => !prev);
   };
 
-  // Pre-define your color palettes here so you don't have to write them on every screen
   const colors = {
     background: isDarkMode ? '#151515' : '#FFFFFF',
     text: isDarkMode ? '#FFFFFF' : '#000000',
     card: isDarkMode ? '#575656' : '#f9f9f9',
-    special: isDarkMode ? '#575656' : '#f9f9f9', // Great for product cards or bottom bars
+    special: isDarkMode ? '#575656' : '#f9f9f9',
   };
 
   return (

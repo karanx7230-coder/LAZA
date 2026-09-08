@@ -15,11 +15,11 @@ import { Colors } from '../../utils';
 
 export default function AddReview({ navigation }: any) {
   const [rating, setRating] = useState(0);
-const {colors}=useTheme();
+  const { colors } = useTheme();
 
   return (
-    <KeyboardAvoidingView style={[styles.mainview,{backgroundColor:colors.background}]}
-  
+    <KeyboardAvoidingView
+      style={[styles.mainview, { backgroundColor: colors.background }]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -28,21 +28,23 @@ const {colors}=useTheme();
             style={styles.back}
             onPress={() => navigation.goBack()}
           >
-            <Text style={styles.backtext}>â†</Text>
+            <Text style={styles.backtext}> ← </Text>
           </TouchableOpacity>
-          <Text  style={[styles.head,{color:colors.text}]}>Add Review</Text>
+          <Text style={[styles.head, { color: colors.text }]}>Add Review</Text>
           <View style={styles.placeholder} />
         </View>
 
         <View>
-          <Text  style={[styles.name,{color:colors.text}]}>Name</Text>
+          <Text style={[styles.name, { color: colors.text }]}>Name</Text>
           <TextInput
             placeholder="Type your name"
             placeholderTextColor={'#8F959E'}
             style={styles.nameinput}
           />
 
-          <Text   style={[styles.name,{color:colors.text}]}>How was your experience ?</Text>
+          <Text style={[styles.name, { color: colors.text }]}>
+            How was your experience ?
+          </Text>
           <TextInput
             placeholder="Describe your experience?"
             placeholderTextColor={'#8F959E'}
@@ -53,9 +55,11 @@ const {colors}=useTheme();
         </View>
 
         <View style={styles.sliderContainer}>
-          <Text   style={[styles.sliderLabel,{color:colors.text}]}>Star</Text>
+          <Text style={[styles.sliderLabel, { color: colors.text }]}>Star</Text>
           <View style={styles.sliderRow}>
-            <Text   style={[styles.sliderNumber,{color:colors.text}]}>0.0</Text>
+            <Text style={[styles.sliderNumber, { color: colors.text }]}>
+              0.0
+            </Text>
             <Slider
               style={styles.slider}
               minimumValue={0}
@@ -68,7 +72,9 @@ const {colors}=useTheme();
               thumbTintColor="#9b6cff"
               thumbSize={20}
             />
-            <Text   style={[styles.sliderNumber,{color:colors.text}]}>5.0</Text>
+            <Text style={[styles.sliderNumber, { color: colors.text }]}>
+              5.0
+            </Text>
           </View>
         </View>
       </ScrollView>
@@ -169,7 +175,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   submitBtn: {
-	backgroundColor: Colors.primaryLight,
+    backgroundColor: Colors.primaryLight,
     height: 65,
     justifyContent: 'center',
     alignItems: 'center',

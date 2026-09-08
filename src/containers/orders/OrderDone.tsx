@@ -11,7 +11,7 @@ export default function OrderDone({ navigation }: any) {
         onPress={() => navigation.replace(Routes.MAIN_TABS)}
         style={styles.backButton}
       >
-        <Text style={styles.backArrow}>â†</Text>
+        <Text style={styles.backArrow}>←</Text>
       </TouchableOpacity>
       <Image
         source={require('../../assets/images/confirm.png')}

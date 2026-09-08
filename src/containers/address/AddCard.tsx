@@ -25,7 +25,7 @@ export default function AddCard({ navigation }: any) {
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <Text style={styles.backArrow}>â†</Text>
+            <Text style={styles.backArrow}>←</Text>
           </TouchableOpacity>
           <Text style={[styles.headTitle, { color: colors.text }]}>
             Add New Card

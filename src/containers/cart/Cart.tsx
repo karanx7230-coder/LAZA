@@ -62,7 +62,7 @@ export default function Cart({ navigation }: any) {
               style={styles.backButton}
               onPress={() => navigation.navigate(Routes.MAIN_TABS)}
             >
-              <Text style={styles.backArrow}>â†</Text>
+              <Text style={styles.backArrow}>←</Text>
             </TouchableOpacity>
             <Text style={[styles.head, { color: colors.text }]}>My Cart</Text>
             <View style={styles.view1} />
@@ -239,11 +239,15 @@ export default function Cart({ navigation }: any) {
               </View>
             </View>
             <TouchableOpacity
+              activeOpacity={0.9}
               style={[
                 styles.last,
                 !isReady && { backgroundColor: '#8a5cf665' },
               ]}
               onPress={() => {
+                if (!isReady) {
+                  return;
+                }
                 if (items.length === 0) {
                   Alert.alert(
                     'Cart is Empty',
@@ -309,4 +313,3 @@ export default function Cart({ navigation }: any) {
     </SafeAreaView>
   );
 }
-

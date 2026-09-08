@@ -69,7 +69,7 @@ export default function Otp({ navigation }: any) {
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <Text style={styles.backArrow}>â†</Text>
+            <Text style={styles.backArrow}>←</Text>
           </TouchableOpacity>
           <Text style={[styles.head, { color: colors.text }]}>
             Verification code

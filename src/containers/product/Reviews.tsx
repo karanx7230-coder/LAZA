@@ -34,7 +34,7 @@ export default function Reviews({ navigation, route }: any) {
           style={styles.back}
           onPress={() => navigation.goBack()}
         >
-          <Text style={styles.backtext}> â† </Text>
+          <Text style={styles.backtext}> ← </Text>
         </TouchableOpacity>
         <Text style={[styles.head, themeStyles.textColor]}>Reviews</Text>
       </View>

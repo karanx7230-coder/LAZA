@@ -78,7 +78,7 @@ export default function Payment({ navigation }: any) {
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <Text style={styles.backArrow}>â†</Text>
+            <Text style={styles.backArrow}>←</Text>
           </TouchableOpacity>
           <Text style={[styles.pagehead, { color: colors.text }]}>Payment</Text>
         </View>
@@ -172,5 +172,3 @@ export default function Payment({ navigation }: any) {
     </KeyboardAvoidingView>
   );
 }
-
-
