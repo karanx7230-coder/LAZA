@@ -13,6 +13,7 @@ import {
   ActivityIndicator,
   StatusBar,
   Image,
+  Modal,
 } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 import React, { useMemo, useState } from 'react';
@@ -138,7 +139,13 @@ export default function Signup({ navigation }: any) {
       setLoading(false);
     }
   };
-
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator color={Colors.black} size="large" />
+      </View>
+    );
+  }
   return (
     <KeyboardAvoidingView
       style={[styles.keyboard, themeStyles.background]}
@@ -149,6 +156,39 @@ export default function Signup({ navigation }: any) {
         backgroundColor="transparent"
         translucent
       />
+
+      {show && (
+        <Modal
+          visible={show}
+          transparent
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              height: '100%',
+              width: '100%',
+              backgroundColor: '#6b6a6a5a',
+              position: 'absolute',
+            }}
+            onPress={() => setshow(!show)}
+          />
+          <View
+            style={{
+              height: '30%',
+              top: '30%',
+              alignSelf: 'center',
+              justifyContent: 'center',
+              width: '80%',
+              backgroundColor: Colors.primary,
+              borderRadius: 50,
+            }}
+          ></View>
+        </Modal>
+      )}
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.scrollContent}

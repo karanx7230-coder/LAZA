@@ -39,25 +39,19 @@ export default function Screen1({ navigation }: any) {
 
           <View style={styles.btns}>
             <TouchableOpacity
-              onPress={() => navigation.navigate(Routes.SIGNUP)}
+              onPress={() => navigation.navigate(Routes.LOGIN)}
               style={styles.men}
             >
-              <Text style={styles.menText}>Men</Text>
+              <Text style={styles.menText}>Login</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => navigation.navigate(Routes.SIGNUP)}
               style={styles.women}
             >
-              <Text style={styles.womenText}>Women</Text>
+              <Text style={styles.womenText}>Signup</Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            onPress={() => navigation.navigate(Routes.SIGNUP)}
-            style={styles.skip}
-          >
-            <Text style={styles.skiptext}>Skip</Text>
-          </TouchableOpacity>
         </View>
       </ImageBackground>
     </LinearGradient>
