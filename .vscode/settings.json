@@ -1,0 +1,20 @@
+{
+  "editor.renderValidationDecorations": "off",
+  "typescript.validate.enable": false,
+  "javascript.validate.enable": false,
+  "eslint.enable": false,
+  "workbench.colorCustomizations": {
+    "editorError.foreground": "#808080",
+    "editorError.border": "#808080",
+    "editorError.background": "#80808020",
+    "editorWarning.foreground": "#808080",
+    "editorWarning.border": "#808080",
+    "editorWarning.background": "#80808020",
+    "editorInfo.foreground": "#808080",
+    "editorInfo.border": "#808080",
+    "editorInfo.background": "#80808020",
+    "editorHint.foreground": "#808080",
+    "editorHint.border": "#808080",
+    "editorHint.background": "#80808020"
+  }
+}
